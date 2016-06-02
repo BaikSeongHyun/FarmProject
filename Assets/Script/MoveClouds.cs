@@ -13,10 +13,12 @@ public class MoveClouds : MonoBehaviour
 	// Update is called once per frame
 	void Update( )
 	{
-		float randomX = Random.Range(0.0f, 2f);
-		float randomZ = Random.Range(0.0f, 2f);
-		Vector3 moveDirection= new Vector3 (randomX, 0f, randomZ);
-		transform.Translate( moveDirection * Time.deltaTime );
+		//cloud movement
+		float randomX = Random.Range( 0.0f, 2f );
+		float randomZ = Random.Range( 0.0f, 2f );
 
+		//move this Vector
+		Vector3 moveDirection = new Vector3( randomX, 0f, randomZ );
+		transform.Translate( moveDirection * Time.deltaTime );
 	}
 }

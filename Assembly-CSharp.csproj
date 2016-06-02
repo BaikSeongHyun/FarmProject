@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{CF78C52E-ADF4-A7CC-5FAB-857A673F6B21}</ProjectGuid>
+    <ProjectGuid>{4F3D49A8-44C8-D5EE-D1BE-C99E50616B3B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -55,6 +55,8 @@
      <Compile Include="Assets\Data\PQAssets\Query-Chan-SD\Scripts\QuerySDController\QuerySDEmotionalController.cs" />
      <Compile Include="Assets\Data\PQAssets\Query-Chan-SD\Scripts\QuerySDController\QuerySDMecanimController.cs" />
      <Compile Include="Assets\Data\PQAssets\Query-Chan-SD\Scripts\QuerySDController\QuerySDSoundController.cs" />
+     <Compile Include="Assets\Script\DestroyLogic.cs" />
+     <Compile Include="Assets\Script\GenerateClouds.cs" />
      <Compile Include="Assets\Script\MoveClouds.cs" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_jp.txt" />
      <None Include="Assets\Data\FancyCarven\Readme.txt" />
