@@ -5,7 +5,7 @@ public class GenerateClouds : MonoBehaviour
 {
 	public GameObject cloud1;
 	public GameObject cloud2;
-	[Range( 0f, 10f )]public float cycle;
+	[Range( 0f, 10f )]public float cycle = 3;
 
 
 	//initialize this script
