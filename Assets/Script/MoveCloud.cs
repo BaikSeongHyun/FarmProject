@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MoveClouds : MonoBehaviour
+public class MoveCloud : MonoBehaviour
 {
 
 	// Use this for initialization
@@ -13,11 +13,11 @@ public class MoveClouds : MonoBehaviour
 	// Update is called once per frame
 	void Update( )
 	{
-		//cloud movement
+		//set speed
 		float randomX = Random.Range( 0.0f, 2f );
 		float randomZ = Random.Range( 0.0f, 2f );
 
-		//move this Vector
+		//move cloud
 		Vector3 moveDirection = new Vector3( randomX, 0f, randomZ );
 		transform.Translate( moveDirection * Time.deltaTime );
 	}
