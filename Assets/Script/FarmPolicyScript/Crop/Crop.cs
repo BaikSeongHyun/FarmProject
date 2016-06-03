@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Crop
+public class Crop : MonoBehaviour
 {
 	//simple data field
 	protected string cropName;
@@ -10,9 +10,11 @@ public class Crop
 	protected Resource[] requireResource;
 	protected Rank rank;
 	protected float sellPrice;
-	protected Dictionary<Rank, float> averagePrice;
+	protected static int growStep = 4;
+	public GameObject[] textureData = new GameObject[growStep];
 
 	//complex data field
+	protected Dictionary<Rank, float> averagePrice;
 
 	//enum field
 	public enum Resource
@@ -50,6 +52,12 @@ public class Crop
 
 
 	//get / set method
+	//name
+	public string GetCropName()
+	{
+		return cropName;
+	}
+
 	//resource
 	public void SetResource (Resource[] data)
 	{
@@ -88,6 +96,17 @@ public class Crop
 	public Dictionary<Rank, float> GetAveragePrice()
 	{
 		return averagePrice;
+	}
+
+	//grow time
+	public float GetGrowTime()
+	{
+		return growTime;
+	}
+
+	public GameObject GetTexture(int step)
+	{
+		return textureData[step];
 	}
 
 }

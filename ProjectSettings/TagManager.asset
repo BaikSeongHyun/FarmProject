@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - InvisibleWorldEnd
+  - TextField
   layers:
   - Default
   - TransparentFX

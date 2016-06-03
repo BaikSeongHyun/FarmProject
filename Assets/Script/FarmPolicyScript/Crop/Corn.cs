@@ -5,7 +5,7 @@ using System.Collections.Generic;
 	public class Corn : Crop
 	{
 		//complex data field
-		public GameObject[] textureData;
+
 			
 		//constructor - corn
 		public Corn ()
