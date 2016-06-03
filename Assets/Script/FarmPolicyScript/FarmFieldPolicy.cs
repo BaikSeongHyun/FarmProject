@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FarmField : MonoBehaviour
+public class FarmFieldPolicy : MonoBehaviour
 {
 	//simple data field
 	public bool onCrop;
@@ -10,6 +10,8 @@ public class FarmField : MonoBehaviour
 	public bool create3rd;
 	public bool createComplete;
 	public float grewTime;
+	GameObject presentTexture;
+	public string fieldName;
 	public FarmState presentState;
 	public Vector3 presentPosition;
 	public Quaternion presentRotation;
@@ -28,10 +30,11 @@ public class FarmField : MonoBehaviour
 
 	;
 
-	//initialization this script
+	//initialize this script
 	void Start( )
 	{
-		InitialzeCreate();	
+		InitialzeCreate();
+		presentTexture = null;
 	}
 	
 	// Update is called once per frame
@@ -56,6 +59,7 @@ public class FarmField : MonoBehaviour
 	}
 
 	//another method
+	//texture create parameter initialze
 	void InitialzeCreate( )
 	{
 		create1st = false;
@@ -64,9 +68,8 @@ public class FarmField : MonoBehaviour
 		createComplete = false;
 	}
 
-
 	//plant crop
-	void PlantCrop( Crop data )
+	public void PlantCrop( Crop data )
 	{
 		presentCrop = new Crop( data );
 	}
@@ -76,34 +79,38 @@ public class FarmField : MonoBehaviour
 	{
 		if (onCrop && presentState == FarmState.FirstStep && !create1st)
 		{
-			Instantiate( presentCrop.GetTexture( 0 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 0 ), presentPosition, presentRotation );
 			create1st = true;
 		}
 		else if (onCrop && presentState == FarmState.SecondStep && !create2nd)
 		{
-			Instantiate( presentCrop.GetTexture( 1 ), presentPosition, presentRotation );
+			Destroy(presentTexture);
+			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 1 ), presentPosition, presentRotation );
 			create2nd = true;
 		}
 		else if (onCrop && presentState == FarmState.ThirdStep && !create3rd)
 		{
-			Instantiate( presentCrop.GetTexture( 2 ), presentPosition, presentRotation );
+			Destroy(presentTexture);
+			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 2 ), presentPosition, presentRotation );
 			create3rd = true;
 		}
 		else if (onCrop && presentState == FarmState.Complete && !createComplete)
 		{
-			Instantiate( presentCrop.GetTexture( 3 ), presentPosition, presentRotation );
+			Destroy(presentTexture);
+			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 3 ), presentPosition, presentRotation );
 			createComplete = true;
 		}
 	}
 
 	//harvestCrop
-	void HarvestCrop( out Crop data )
+	public void HarvestCrop( out Crop data )
 	{
 		data = new Crop( presentCrop );
 		presentCrop = null;
 		InitialzeCreate();
 	}
 
+	//set farm state
 	void SetFarmState( )
 	{
 		if (grewTime == 0.0f)

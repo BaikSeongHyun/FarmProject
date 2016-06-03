@@ -39,8 +39,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec59dfc72cbd8f499c0e1c81d334b1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presentCrop: {fileID: 0}
+  onCrop: 0
+  create1st: 0
+  create2nd: 0
+  create3rd: 0
+  createComplete: 0
+  grewTime: 0
+  presentTexture: {fileID: 0}
+  fieldName: 
+  presentState: 0
   presentPosition: {x: 0, y: 0, z: 0}
+  presentRotation: {x: 0, y: 0, z: 0, w: 0}
+  presentCrop: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

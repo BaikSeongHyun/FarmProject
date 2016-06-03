@@ -62,7 +62,7 @@
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Crop.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\StrawBerry.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Watermelon.cs" />
-     <Compile Include="Assets\Script\FarmPolicyScript\FarmField.cs" />
+     <Compile Include="Assets\Script\FarmPolicyScript\FarmFieldPolicy.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\FarmManager.cs" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_jp.txt" />
      <None Include="Assets\Data\FancyCarven\Readme.txt" />

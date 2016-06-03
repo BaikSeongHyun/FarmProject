@@ -6,6 +6,8 @@ TagManager:
   tags:
   - InvisibleWorldEnd
   - TextField
+  - FarmField
+  - Crop
   layers:
   - Default
   - TransparentFX
