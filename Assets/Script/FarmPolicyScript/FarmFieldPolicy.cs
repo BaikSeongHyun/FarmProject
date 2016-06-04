@@ -10,6 +10,7 @@ public class FarmFieldPolicy : MonoBehaviour
 	public bool create3rd;
 	public bool createComplete;
 	public float grewTime;
+	public float resourceTime;
 	GameObject presentTexture;
 	public string fieldName;
 	public FarmState presentState;
@@ -95,10 +96,12 @@ public class FarmFieldPolicy : MonoBehaviour
 		}
 
 	}
+
 	//plant crop
 	void PlantCrop( Crop data )
 	{
 		presentCrop = data;
+		resourceTime = ((1 / presentCrop.GetGrowTime()) * 100) + 1;
 	}
 
 	//grow crop
@@ -107,12 +110,14 @@ public class FarmFieldPolicy : MonoBehaviour
 		if (onCrop && presentState == FarmState.FirstStep && !create1st)
 		{
 			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 0 ), presentPosition, presentRotation );
+			//water supply
 			create1st = true;
 		}
 		else if (onCrop && presentState == FarmState.SecondStep && !create2nd)
 		{
 			Destroy( presentTexture );
 			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 1 ), presentPosition, presentRotation );
+			//Fertilizer supply
 			create2nd = true;
 		}
 		else if (onCrop && presentState == FarmState.ThirdStep && !create3rd)
@@ -139,9 +144,20 @@ public class FarmFieldPolicy : MonoBehaviour
 		data = SetCropRank();
 	}
 
-	//work farm
+	//work farm - supply resource
 	void FarmWork( )
 	{
+		//water supply
+		if (presentState == FarmState.FirstStep)
+		{
+			
+		}
+		//Fertilizer supply
+		else if (presentState == FarmState.SecondStep)
+		{
+			Debug.Log( "Second resource active" );
+		}
+
 	}
 
 	//set crop Rank

@@ -8,13 +8,11 @@ public class Crop : MonoBehaviour
 	protected string cropName;
 	protected float growTime;
 	protected Resource[] requireResource;
-	protected Rank rank;
-	protected float sellPrice;
 	protected static int growStep = 4;
 	public GameObject[] textureData = new GameObject[growStep];
 
 	//complex data field
-	protected Dictionary<Rank, float> averagePrice;
+	public Dictionary<Rank, float> averagePrice;
 
 	//enum field
 	public enum Resource
@@ -65,31 +63,9 @@ public class Crop : MonoBehaviour
 		for (int i = 0; i < requireResource.Length; i++)
 			requireResource[i] = data[i];
 	}
-
 	public Resource[] GetRequireResource( )
 	{
 		return requireResource;
-	}
-	//rank
-	public void SetRank( Rank _rank )
-	{
-		rank = _rank;
-	}
-
-	public Rank GetRank( )
-	{
-		return rank;
-	}
-
-	//sellPrice
-	public void SetSellPrice( float _sellPrice )
-	{
-		sellPrice = _sellPrice;
-	}
-
-	public float GetSellPrice( )
-	{
-		return sellPrice;
 	}
 
 	//averagePrice
@@ -104,6 +80,7 @@ public class Crop : MonoBehaviour
 		return growTime;
 	}
 
+	//texture
 	public GameObject GetTexture( int step )
 	{
 		return textureData[step];
