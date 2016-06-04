@@ -70,6 +70,7 @@ public class FarmManager : MonoBehaviour
 			AddCropItem( tempCropItem );
 		}
 	}
+
 	//harvest crop and input storage
 	void AddCropItem( CropItem data )
 	{
