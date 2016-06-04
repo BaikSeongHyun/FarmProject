@@ -8,6 +8,7 @@ TagManager:
   - TextField
   - FarmField
   - Crop
+  - FarmController
   layers:
   - Default
   - TransparentFX

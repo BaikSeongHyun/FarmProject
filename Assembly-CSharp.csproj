@@ -60,10 +60,12 @@
      <Compile Include="Assets\Script\BackGroundScript\MoveCloud.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Corn.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Crop.cs" />
+     <Compile Include="Assets\Script\FarmPolicyScript\Crop\CropItem.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\StrawBerry.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Watermelon.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\FarmFieldPolicy.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\FarmManager.cs" />
+     <Compile Include="Assets\Script\InputController.cs" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_jp.txt" />
      <None Include="Assets\Data\FancyCarven\Readme.txt" />
      <None Include="Assets\Data\Baker House\Readme.txt" />

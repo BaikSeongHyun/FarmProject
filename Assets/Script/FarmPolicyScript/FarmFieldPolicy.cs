@@ -15,6 +15,7 @@ public class FarmFieldPolicy : MonoBehaviour
 	public FarmState presentState;
 	public Vector3 presentPosition;
 	public Quaternion presentRotation;
+	private Crop.Rank tempRank;
 
 	//complex data field
 	public Crop presentCrop;
@@ -68,10 +69,36 @@ public class FarmFieldPolicy : MonoBehaviour
 		createComplete = false;
 	}
 
-	//plant crop
-	public void PlantCrop( Crop data )
+	//click event process
+	public void ProcessEvent( Crop data, CropItem itemData )
 	{
-		presentCrop = new Crop( data );
+		itemData.SetCropName( null );
+		switch(presentState)
+		{
+			case FarmState.Empty:
+				PlantCrop( data );
+				break;
+			case FarmState.FirstStep:
+				FarmWork();
+				break;
+			case FarmState.SecondStep:
+				FarmWork();
+				break;
+			case FarmState.ThirdStep:
+				FarmWork();
+				break;
+			case FarmState.Complete:
+				itemData.SetCropName( presentCrop.GetCropName() );
+				HarvestCrop( out tempRank );
+				itemData.SetRank( tempRank );
+				break;
+		}
+
+	}
+	//plant crop
+	void PlantCrop( Crop data )
+	{
+		presentCrop = data;
 	}
 
 	//grow crop
@@ -84,32 +111,44 @@ public class FarmFieldPolicy : MonoBehaviour
 		}
 		else if (onCrop && presentState == FarmState.SecondStep && !create2nd)
 		{
-			Destroy(presentTexture);
+			Destroy( presentTexture );
 			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 1 ), presentPosition, presentRotation );
 			create2nd = true;
 		}
 		else if (onCrop && presentState == FarmState.ThirdStep && !create3rd)
 		{
-			Destroy(presentTexture);
+			Destroy( presentTexture );
 			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 2 ), presentPosition, presentRotation );
 			create3rd = true;
 		}
 		else if (onCrop && presentState == FarmState.Complete && !createComplete)
 		{
-			Destroy(presentTexture);
+			Destroy( presentTexture );
 			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 3 ), presentPosition, presentRotation );
 			createComplete = true;
 		}
 	}
 
 	//harvestCrop
-	public void HarvestCrop( out Crop data )
+	void HarvestCrop( out Crop.Rank data )
 	{
-		data = new Crop( presentCrop );
 		presentCrop = null;
+		Destroy( presentTexture );
 		InitialzeCreate();
+		grewTime = 0.0f;
+		data = SetCropRank();
 	}
 
+	//work farm
+	void FarmWork( )
+	{
+	}
+
+	//set crop Rank
+	Crop.Rank SetCropRank( )
+	{
+		return Crop.Rank.S;
+	}
 	//set farm state
 	void SetFarmState( )
 	{

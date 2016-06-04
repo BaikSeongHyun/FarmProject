@@ -1,55 +1,96 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FarmManager : MonoBehaviour
 {
 	//simple data field
+	public bool onGame;
 	public float gameTime;
+	public Vector2 mousePosition;
+	const float RayCastMaxDistance = 100.0f;
+
 	//complex data field
+
+	public GameObject tempSearchFarm;
+	public FarmFieldPolicy tempPolicy;
+	public CropItem tempCropItem;
 	//dynamic set tis array
-	public GameObject[] farmField;
 	public GameObject[] cropData;
-	public FarmFieldPolicy[] farmFieldGroup;
 	public Crop[] cropGroup;
+	public List<CropItem> saveCropItem;
+
 
 	// initialize this script
 	void Start( )
 	{
+		onGame = true;
 		gameTime = 0.0f;
-		LinkFarmFieldPolicy();
 		LinkCropData();
+		tempCropItem = new CropItem();
+		saveCropItem = new List<CropItem>();
 	}
 	
 	// Update is called once per frame
 	void Update( )
 	{
-		gameTime += Time.deltaTime;	
-		if (Input.GetKey( KeyCode.P ))
+		mousePosition = Input.mousePosition;
+		if (onGame)
 		{
-			Debug.Log("Press P");
+			gameTime += Time.deltaTime;	
+	
+			if (Input.GetButtonDown( "Click" ))
+			{
+				OnMouseClick();
+			}
 		}
-
 	}
 
 	//another method
-	void LinkFarmFieldPolicy( )
-	{
-		farmField = GameObject.FindGameObjectsWithTag( "FarmField" );
-		farmFieldGroup = new FarmFieldPolicy[farmField.Length];
-		for (int i = 0; i < farmFieldGroup.Length; i++)
-		{
-			if (farmField[i] != null)
-				farmFieldGroup[i] = farmField[i].GetComponent<FarmFieldPolicy>();
-		}
-	
-	}
-
-	void LinkCropData()
+	//initialize game data
+	void LinkCropData( )
 	{
 		cropData = GameObject.FindGameObjectsWithTag( "Crop" );
 		cropGroup = new Crop[cropData.Length];
 		GameObject temp = GameObject.FindGameObjectWithTag( "Crop" );
 		if (temp != null)
-			cropGroup[0] = temp.GetComponent<Crop>();
+			cropGroup[0] = temp.GetComponent<Crop>();		
 	}
+
+	//mouse click event
+	void OnMouseClick( )
+	{
+		Ray ray = Camera.main.ScreenPointToRay( mousePosition );
+		RaycastHit hitinfo;
+		if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "FarmField" ) ))
+		{
+			tempSearchFarm = hitinfo.collider.gameObject;
+			tempPolicy = tempSearchFarm.GetComponent<FarmFieldPolicy>();
+			tempPolicy.ProcessEvent( cropGroup[0], tempCropItem );
+			AddCropItem( tempCropItem );
+		}
+	}
+	//harvest crop and input storage
+	void AddCropItem( CropItem data )
+	{
+		if (data.GetCropName() != null)
+		{
+			Debug.Log( data.GetCropName() );
+			saveCropItem.Add( data );
+		}
+	}
+
+	//farm game start or reStart
+	void StartFarmGame( )
+	{
+		onGame = true;
+	}
+
+	//farm game close
+	void EndFarmGame( )
+	{
+		onGame = false;
+		gameTime = 0.0f;
+	}
+		
 }

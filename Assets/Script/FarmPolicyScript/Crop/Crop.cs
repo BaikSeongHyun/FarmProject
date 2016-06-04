@@ -35,16 +35,16 @@ public class Crop : MonoBehaviour
 
 	//constructor
 	//no parameter - for inheritance instance
-	public Crop ()
+	public Crop()
 	{
 		averagePrice = new Dictionary<Rank, float>();
 	}
 	//crop parameter - for add crop by farm field
-	public Crop (Crop data)
+	public Crop( Crop data )
 	{
 		this.cropName = data.cropName;
 		this.growTime = data.growTime;
-		SetResource (data.requireResource);
+		SetResource( data.requireResource );
 		this.averagePrice = data.averagePrice;
 	}
 
@@ -53,60 +53,61 @@ public class Crop : MonoBehaviour
 
 	//get / set method
 	//name
-	public string GetCropName()
+	public string GetCropName( )
 	{
 		return cropName;
 	}
 
 	//resource
-	public void SetResource (Resource[] data)
+	public void SetResource( Resource[] data )
 	{
 		requireResource = new Resource[data.Length];
 		for (int i = 0; i < requireResource.Length; i++)
-			requireResource [i] = data [i];
+			requireResource[i] = data[i];
 	}
 
-	public Resource[] GetRequireResource ()
+	public Resource[] GetRequireResource( )
 	{
 		return requireResource;
 	}
 	//rank
-	public void SetRank (Rank _rank)
+	public void SetRank( Rank _rank )
 	{
 		rank = _rank;
 	}
 
-	public Rank GetRank ()
+	public Rank GetRank( )
 	{
 		return rank;
 	}
 
 	//sellPrice
-	public void SetSellPrice (float _sellPrice)
+	public void SetSellPrice( float _sellPrice )
 	{
 		sellPrice = _sellPrice;
 	}
 
-	public float GetSellPrice ()
+	public float GetSellPrice( )
 	{
 		return sellPrice;
 	}
 
 	//averagePrice
-	public Dictionary<Rank, float> GetAveragePrice()
+	public Dictionary<Rank, float> GetAveragePrice( )
 	{
 		return averagePrice;
 	}
 
 	//grow time
-	public float GetGrowTime()
+	public float GetGrowTime( )
 	{
 		return growTime;
 	}
 
-	public GameObject GetTexture(int step)
+	public GameObject GetTexture( int step )
 	{
 		return textureData[step];
 	}
 
 }
+
