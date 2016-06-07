@@ -1418,8 +1418,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 449311112}
+  - 114: {fileID: 449311113}
   m_Layer: 0
-  m_Name: Manager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1440,6 +1441,19 @@ Transform:
   - {fileID: 1860555960}
   m_Father: {fileID: 0}
   m_RootOrder: 11
+--- !u!114 &449311113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 449311111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a55340ded8b13a4aaa8f863aa97064e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  farmStage: {fileID: 0}
+  sellStage: {fileID: 0}
 --- !u!1001 &480511032
 Prefab:
   m_ObjectHideFlags: 0
@@ -2335,7 +2349,7 @@ GameObject:
   - 114: {fileID: 694712570}
   m_Layer: 0
   m_Name: FarmStageManager
-  m_TagString: Untagged
+  m_TagString: FarmStage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2789,9 +2803,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 867240922}
+  - 114: {fileID: 867240923}
   m_Layer: 0
-  m_Name: SellStateManager
-  m_TagString: Untagged
+  m_Name: SellStageManager
+  m_TagString: SellStage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2808,6 +2823,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 449311112}
   m_RootOrder: 1
+--- !u!114 &867240923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 867240921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4eb7bce268f33940ae5fceeb6bfe3ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &910624698 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 9c3ddebd3250acf4b83beb680dad74ac, type: 3}

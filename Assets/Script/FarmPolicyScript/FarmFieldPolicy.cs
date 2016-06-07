@@ -45,7 +45,6 @@ public class FarmFieldPolicy : MonoBehaviour
 		presentTexture = null;
 		resourceImage = transform.Find( "FarmCanvas" ).GetComponent<Image>();
 		resourceImage.enabled = false;
-		Debug.Log( resourceImage );
 	}
 	
 	// Update is called once per frame

@@ -6,14 +6,12 @@ public class FarmManager : MonoBehaviour
 {
 	//simple data field
 	public bool onGame;
-	public float gameTime;
-	public Vector2 mousePosition;
 	const float RayCastMaxDistance = 100.0f;
 
 	//complex data field
 	public CropItem tempCropItem;
 	public Crop.Resource presentResource;
-	//dynamic set tis array
+	//set automatic this array
 	public GameObject[] cropData;
 	public Crop[] cropGroup;
 	public List<CropItem> saveCropItem;
@@ -22,30 +20,11 @@ public class FarmManager : MonoBehaviour
 	// initialize this script
 	void Start( )
 	{
-		onGame = true;
-		gameTime = 0.0f;
+		onGame = false;
 		presentResource = Crop.Resource.Default;
 		LinkCropData();
 		tempCropItem = new CropItem();
 		saveCropItem = new List<CropItem>();
-	}
-	
-	// Update is called once per frame
-	void Update( )
-	{
-		mousePosition = Input.mousePosition;
-		if (onGame)
-		{
-			gameTime += Time.deltaTime;	
-	
-			if (Input.GetButtonDown( "Click" ))
-			{
-				OnMouseClick();
-			}
-
-			if (gameTime >= 180f)
-				EndFarmGame();
-		}
 	}
 
 	//another method
@@ -59,24 +38,27 @@ public class FarmManager : MonoBehaviour
 			cropGroup[0] = temp.GetComponent<Crop>();		
 	}
 
-	//mouse click event
-	void OnMouseClick( )
+	//precess game event - mouse click event
+	public void ProcessStageEvent( Vector2 mousePosition )
 	{
-		Ray ray = Camera.main.ScreenPointToRay( mousePosition );
-		RaycastHit hitinfo;
-		if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "FarmField" ) ))
+		if (Input.GetButtonDown( "Click" ) && onGame)
 		{
-			GameObject tempSearch = hitinfo.collider.gameObject;
-			FarmFieldPolicy tempPolicy = tempSearch.GetComponent<FarmFieldPolicy>();
-			tempPolicy.ProcessEvent( cropGroup[0], tempCropItem, presentResource );
-			AddCropItem( tempCropItem );
-		}
+			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
+			RaycastHit hitinfo;
+			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "FarmField" ) ))
+			{
+				GameObject tempSearch = hitinfo.collider.gameObject;
+				FarmFieldPolicy tempPolicy = tempSearch.GetComponent<FarmFieldPolicy>();
+				tempPolicy.ProcessEvent( cropGroup[0], tempCropItem, presentResource );
+				AddCropItem( tempCropItem );
+			}
 
-		if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "Resource" ) ))
-		{
-			GameObject tempSearch = hitinfo.collider.gameObject;
-			Resource temp = tempSearch.GetComponent<Resource>();
-			presentResource = temp.GetResource();
+			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "Resource" ) ))
+			{
+				GameObject tempSearch = hitinfo.collider.gameObject;
+				Resource temp = tempSearch.GetComponent<Resource>();
+				presentResource = temp.GetResource();
+			}
 		}
 	}
 
@@ -89,7 +71,7 @@ public class FarmManager : MonoBehaviour
 		}
 	}
 
-	//farm game start or reStart
+	//farm game start or restart
 	public void StartFarmGame( )
 	{
 		onGame = true;
@@ -99,7 +81,18 @@ public class FarmManager : MonoBehaviour
 	public void EndFarmGame( )
 	{
 		onGame = false;
-		gameTime = 0.0f;
 	}
-		
+
+	//get / set method
+	//on game
+	public bool GetOnGame( )
+	{
+		return onGame;
+	}
+
+	//crop item
+	public List<CropItem> GetCropItem( )
+	{
+		return saveCropItem;
+	}
 }

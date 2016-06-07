@@ -5,10 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - InvisibleWorldEnd
-  - TextField
+  - FarmStage
   - FarmField
   - Crop
-  - FarmController
+  - Resource
+  - SellStage
   layers:
   - Default
   - TransparentFX
