@@ -11,10 +11,8 @@ public class FarmManager : MonoBehaviour
 	const float RayCastMaxDistance = 100.0f;
 
 	//complex data field
-
-	public GameObject tempSearchFarm;
-	public FarmFieldPolicy tempPolicy;
 	public CropItem tempCropItem;
+	public Crop.Resource presentResource;
 	//dynamic set tis array
 	public GameObject[] cropData;
 	public Crop[] cropGroup;
@@ -26,6 +24,7 @@ public class FarmManager : MonoBehaviour
 	{
 		onGame = true;
 		gameTime = 0.0f;
+		presentResource = Crop.Resource.Default;
 		LinkCropData();
 		tempCropItem = new CropItem();
 		saveCropItem = new List<CropItem>();
@@ -43,6 +42,9 @@ public class FarmManager : MonoBehaviour
 			{
 				OnMouseClick();
 			}
+
+			if (gameTime >= 180f)
+				EndFarmGame();
 		}
 	}
 
@@ -64,10 +66,17 @@ public class FarmManager : MonoBehaviour
 		RaycastHit hitinfo;
 		if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "FarmField" ) ))
 		{
-			tempSearchFarm = hitinfo.collider.gameObject;
-			tempPolicy = tempSearchFarm.GetComponent<FarmFieldPolicy>();
-			tempPolicy.ProcessEvent( cropGroup[0], tempCropItem );
+			GameObject tempSearch = hitinfo.collider.gameObject;
+			FarmFieldPolicy tempPolicy = tempSearch.GetComponent<FarmFieldPolicy>();
+			tempPolicy.ProcessEvent( cropGroup[0], tempCropItem, presentResource );
 			AddCropItem( tempCropItem );
+		}
+
+		if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "Resource" ) ))
+		{
+			GameObject tempSearch = hitinfo.collider.gameObject;
+			Resource temp = tempSearch.GetComponent<Resource>();
+			presentResource = temp.GetResource();
 		}
 	}
 
@@ -75,20 +84,19 @@ public class FarmManager : MonoBehaviour
 	void AddCropItem( CropItem data )
 	{
 		if (data.GetCropName() != null)
-		{
-			Debug.Log( data.GetCropName() );
-			saveCropItem.Add( data );
+		{			
+			saveCropItem.Add( new CropItem( data ) );
 		}
 	}
 
 	//farm game start or reStart
-	void StartFarmGame( )
+	public void StartFarmGame( )
 	{
 		onGame = true;
 	}
 
 	//farm game close
-	void EndFarmGame( )
+	public void EndFarmGame( )
 	{
 		onGame = false;
 		gameTime = 0.0f;

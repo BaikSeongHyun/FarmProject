@@ -3,9 +3,10 @@ using System.Collections;
 
 public class GenerateClouds : MonoBehaviour
 {
+	//simple data field
 	public GameObject cloud1;
 	public GameObject cloud2;
-	[Range( 0f, 10f )]public float cycle = 3;
+	[Range( 0f, 10f )]public float cycle = 3f;
 
 
 	//initialize this script
@@ -13,6 +14,7 @@ public class GenerateClouds : MonoBehaviour
 	{
 		StartCoroutine( GenerateCloud() );	
 	}
+
 
 	//IEnumerator -> make cloud
 	IEnumerator GenerateCloud( )

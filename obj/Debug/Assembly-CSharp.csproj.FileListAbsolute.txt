@@ -36,5 +36,6 @@ C:\Users\Public\Documents\Unity Projects\FarmProject\Temp\bin\Debug\UnityEngine.
 C:\Users\Public\Documents\Unity Projects\FarmProject\Temp\bin\Debug\UnityEditor.xml
 C:\Users\Public\Documents\Unity Projects\FarmProject\Temp\bin\Debug\UnityEngine.UI.xml
 C:\Users\Public\Documents\Unity Projects\FarmProject\Temp\bin\Debug\UnityEngine.Networking.xml
+C:\Users\Public\Documents\Unity Projects\FarmProject\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\Public\Documents\Unity Projects\FarmProject\obj\Debug\Assembly-CSharp.dll
 C:\Users\Public\Documents\Unity Projects\FarmProject\obj\Debug\Assembly-CSharp.pdb

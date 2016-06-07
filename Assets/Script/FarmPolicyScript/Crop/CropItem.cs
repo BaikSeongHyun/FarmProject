@@ -10,10 +10,16 @@ public class CropItem
 	public int price;
 
 
-	//constructor
+	//constructor - no parameter
 	public CropItem()
 	{
 		cropName = null;
+	}
+	//constructor - 
+	public CropItem(CropItem data)
+	{
+		cropName = data.cropName;
+		cropRank = data.cropRank;
 	}
 
 	//get / set method

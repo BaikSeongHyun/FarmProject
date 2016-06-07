@@ -5,18 +5,21 @@ using System.Collections.Generic;
 public class Crop : MonoBehaviour
 {
 	//simple data field
-	protected string cropName;
-	protected float growTime;
-	protected Resource[] requireResource;
+	public string cropName;
+	public float growTime;
 	protected static int growStep = 4;
-	public GameObject[] textureData = new GameObject[growStep];
 
 	//complex data field
 	public Dictionary<Rank, float> averagePrice;
+	public Resource[] requireResource;
+	public Sprite[] resourceImage;
+	public GameObject[] textureData = new GameObject[growStep];
+
 
 	//enum field
 	public enum Resource
 	{
+		Default,
 		Water,
 		Fertilizer}
 
@@ -37,6 +40,7 @@ public class Crop : MonoBehaviour
 	{
 		averagePrice = new Dictionary<Rank, float>();
 	}
+
 	//crop parameter - for add crop by farm field
 	public Crop( Crop data )
 	{
@@ -63,9 +67,10 @@ public class Crop : MonoBehaviour
 		for (int i = 0; i < requireResource.Length; i++)
 			requireResource[i] = data[i];
 	}
-	public Resource[] GetRequireResource( )
+	public Resource GetRequireResource(int i )
 	{
-		return requireResource;
+		//only use one/two
+		return requireResource[i];
 	}
 
 	//averagePrice
@@ -86,5 +91,11 @@ public class Crop : MonoBehaviour
 		return textureData[step];
 	}
 
+	//resource image sprite
+	public Sprite GerResourceImage(int data)
+	{
+		return resourceImage[data];
+	}
+		
 }
 

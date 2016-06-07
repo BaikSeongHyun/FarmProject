@@ -65,6 +65,9 @@
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Watermelon.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\FarmFieldPolicy.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\FarmManager.cs" />
+     <Compile Include="Assets\Script\FarmPolicyScript\Resource\Fertilizer.cs" />
+     <Compile Include="Assets\Script\FarmPolicyScript\Resource\Resource.cs" />
+     <Compile Include="Assets\Script\FarmPolicyScript\Resource\Water.cs" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_jp.txt" />
      <None Include="Assets\Data\FancyCarven\Readme.txt" />
      <None Include="Assets\Data\Baker House\Readme.txt" />
