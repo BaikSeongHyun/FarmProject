@@ -38,18 +38,24 @@ public class SellFieldPolicy : MonoBehaviour
 		onSell = true;
 	}
 
+	//customer to player baergaining
+	public void BargainingCrop(int price)
+	{
+
+	}
+
 	//sell crop item
 	public void SellCropItem(out int price )
 	{
 		price = presentItem.Price;
-		Destroy( presentItem );
+		//Destroy( presentItem );
 		onSell = false;
 	}
 
 	//thief has been stolen crop item
 	public void StolenCrop( )
 	{
-		Destroy( presentItem );
+		//Destroy( presentItem );
 		onSell = false;
 	}
 

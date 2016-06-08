@@ -10,6 +10,8 @@ TagManager:
   - Crop
   - Resource
   - SellStage
+  - SellField
+  - GameManager
   layers:
   - Default
   - TransparentFX

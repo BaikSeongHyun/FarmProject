@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour
 	{
 		gameTime = 0.0f;
 		farmStage = GetComponent<FarmManager>();
+		farmStage.StartFarmGame();
 		sellStage = GetComponent<SellManager>();
-
 	}
 	
 	// Update is called once per frame
@@ -26,12 +26,21 @@ public class GameManager : MonoBehaviour
 	{
 		mousePosition = Input.mousePosition;
 		if (farmStage.CheckOnGame())
-			farmStage.ProcessStageEvent(mousePosition);		
+		{
+			gameTime += Time.deltaTime;
+			farmStage.ProcessStageEvent( mousePosition );
+		}
+	}
+
+	//property
+	public float GameTime
+	{
+		get { return gameTime; }
 	}
 
 	//another method
-	//move crop item data (farm to sell) 
-	void TransferCropItem()
+	//move crop item data (farm to sell)
+	void TransferCropItem( )
 	{
 		sellStage.SetCropItem( farmStage.GetCropItem().ToArray() );
 	}

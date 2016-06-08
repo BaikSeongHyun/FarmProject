@@ -11,8 +11,9 @@ public class FarmManager : MonoBehaviour
 	//complex data field
 	public CropItem tempCropItem;
 	public Crop.Resource presentResource;
-	//this array will be set automaic 
-	public GameObject[] cropData;
+	//this array will be set automaic
+	public GameObject[] tempData;
+	public FarmFieldPolicy[] farmFieldGroup;
 	public Crop[] cropGroup;
 	public List<CropItem> saveCropItem;
 
@@ -20,8 +21,8 @@ public class FarmManager : MonoBehaviour
 	// initialize this script
 	void Start( )
 	{
-		onGame = false;
 		presentResource = Crop.Resource.Default;
+		LinkFarmFieldPolicy();
 		LinkCropData();
 		tempCropItem = new CropItem();
 		saveCropItem = new List<CropItem>();
@@ -29,13 +30,32 @@ public class FarmManager : MonoBehaviour
 
 	//another method
 	//initialize game data
+	void LinkFarmFieldPolicy( )
+	{
+		tempData = GameObject.FindGameObjectsWithTag( "FarmField" );
+		farmFieldGroup = new FarmFieldPolicy[tempData.Length];
+		for (int i = 0; i < farmFieldGroup.Length; i++)
+		{
+			if (tempData[i] != null)
+			{
+				farmFieldGroup[i] = tempData[i].GetComponent<FarmFieldPolicy>();
+				SleepFarm( farmFieldGroup[i] );
+			}
+		}
+	}
 	void LinkCropData( )
 	{
-		cropData = GameObject.FindGameObjectsWithTag( "Crop" );
-		cropGroup = new Crop[cropData.Length];
+		tempData = GameObject.FindGameObjectsWithTag( "Crop" );
+		cropGroup = new Crop[tempData.Length];
 		GameObject temp = GameObject.FindGameObjectWithTag( "Crop" );
 		if (temp != null)
 			cropGroup[0] = temp.GetComponent<Crop>();		
+	}
+
+	//farm enable set false
+	void SleepFarm(FarmFieldPolicy farm)
+	{
+		farm.enabled = false;
 	}
 
 	//precess game event - mouse click event
@@ -49,8 +69,9 @@ public class FarmManager : MonoBehaviour
 			{
 				GameObject tempSearch = hitinfo.collider.gameObject;
 				FarmFieldPolicy tempPolicy = tempSearch.GetComponent<FarmFieldPolicy>();
+				tempPolicy.enabled = true;
 				tempPolicy.ProcessEvent( cropGroup[0], tempCropItem, presentResource );
-				AddCropItem( tempCropItem );
+				AddCropItem( tempCropItem, tempPolicy );
 			}
 
 			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "Resource" ) ))
@@ -63,11 +84,12 @@ public class FarmManager : MonoBehaviour
 	}
 
 	//harvest crop and input storage
-	void AddCropItem( CropItem data )
+	void AddCropItem( CropItem data, FarmFieldPolicy farm )
 	{
 		if (data.Name != null)
 		{			
 			saveCropItem.Add( new CropItem( data ) );
+			SleepFarm( farm );
 		}
 	}
 
@@ -85,7 +107,7 @@ public class FarmManager : MonoBehaviour
 
 	//get / set method
 	//on game
-	public bool CheckOnGame()
+	public bool CheckOnGame( )
 	{
 		return onGame;
 	}
