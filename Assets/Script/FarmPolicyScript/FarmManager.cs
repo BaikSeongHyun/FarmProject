@@ -11,7 +11,7 @@ public class FarmManager : MonoBehaviour
 	//complex data field
 	public CropItem tempCropItem;
 	public Crop.Resource presentResource;
-	//set automatic this array
+	//this array will be set automaic 
 	public GameObject[] cropData;
 	public Crop[] cropGroup;
 	public List<CropItem> saveCropItem;
@@ -65,7 +65,7 @@ public class FarmManager : MonoBehaviour
 	//harvest crop and input storage
 	void AddCropItem( CropItem data )
 	{
-		if (data.GetCropName() != null)
+		if (data.Name != null)
 		{			
 			saveCropItem.Add( new CropItem( data ) );
 		}
@@ -85,7 +85,7 @@ public class FarmManager : MonoBehaviour
 
 	//get / set method
 	//on game
-	public bool GetOnGame( )
+	public bool CheckOnGame()
 	{
 		return onGame;
 	}

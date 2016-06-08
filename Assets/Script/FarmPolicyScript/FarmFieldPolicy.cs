@@ -14,7 +14,6 @@ public class FarmFieldPolicy : MonoBehaviour
 	public bool secondResource;
 	public float grewTime;
 	public float resourceTime;
-	public string fieldName;
 	public Sprite temp;
 	public FarmState presentState;
 	public Vector3 presentPosition;
@@ -78,6 +77,7 @@ public class FarmFieldPolicy : MonoBehaviour
 		createComplete = false;
 	}
 
+	//check resource initialze
 	void InitialzeResource( )
 	{
 		firstResource = false;
@@ -87,7 +87,7 @@ public class FarmFieldPolicy : MonoBehaviour
 	//click event process
 	public void ProcessEvent( Crop data, CropItem itemData, Crop.Resource resource )
 	{
-		itemData.SetCropName( null );
+		itemData.Name = null;
 		switch(presentState)
 		{
 			case FarmState.Empty:
@@ -102,9 +102,9 @@ public class FarmFieldPolicy : MonoBehaviour
 				FarmWork( resource );
 				break;
 			case FarmState.Complete:
-				itemData.SetCropName( presentCrop.GetCropName() );
+				itemData.Name = presentCrop.Name;
 				HarvestCrop( out tempRank );
-				itemData.SetRank( tempRank );
+				itemData.Rank = tempRank;
 				break;
 		}
 
@@ -115,7 +115,7 @@ public class FarmFieldPolicy : MonoBehaviour
 	{
 		presentCrop = data;
 		InitialzeResource();
-		resourceTime = ((1 / presentCrop.GetGrowTime()) * 100) + 1;
+		resourceTime = ((1 / presentCrop.GrowTime) * 100) + 1;
 
 	}
 
@@ -226,13 +226,13 @@ public class FarmFieldPolicy : MonoBehaviour
 	{
 		if (grewTime == 0.0f)
 			presentState = FarmState.Empty;
-		else if (grewTime < presentCrop.GetGrowTime() / 3)
+		else if (grewTime < presentCrop.GrowTime / 3)
 			presentState = FarmState.FirstStep;
-		else if (grewTime < (presentCrop.GetGrowTime() / 3) * 2)
+		else if (grewTime < (presentCrop.GrowTime / 3) * 2)
 			presentState = FarmState.SecondStep;
-		else if (grewTime < presentCrop.GetGrowTime())
+		else if (grewTime < presentCrop.GrowTime)
 			presentState = FarmState.ThirdStep;
-		else if (presentCrop.GetGrowTime() < grewTime)
+		else if (presentCrop.GrowTime < grewTime)
 			presentState = FarmState.Complete;
 	}
 }

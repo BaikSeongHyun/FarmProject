@@ -6,21 +6,58 @@ public class SellManager : MonoBehaviour
 {
 	//simple data field
 	public bool onGame;
+	const float RayCastMaxDistance = 100.0f;
+	public int money;
 
 	//complex data field
-	public CropItem[] cropList;
+	//this array will be set automaic
+	public List<CropItem> cropList;
+	public GameObject[] cropData;
+	public Crop[] cropGroup;
 
 	//initialize this script
 	void Start( )
 	{
 		onGame = false;
+		money = 100;
+		cropList = new List<CropItem>();
 	}
 
 	//another method
+	//initialize game data
+	void LinkCropData( )
+	{
+		cropData = GameObject.FindGameObjectsWithTag( "Crop" );
+		cropGroup = new Crop[cropData.Length];
+		GameObject temp = GameObject.FindGameObjectWithTag( "Crop" );
+		if (temp != null)
+			cropGroup[0] = temp.GetComponent<Crop>();		
+	}
+
 	//process game event - mouse click event
 	public void ProcessStageEvent( Vector2 mousePosition )
 	{
+		if (Input.GetButtonDown( "Click" ) && onGame)
+		{
+			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
+			RaycastHit hitinfo;
+			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "SellField" ) ))
+			{
+				GameObject tempSearch = hitinfo.collider.gameObject;
+				SellFieldPolicy tempPolicy = tempSearch.GetComponent<SellFieldPolicy>();
+				tempPolicy.ProcessEvent();
+			}
 
+		}
+	}
+
+	//sell cropitem
+	public void SellCrop( int cropIndex )
+	{
+		//add money & remove crop item in list
+		CropItem temp = cropList[cropIndex];
+		money += temp.Price;
+		cropList.RemoveAt( cropIndex );
 	}
 
 	//sell game start or restart
@@ -39,9 +76,13 @@ public class SellManager : MonoBehaviour
 	//set crop item -> link farm stage;
 	public void SetCropItem( CropItem[] data )
 	{
-		cropList = new CropItem[data.Length];
-		for (int i = 0; i < cropList.Length; i++)
-			cropList[i] = data[i];
+		for (int i = 0; i < data.Length; i++)
+			cropList.Add( data[i] );
 	}
 
+	//on game
+	public bool CheckOnGame( )
+	{
+		return onGame;
+	}
 }

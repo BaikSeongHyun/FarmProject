@@ -25,9 +25,10 @@ public class GameManager : MonoBehaviour
 	void Update( )
 	{
 		mousePosition = Input.mousePosition;
-		if (farmStage.GetOnGame())
+		if (farmStage.CheckOnGame())
 			farmStage.ProcessStageEvent(mousePosition);		
 	}
+
 	//another method
 	//move crop item data (farm to sell) 
 	void TransferCropItem()

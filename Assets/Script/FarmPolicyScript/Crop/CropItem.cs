@@ -14,32 +14,35 @@ public class CropItem
 	public CropItem()
 	{
 		cropName = null;
+		cropRank = Crop.Rank.Default;
+		price = 0;
 	}
-	//constructor - 
-	public CropItem(CropItem data)
+	//constructor - self parameter
+	public CropItem( CropItem data )
 	{
 		cropName = data.cropName;
 		cropRank = data.cropRank;
+		price = data.price;
 	}
 
-	//get / set method
-	//cropName
-	public void SetCropName(string data)
+	//property
+	//crop name
+	public string Name
 	{
-		cropName = data;
+		set { cropName = value; }
+		get{ return cropName; }
 	}
-	public string GetCropName()
+	//crop rank
+	public Crop.Rank Rank
 	{
-		return cropName;
+		set{ cropRank = value; }
+		get { return cropRank; }
 	}
-
-	//Rank
-	public void SetRank(Crop.Rank data)
+	//price
+	public int Price
 	{
-		cropRank = data;
+		set { price = value; }
+		get { return price; }
 	}
-	public Crop.Rank GetRank()
-	{
-		return cropRank;
-	}
+		
 }
