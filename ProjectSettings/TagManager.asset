@@ -14,7 +14,7 @@ TagManager:
   - GameManager
   - FarmCanvas
   - SellCanvas
-  - TestButton
+  - Goal
   layers:
   - Default
   - TransparentFX
