@@ -11,6 +11,7 @@ public class SellManager : MonoBehaviour
 
 	//complex data field
 	//this array will be set automaic
+	public CropItem presentCrop;
 	public List<CropItem> cropList;
 	public GameObject[] cropData;
 	public Crop[] cropGroup;
@@ -45,7 +46,7 @@ public class SellManager : MonoBehaviour
 			{
 				GameObject tempSearch = hitinfo.collider.gameObject;
 				SellFieldPolicy tempPolicy = tempSearch.GetComponent<SellFieldPolicy>();
-				tempPolicy.ProcessEvent();
+				tempPolicy.ProcessEvent(presentCrop);
 			}
 
 		}
@@ -84,7 +85,6 @@ public class SellManager : MonoBehaviour
 	{
 		return cropList;
 	}
-		
 
 	//on game
 	public bool CheckOnGame( )

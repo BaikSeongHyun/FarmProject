@@ -25,15 +25,18 @@ public class SellFieldPolicy : MonoBehaviour
 	//another method
 
 	//click event process
-	public void ProcessEvent( )
+	public void ProcessEvent(CropItem data)
 	{
-
+		if (!onSell)
+		{
+			SetCropItem( data );
+		}
 	}
 
 	//input sell object
 	void SetCropItem(CropItem data)
 	{
-		//draw 
+		//draw texture image 
 		presentItem = new CropItem(data);
 		onSell = true;
 	}

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class SellUI : MonoBehaviour
 {
 	//simple datafield
@@ -95,7 +96,10 @@ public class SellUI : MonoBehaviour
 		//image
 		button.GetComponent<Image>().sprite = SetSprite( itemData.Name );
 		//add call back method
-		button.GetComponent<Button>().onClick.AddListener(SleepCanvas);
+		button.GetComponent<Button>().onClick.AddListener( ( ) =>
+		{
+			PopUpCropItem();
+		} );
 
 		//return object
 		return button;
