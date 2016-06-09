@@ -12,6 +12,8 @@ TagManager:
   - SellStage
   - SellField
   - GameManager
+  - FarmCanvas
+  - SellCanvas
   layers:
   - Default
   - TransparentFX

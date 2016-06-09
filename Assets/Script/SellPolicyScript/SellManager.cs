@@ -80,6 +80,12 @@ public class SellManager : MonoBehaviour
 			cropList.Add( data[i] );
 	}
 
+	public List<CropItem> GetCropItem()
+	{
+		return cropList;
+	}
+		
+
 	//on game
 	public bool CheckOnGame( )
 	{
