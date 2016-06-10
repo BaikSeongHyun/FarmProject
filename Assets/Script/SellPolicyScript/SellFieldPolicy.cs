@@ -5,9 +5,10 @@ public class SellFieldPolicy : MonoBehaviour
 {
 	//simple data field
 	public bool onSell;
+	public int presentCropIndex;
 
 	//complex data field
-	CropItem presentItem;
+	public CropItem presentCrop;
 
 	// initialize this script
 	void Start( )
@@ -16,41 +17,42 @@ public class SellFieldPolicy : MonoBehaviour
 	}
 
 	//property
-	public bool Selled
+	public bool OnSell
 	{
 		get{ return onSell; }
 	}
 
-
 	//another method
 
-	//click event process
-	public void ProcessEvent(CropItem data)
+	//click event process - mouse click event
+	public void ProcessEvent( CropItem data, int index )
 	{
 		if (!onSell)
 		{
-			SetCropItem( data );
+			SetCropItem( data, index );
 		}
 	}
 
 	//input sell object
-	void SetCropItem(CropItem data)
+	void SetCropItem( CropItem data, int index )
 	{
-		//draw texture image 
-		presentItem = new CropItem(data);
+		presentCropIndex = index;
+		presentCrop = new CropItem( data );
 		onSell = true;
+
+		//draw texture image 
+		Debug.Log("set crop item");
 	}
 
 	//customer to player baergaining
-	public void BargainingCrop(int price)
+	public void BargainingCrop( int price )
 	{
 
 	}
 
 	//sell crop item
-	public void SellCropItem(out int price )
+	public void SoldOutCropItem( )
 	{
-		price = presentItem.Price;
 		//Destroy( presentItem );
 		onSell = false;
 	}
@@ -61,5 +63,4 @@ public class SellFieldPolicy : MonoBehaviour
 		//Destroy( presentItem );
 		onSell = false;
 	}
-
 }

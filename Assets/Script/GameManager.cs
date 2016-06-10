@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 	public Vector2 mousePosition;
 
 	//complex data field
+	CropItem[] cropData;
 	FarmManager farmStage;
 	SellManager sellStage;
 	public FarmUI farmUI;
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
 		if (farmStage.CheckOnGame())
 		{
 			gameTime += Time.deltaTime;
-			farmUI.GameTime = gameTime;
+			farmUI.SetGameTime(gameTime);
 			farmStage.ProcessStageEvent( mousePosition );
 			farmUI.LinkCropItem(farmStage.GetCropItem());
 			//temp code for test
@@ -38,9 +39,8 @@ public class GameManager : MonoBehaviour
 		if (sellStage.CheckOnGame())
 		{
 			gameTime += Time.deltaTime;
-			sellUI.GameTime = gameTime;
+			sellUI.SetGameTime(gameTime);
 			sellStage.ProcessStageEvent( mousePosition );
-			sellUI.LinkCropItem( sellStage.GetCropItem().ToArray() );
 		}	
 	}
 
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
 	//move crop item data (farm to sell)
 	void TransferCropItem( )
 	{
-		sellStage.SetCropItem( farmStage.GetCropItem().ToArray() );
+		cropData = farmStage.GetCropItem().ToArray();
 	}
 
 }

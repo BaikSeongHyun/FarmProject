@@ -167,6 +167,7 @@ public class FarmFieldPolicy : MonoBehaviour
 	{
 		presentCrop = null;
 		Destroy( presentTexture );
+		presentState = FarmState.Empty;
 		InitialzeCreate();
 		grewTime = 0.0f;
 		data = SetCropRank();

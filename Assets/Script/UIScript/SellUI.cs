@@ -3,46 +3,32 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
 public class SellUI : MonoBehaviour
 {
 	//simple datafield
 	int moveX;
+	int presentIndex;
+	int price;
 	float gameTime;
-	int countCrop;
+	int tempPrice;
 
 	//complex data field
+	public Sprite soldCrop;
+	public Sprite stolenCrop;
 	public Sprite[] itemSprite;
-	public List<CropItem> cropData;
-	public List<GameObject> button;
+	public CropItem[] cropData;
+	public GameObject[] button;
 	Scrollbar timeBar;
+	SellManager manager;
+	GameObject priceSetPopUp;
 
 	// initialize this script
 	void Start( )
 	{
-		GameObject temp = GameObject.FindGameObjectWithTag( "GameManager" );
 		timeBar = transform.Find( "TimeBar" ).GetComponent<Scrollbar>();
-		button = new List<GameObject>();
-		cropData = new List<CropItem>();
-	}
-
-	//update data
-	void Update( )
-	{
-		timeBar.value = (1 - gameTime / 60f);
-
-		if (button.ToArray().Length != countCrop)
-		{
-			button.Clear();
-			for (int i = 0; i < countCrop; i++)
-				button.Add( MakeNewItemButton( cropData[i], i ) );
-		}
-	}
-
-	//property
-	public float GameTime
-	{
-		set { gameTime = value; }
+		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<SellManager>();
+		priceSetPopUp = GameObject.Find( "PriceSetPopUp" );
+		priceSetPopUp.GetComponent<Canvas>().enabled = false;
 	}
 
 	//another method
@@ -61,20 +47,27 @@ public class SellUI : MonoBehaviour
 		temp.enabled = false;
 	}
 
-	//link crop item data
+	//link crop item data and create button
 	public void LinkCropItem( CropItem[] data )
 	{
-		cropData.Clear();
-		countCrop = data.Length;
+		//set cropData
+		cropData = new CropItem[data.Length];
 		for (int i = 0; i < data.Length; i++)
-			cropData.Add( data[i] );
+			cropData[i] = data[i];
+		
+		//button create
+		button = new GameObject[cropData.Length];
+		for (int i = 0; i < cropData.Length; i++)
+			button[i] = MakeNewItemButton( cropData[i], i );
+	
 	}
 
-	// click crop item - for sell item
-	public void SelectCropItem( )
+	//set game time and renewal scroll bar value
+	public void SetGameTime(float time)
 	{
-
-	}
+		gameTime = time;
+		timeBar.value = (1 - gameTime / 60f);
+	}	
 
 	//make button method
 	GameObject MakeNewItemButton( CropItem itemData, int index )
@@ -98,7 +91,7 @@ public class SellUI : MonoBehaviour
 		//add call back method
 		button.GetComponent<Button>().onClick.AddListener( ( ) =>
 		{
-			PopUpCropItem();
+			PopUpCropItem(itemData, index);
 		} );
 
 		//return object
@@ -119,10 +112,36 @@ public class SellUI : MonoBehaviour
 		return null;
 	}
 
-	//buttom event method
-	public void PopUpCropItem( )
+	//button event method - dynamic crop button
+	public void PopUpCropItem(CropItem data, int index )
 	{
-		Debug.Log( "Active pop up call back" );
+		price = 0;
+		presentIndex = index;
+		priceSetPopUp.GetComponent<Canvas>().enabled = true;
+		priceSetPopUp.transform.Find( "AveragePrice" ).GetComponent<Image>().sprite = manager.SetAverageCropTable( data.Name );
 	}
 
+	//button event method - confirm price and send crop item by sell manager
+	public void ConfirmPrice( )
+	{
+		cropData[presentIndex].Price = price;
+		//send object and destroy object
+		if (manager.LinkPresentCropItem( cropData[presentIndex], presentIndex ))
+		{
+			//button[index].GetComponent<Image>().sprite = soldCrop;
+			button[presentIndex].GetComponent<Button>().enabled = false;
+		}
+	}
+
+	//sprite set sold out
+	public void SoldOutCrop( int index )
+	{
+		button[index].GetComponent<Image>().sprite = soldCrop;
+	}
+
+	//sprite set Stolen
+	public void StolenCrop( int index )
+	{
+		button[index].GetComponent<Image>().sprite = stolenCrop;
+	}
 }

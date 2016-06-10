@@ -65,4 +65,11 @@ public class FarmUI : MonoBehaviour
 		itemList = new CropItem[data.ToArray().Length];
 		itemList = data.ToArray();
 	}
+
+	//set game time and renewal scroll bar value
+	public void SetGameTime(float time)
+	{
+		gameTime = time;
+		timeBar.value = (1 - gameTime / 60f);
+	}	
 }

@@ -8,20 +8,22 @@ public class SellManager : MonoBehaviour
 	public bool onGame;
 	const float RayCastMaxDistance = 100.0f;
 	public int money;
+	public int presentCropIndex;
 
 	//complex data field
 	//this array will be set automaic
 	public CropItem presentCrop;
-	public List<CropItem> cropList;
 	public GameObject[] cropData;
 	public Crop[] cropGroup;
+	public Sprite[] cropAverageTable;
+	public GameObject[] tempData;
+	public SellFieldPolicy[] sellFieldGroup;
 
 	//initialize this script
 	void Start( )
 	{
 		onGame = false;
 		money = 100;
-		cropList = new List<CropItem>();
 	}
 
 	//another method
@@ -33,6 +35,25 @@ public class SellManager : MonoBehaviour
 		GameObject temp = GameObject.FindGameObjectWithTag( "Crop" );
 		if (temp != null)
 			cropGroup[0] = temp.GetComponent<Crop>();		
+	}
+	void LinkSellFieldPolicy( )
+	{
+		tempData = GameObject.FindGameObjectsWithTag( "SellField" );
+		sellFieldGroup = new SellFieldPolicy[tempData.Length];
+		for (int i = 0; i < sellFieldGroup.Length; i++)
+		{
+			if (tempData[i] != null)
+			{
+				sellFieldGroup[i] = tempData[i].GetComponent<SellFieldPolicy>();
+				SleepSellField( sellFieldGroup[i] );
+			}
+		}
+	}
+
+	//sell field enable set false
+	void SleepSellField(SellFieldPolicy sell)
+	{
+		sell.enabled = false;
 	}
 
 	//process game event - mouse click event
@@ -46,7 +67,7 @@ public class SellManager : MonoBehaviour
 			{
 				GameObject tempSearch = hitinfo.collider.gameObject;
 				SellFieldPolicy tempPolicy = tempSearch.GetComponent<SellFieldPolicy>();
-				tempPolicy.ProcessEvent(presentCrop);
+				tempPolicy.ProcessEvent(presentCrop, presentCropIndex);
 			}
 
 		}
@@ -56,9 +77,7 @@ public class SellManager : MonoBehaviour
 	public void SellCrop( int cropIndex )
 	{
 		//add money & remove crop item in list
-		CropItem temp = cropList[cropIndex];
-		money += temp.Price;
-		cropList.RemoveAt( cropIndex );
+	
 	}
 
 	//sell game start or restart
@@ -73,22 +92,47 @@ public class SellManager : MonoBehaviour
 		onGame = false;
 	}
 
-	//get / set method
-	//set crop item -> link farm stage;
-	public void SetCropItem( CropItem[] data )
+	//crop button click 
+	public bool LinkPresentCropItem(CropItem item, int index)
 	{
-		for (int i = 0; i < data.Length; i++)
-			cropList.Add( data[i] );
+		if (CheckAllField())
+		{
+			presentCropIndex = index;
+			presentCrop = new CropItem( item );
+			return true;
+		}
+		else
+			return false;
 	}
 
-	public List<CropItem> GetCropItem()
+	//check empty sell field
+	bool CheckAllField()
 	{
-		return cropList;
+		for(int i = 0; i < sellFieldGroup.Length; i++)
+		{
+			if(!sellFieldGroup[i].OnSell)
+				return true;
+		}
+	
+		return false;
 	}
+
+	//get / set method
 
 	//on game
 	public bool CheckOnGame( )
 	{
 		return onGame;
+	}
+
+	public Sprite SetAverageCropTable(string name)
+	{
+		switch(name)
+		{
+			case "Corn":
+				return cropAverageTable[0];
+		}
+
+		return null;
 	}
 }
