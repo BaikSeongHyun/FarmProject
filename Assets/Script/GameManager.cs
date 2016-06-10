@@ -11,45 +11,52 @@ public class GameManager : MonoBehaviour
 	//complex data field
 	CropItem[] cropData;
 	FarmManager farmStage;
-	SellManager sellStage;
+	StoreManager storeStage;
 	public FarmUI farmUI;
-	public SellUI sellUI;
+	public StoreUI storeUI;
 
 	// Use this for initialization
-	void Start( )
+	void Start ()
 	{
 		gameTime = 0.0f;
-		LinkGameResource();
+		LinkGameResource ();
 
 		//sleep farm
-		farmStage.enabled = false;
-		farmUI.SleepCanvas();
+		farmUI.SleepCanvas ();
 		farmUI.enabled = false;
 
 		//sleep store
-		sellStage.enabled = false;
-		sellUI.SleepCanvas();
-		sellUI.enabled = false;
+		storeUI.SleepCanvas ();
+		storeUI.enabled = false;
 	}
 	
 	// Update is called once per frame
-	void Update( )
+	void Update ()
 	{
 		mousePosition = Input.mousePosition;
-		if (farmStage.CheckOnGame())
+
+		//farm stage
+		if (farmStage.CheckOnGame ())
 		{
 			gameTime += Time.deltaTime;
-			farmUI.SetGameTime( gameTime );
-			farmStage.ProcessStageEvent( mousePosition );
-			farmUI.LinkCropItem( farmStage.GetCropItem() );
+			farmUI.SetGameTime (gameTime);
+			farmStage.ProcessStageEvent (mousePosition);
+			farmUI.LinkCropItem (farmStage.GetCropItem ());
 		}
 
-		if (!sellStage.PlaceComplete)
+		//store stage placement item step
+		if (!storeStage.PlaceComplete && !farmStage.CheckOnGame() )
+		{			
+			storeStage.ProcessPlacementEvent (mousePosition);
+		}
+
+		//store stage 
+		if (storeStage.CheckOnGame ())
 		{
-//			gameTime += Time.deltaTime;
-//			sellUI.SetGameTime( gameTime );
-			sellStage.ProcessStageEvent( mousePosition );
-		}	
+			gameTime += Time.deltaTime;
+			storeUI.SetGameTime (gameTime);
+			storeStage.ProcessStageEvent (mousePosition);
+		}
 	}
 
 	//property
@@ -59,62 +66,61 @@ public class GameManager : MonoBehaviour
 	}
 
 	//another method
-	void LinkGameResource( )
+	void LinkGameResource ()
 	{
 		//link stage data
-		farmStage = GetComponent<FarmManager>();
-		sellStage = GetComponent<SellManager>();
+		farmStage = GetComponent<FarmManager> ();
+		storeStage = GetComponent<StoreManager> ();
 
 		//link UI data
-		GameObject temp = GameObject.FindGameObjectWithTag( "FarmCanvas" );
-		farmUI = temp.GetComponent<FarmUI>();
+		GameObject temp = GameObject.FindGameObjectWithTag ("FarmCanvas");
+		farmUI = temp.GetComponent<FarmUI> ();
 
-		GameObject temp2 = GameObject.FindGameObjectWithTag( "SellCanvas" );
-		sellUI = temp2.GetComponent<SellUI>();
+		GameObject temp2 = GameObject.FindGameObjectWithTag ("StoreCanvas");
+		storeUI = temp2.GetComponent<StoreUI> ();
 	}
 
-	//move crop item data (farm to sell)
-	void TransferCropItem( )
+	//move crop item data (farm to store)
+	void TransferCropItem ()
 	{
-		cropData = farmStage.GetCropItem().ToArray();
+		cropData = farmStage.GetCropItem ().ToArray ();
 	}
 
 	//game start / end policy
 	//farm
-	public void StartFarmGame( )
+	public void StartFarmGame ()
 	{
 		//mainUI.enabled = false;
-		farmStage.enabled = true;
 		farmUI.enabled = true;
-		farmUI.WakeUpCanvas();
-		farmStage.StartFarmGame();
+		farmUI.WakeUpCanvas ();
+		farmStage.StartFarmGame ();
 	}
 
-	public void EndFarmGame( )
+	public void EndFarmGame ()
 	{
-		farmStage.EndFarmGame();
-		farmStage.enabled = false;
-		farmUI.SleepCanvas();
+		farmStage.EndFarmGame ();
+		farmUI.SleepCanvas ();
 		farmUI.enabled = false;
 		gameTime = 0.0f;
 	}
 
-	//sell
-	public void StartSellGame( )
+	//store
+	public void StartStoreGame ()
 	{
-		sellStage.enabled = true;
-		sellUI.enabled = true;
-		sellUI.WakeUpCanvas();
-		sellUI.LinkCropItem( farmStage.GetCropItem().ToArray() );
-		sellStage.StartSellGame();
+		
+		storeUI.enabled = true;
+		storeUI.WakeUpCanvas ();
+		storeUI.LinkCropItem (farmStage.GetCropItem ().ToArray ());
+		storeStage.StartStoreGame ();
+	
 
 	}
-	public void EndSellGame( )
+
+	public void EndStoreGame ()
 	{
-		sellStage.EndSellGame();
-		sellStage.enabled = false;
-		sellUI.SleepCanvas();
-		sellUI.enabled = false;
+		storeStage.EndStoreGame ();
+		storeUI.SleepCanvas ();
+		storeUI.enabled = false;
 		gameTime = 0.0f;
 		//mainUI.enabled = true;
 	}

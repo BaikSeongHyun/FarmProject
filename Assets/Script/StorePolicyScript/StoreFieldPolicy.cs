@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SellFieldPolicy : MonoBehaviour
+public class StoreFieldPolicy : MonoBehaviour
 {
 	//simple data field
-	public bool onSell;
+	public bool onstore;
 	public int presentCropIndex;
 
 	//complex data field
@@ -13,13 +13,13 @@ public class SellFieldPolicy : MonoBehaviour
 	// initialize this script
 	void Start( )
 	{
-		onSell = false;
+		onstore = false;
 	}
 
 	//property
-	public bool OnSell
+	public bool Onstore
 	{
-		get{ return onSell; }
+		get{ return onstore; }
 	}
 
 	//another method
@@ -27,18 +27,18 @@ public class SellFieldPolicy : MonoBehaviour
 	//click event process - mouse click event
 	public void ProcessEvent( CropItem data, int index )
 	{
-		if (!onSell)
+		if (!onstore)
 		{
 			SetCropItem( data, index );
 		}
 	}
 
-	//input sell object
+	//input store object
 	void SetCropItem( CropItem data, int index )
 	{
 		presentCropIndex = index;
 		presentCrop = new CropItem( data );
-		onSell = true;
+		onstore = true;
 
 		//draw texture image 
 
@@ -50,17 +50,17 @@ public class SellFieldPolicy : MonoBehaviour
 
 	}
 
-	//sell crop item
+	//store crop item
 	public void SoldOutCropItem( )
 	{
 		//Destroy( presentItem );
-		onSell = false;
+		onstore = false;
 	}
 
 	//thief has been stolen crop item
 	public void StolenCrop( )
 	{
 		//Destroy( presentItem );
-		onSell = false;
+		onstore = false;
 	}
 }

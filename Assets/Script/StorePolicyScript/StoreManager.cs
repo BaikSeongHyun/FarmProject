@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SellManager : MonoBehaviour
+public class StoreManager : MonoBehaviour
 {
 	//simple data field
 	public bool onGame;
 	public bool placeComplete;
-	const float RayCastMaxDistance = 200.0f;
+	const float RayCastMaxDistance = 100.0f;
 	public int money;
 	public int presentCropIndex;
 
@@ -18,7 +18,7 @@ public class SellManager : MonoBehaviour
 	public Crop[] cropGroup;
 	public Sprite[] cropAverageTable;
 	public GameObject[] tempData;
-	public SellFieldPolicy[] sellFieldGroup;
+	public StoreFieldPolicy[] storeFieldGroup;
 
 	//initialize this script
 	void Start( )
@@ -27,7 +27,7 @@ public class SellManager : MonoBehaviour
 		placeComplete = false;
 		money = 100;
 		LinkCropData();
-		LinkSellFieldPolicy();
+		LinkstoreFieldPolicy();
 	}
 
 	//property
@@ -46,38 +46,38 @@ public class SellManager : MonoBehaviour
 		if (temp != null)
 			cropGroup[0] = temp.GetComponent<Crop>();		
 	}
-	void LinkSellFieldPolicy( )
+	void LinkstoreFieldPolicy( )
 	{
-		tempData = GameObject.FindGameObjectsWithTag( "SellField" );
-		sellFieldGroup = new SellFieldPolicy[tempData.Length];
-		for (int i = 0; i < sellFieldGroup.Length; i++)
+		tempData = GameObject.FindGameObjectsWithTag( "StoreField" );
+		storeFieldGroup = new StoreFieldPolicy[tempData.Length];
+		for (int i = 0; i < storeFieldGroup.Length; i++)
 		{
 			if (tempData[i] != null)
 			{
-				sellFieldGroup[i] = tempData[i].GetComponent<SellFieldPolicy>();
-				SleepSellField( sellFieldGroup[i] );
+				storeFieldGroup[i] = tempData[i].GetComponent<StoreFieldPolicy>();
+				SleepstoreField( storeFieldGroup[i] );
 			}
 		}
 	}
 
-	//sell field enable set false
-	void SleepSellField(SellFieldPolicy sell)
+	//store field enable set false
+	void SleepstoreField(StoreFieldPolicy store)
 	{
-		sell.enabled = false;
+		store.enabled = false;
 	}
 
-	//process game event - mouse click event
-	public void ProcessStageEvent( Vector2 mousePosition )
+	//process placement step
+	public void ProcessPlacementEvent( Vector2 mousePosition )
 	{
-		if (Input.GetButtonDown( "Click" ) && !placeComplete)
+		if (Input.GetButtonDown( "Click" ))
 		{
 			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
 			RaycastHit hitinfo;
-			Debug.Log( "active process event in manager" );
+
 			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "StoreField" ) ))
 			{
 				GameObject tempSearch = hitinfo.collider.gameObject;
-				SellFieldPolicy tempPolicy = tempSearch.GetComponent<SellFieldPolicy>();
+				StoreFieldPolicy tempPolicy = tempSearch.GetComponent<StoreFieldPolicy>();
 				tempPolicy.enabled = true;
 				tempPolicy.ProcessEvent(presentCrop, presentCropIndex);
 			}
@@ -85,21 +85,27 @@ public class SellManager : MonoBehaviour
 		}
 	}
 
-	//sell cropitem
-	public void SellCrop( int cropIndex )
+	//process game event - moveclick event
+	public void ProcessStageEvent(Vector2 mousePosition)
+	{
+
+	}
+
+	//store cropitem
+	public void storeCrop( int cropIndex )
 	{
 		//add money & remove crop item in list
 	
 	}
 
-	//sell game start or restart
-	public void StartSellGame( )
+	//store game start or restart
+	public void StartStoreGame( )
 	{
 		onGame = true;
 	}
 
-	//sell game close
-	public void EndSellGame( )
+	//store game close
+	public void EndStoreGame( )
 	{
 		onGame = false;
 	}
@@ -107,10 +113,8 @@ public class SellManager : MonoBehaviour
 	//crop button click 
 	public bool LinkPresentCropItem(CropItem item, int index)
 	{
-		Debug.Log( "Active Crop Item" );
 		if (CheckAllField())
 		{
-			Debug.Log( "Success Data Input" );
 			presentCropIndex = index;
 			presentCrop = new CropItem( item );
 			return true;
@@ -119,12 +123,12 @@ public class SellManager : MonoBehaviour
 			return false;
 	}
 
-	//check empty sell field
-	bool CheckAllField()
+	//check empty store field
+	public bool CheckAllField()
 	{
-		for(int i = 0; i < sellFieldGroup.Length; i++)
+		for(int i = 0; i < storeFieldGroup.Length; i++)
 		{
-			if(!sellFieldGroup[i].OnSell)
+			if(!storeFieldGroup[i].Onstore)
 				return true;
 		}
 	

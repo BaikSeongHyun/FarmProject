@@ -9,12 +9,14 @@ TagManager:
   - FarmField
   - Crop
   - Resource
-  - SellStage
-  - SellField
+  - StoreStage
+  - StoreField
   - GameManager
   - FarmCanvas
-  - SellCanvas
+  - StoreCanvas
   - MainCanvas
+  - Goal
+  - StoreCanvas
   layers:
   - Default
   - TransparentFX

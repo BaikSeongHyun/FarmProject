@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SellUI : MonoBehaviour
+public class StoreUI : MonoBehaviour
 {
 	//simple datafield
 	int moveX;
@@ -19,14 +19,14 @@ public class SellUI : MonoBehaviour
 	public CropItem[] cropData;
 	public GameObject[] button;
 	Scrollbar timeBar;
-	SellManager manager;
+	StoreManager manager;
 	GameObject priceSetPopUp;
 
 	// initialize this script
 	void Start( )
 	{
 		timeBar = transform.Find( "TimeBar" ).GetComponent<Scrollbar>();
-		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<SellManager>();
+		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
 		priceSetPopUp = GameObject.Find( "PriceSetPopUp" );
 		priceSetPopUp.GetComponent<Canvas>().enabled = false;
 	}
@@ -115,13 +115,19 @@ public class SellUI : MonoBehaviour
 	//button event method - dynamic crop button
 	public void PopUpCropItem( CropItem data, int index )
 	{
+		if(!manager.CheckAllField())
+		{
+			//pop up message
+			Debug.Log("Store field is full");
+			return;
+		}
 		price = 0;
 		presentIndex = index;
 		priceSetPopUp.GetComponent<Canvas>().enabled = true;
 		priceSetPopUp.transform.Find( "AveragePrice" ).GetComponent<Image>().sprite = manager.SetAverageCropTable( data.Name );
 	}
 
-	//button event method - confirm price and send crop item by sell manager
+	//button event method - confirm price and send crop item by store manager
 	public void ConfirmPrice( )
 	{
 		cropData[presentIndex].Price = price;

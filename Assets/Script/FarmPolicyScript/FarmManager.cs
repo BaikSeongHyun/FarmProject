@@ -61,7 +61,7 @@ public class FarmManager : MonoBehaviour
 	//precess game event - mouse click event
 	public void ProcessStageEvent( Vector2 mousePosition )
 	{
-		if (Input.GetButtonDown( "Click" ) && onGame)
+		if (Input.GetButtonDown( "Click" ))
 		{
 			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
 			RaycastHit hitinfo;
