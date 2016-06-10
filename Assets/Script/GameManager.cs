@@ -20,6 +20,16 @@ public class GameManager : MonoBehaviour
 	{
 		gameTime = 0.0f;
 		LinkGameResource();
+
+		//sleep farm
+		farmStage.enabled = false;
+		farmUI.SleepCanvas();
+		farmUI.enabled = false;
+
+		//sleep store
+		sellStage.enabled = false;
+		sellUI.SleepCanvas();
+		sellUI.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -29,17 +39,15 @@ public class GameManager : MonoBehaviour
 		if (farmStage.CheckOnGame())
 		{
 			gameTime += Time.deltaTime;
-			farmUI.SetGameTime(gameTime);
+			farmUI.SetGameTime( gameTime );
 			farmStage.ProcessStageEvent( mousePosition );
-			farmUI.LinkCropItem(farmStage.GetCropItem());
-			//temp code for test
-			sellUI.LinkCropItem( farmStage.GetCropItem().ToArray() );
+			farmUI.LinkCropItem( farmStage.GetCropItem() );
 		}
 
-		if (sellStage.CheckOnGame())
+		if (!sellStage.PlaceComplete)
 		{
-			gameTime += Time.deltaTime;
-			sellUI.SetGameTime(gameTime);
+//			gameTime += Time.deltaTime;
+//			sellUI.SetGameTime( gameTime );
 			sellStage.ProcessStageEvent( mousePosition );
 		}	
 	}
@@ -70,5 +78,48 @@ public class GameManager : MonoBehaviour
 	{
 		cropData = farmStage.GetCropItem().ToArray();
 	}
+
+	//game start / end policy
+	//farm
+	public void StartFarmGame( )
+	{
+		//mainUI.enabled = false;
+		farmStage.enabled = true;
+		farmUI.enabled = true;
+		farmUI.WakeUpCanvas();
+		farmStage.StartFarmGame();
+	}
+
+	public void EndFarmGame( )
+	{
+		farmStage.EndFarmGame();
+		farmStage.enabled = false;
+		farmUI.SleepCanvas();
+		farmUI.enabled = false;
+		gameTime = 0.0f;
+	}
+
+	//sell
+	public void StartSellGame( )
+	{
+		sellStage.enabled = true;
+		sellUI.enabled = true;
+		sellUI.WakeUpCanvas();
+		sellUI.LinkCropItem( farmStage.GetCropItem().ToArray() );
+		sellStage.StartSellGame();
+
+	}
+	public void EndSellGame( )
+	{
+		sellStage.EndSellGame();
+		sellStage.enabled = false;
+		sellUI.SleepCanvas();
+		sellUI.enabled = false;
+		gameTime = 0.0f;
+		//mainUI.enabled = true;
+	}
+
+
+
 
 }

@@ -41,7 +41,7 @@ public class SellFieldPolicy : MonoBehaviour
 		onSell = true;
 
 		//draw texture image 
-		Debug.Log("set crop item");
+
 	}
 
 	//customer to player baergaining

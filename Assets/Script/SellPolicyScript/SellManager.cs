@@ -6,7 +6,8 @@ public class SellManager : MonoBehaviour
 {
 	//simple data field
 	public bool onGame;
-	const float RayCastMaxDistance = 100.0f;
+	public bool placeComplete;
+	const float RayCastMaxDistance = 200.0f;
 	public int money;
 	public int presentCropIndex;
 
@@ -23,7 +24,16 @@ public class SellManager : MonoBehaviour
 	void Start( )
 	{
 		onGame = false;
+		placeComplete = false;
 		money = 100;
+		LinkCropData();
+		LinkSellFieldPolicy();
+	}
+
+	//property
+	public bool PlaceComplete
+	{
+		get { return placeComplete; }
 	}
 
 	//another method
@@ -59,14 +69,16 @@ public class SellManager : MonoBehaviour
 	//process game event - mouse click event
 	public void ProcessStageEvent( Vector2 mousePosition )
 	{
-		if (Input.GetButtonDown( "Click" ) && onGame)
+		if (Input.GetButtonDown( "Click" ) && !placeComplete)
 		{
 			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
 			RaycastHit hitinfo;
-			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "SellField" ) ))
+			Debug.Log( "active process event in manager" );
+			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "StoreField" ) ))
 			{
 				GameObject tempSearch = hitinfo.collider.gameObject;
 				SellFieldPolicy tempPolicy = tempSearch.GetComponent<SellFieldPolicy>();
+				tempPolicy.enabled = true;
 				tempPolicy.ProcessEvent(presentCrop, presentCropIndex);
 			}
 
@@ -95,8 +107,10 @@ public class SellManager : MonoBehaviour
 	//crop button click 
 	public bool LinkPresentCropItem(CropItem item, int index)
 	{
+		Debug.Log( "Active Crop Item" );
 		if (CheckAllField())
 		{
+			Debug.Log( "Success Data Input" );
 			presentCropIndex = index;
 			presentCrop = new CropItem( item );
 			return true;

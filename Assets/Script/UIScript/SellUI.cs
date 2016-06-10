@@ -63,11 +63,11 @@ public class SellUI : MonoBehaviour
 	}
 
 	//set game time and renewal scroll bar value
-	public void SetGameTime(float time)
+	public void SetGameTime( float time )
 	{
 		gameTime = time;
 		timeBar.value = (1 - gameTime / 60f);
-	}	
+	}
 
 	//make button method
 	GameObject MakeNewItemButton( CropItem itemData, int index )
@@ -91,7 +91,7 @@ public class SellUI : MonoBehaviour
 		//add call back method
 		button.GetComponent<Button>().onClick.AddListener( ( ) =>
 		{
-			PopUpCropItem(itemData, index);
+			PopUpCropItem( itemData, index );
 		} );
 
 		//return object
@@ -113,7 +113,7 @@ public class SellUI : MonoBehaviour
 	}
 
 	//button event method - dynamic crop button
-	public void PopUpCropItem(CropItem data, int index )
+	public void PopUpCropItem( CropItem data, int index )
 	{
 		price = 0;
 		presentIndex = index;
@@ -130,6 +130,7 @@ public class SellUI : MonoBehaviour
 		{
 			//button[index].GetComponent<Image>().sprite = soldCrop;
 			button[presentIndex].GetComponent<Button>().enabled = false;
+			priceSetPopUp.GetComponent<Canvas>().enabled = false;
 		}
 	}
 
