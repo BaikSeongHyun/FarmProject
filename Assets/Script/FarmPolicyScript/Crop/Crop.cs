@@ -84,6 +84,13 @@ public class Crop : MonoBehaviour
 	{
 		return averagePrice;
 	}
+	public float GetAveragePrice(Rank rank)
+	{
+		float result;
+		averagePrice.TryGetValue( rank, out result );
+
+		return result;
+	}
 
 	//texture
 	public GameObject GetTexture( int step )

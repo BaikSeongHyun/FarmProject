@@ -8,7 +8,6 @@ public class Customer : Human
 	{
 		moveSpeed = 5f;
 		disposition = Random.Range( 0.9f, 1.1f );
-		money = Random.Range( 100, 300 );
 		state = State.Customer;
 	}
 }

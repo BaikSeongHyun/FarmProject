@@ -19,6 +19,7 @@ public class StoreManager : MonoBehaviour
 	public Sprite[] cropAverageTable;
 	public GameObject[] tempData;
 	public StoreFieldPolicy[] storeFieldGroup;
+	public StoreUI storeUI;
 
 	//initialize this script
 	void Start( )
@@ -28,6 +29,7 @@ public class StoreManager : MonoBehaviour
 		money = 100;
 		LinkCropData();
 		LinkstoreFieldPolicy();
+		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
 	}
 
 	//property
@@ -55,13 +57,13 @@ public class StoreManager : MonoBehaviour
 			if (tempData[i] != null)
 			{
 				storeFieldGroup[i] = tempData[i].GetComponent<StoreFieldPolicy>();
-				SleepstoreField( storeFieldGroup[i] );
+				SleepStoreField( storeFieldGroup[i] );
 			}
 		}
 	}
 
 	//store field enable set false
-	void SleepstoreField(StoreFieldPolicy store)
+	void SleepStoreField(StoreFieldPolicy store)
 	{
 		store.enabled = false;
 	}
@@ -88,7 +90,17 @@ public class StoreManager : MonoBehaviour
 	//process game event - moveclick event
 	public void ProcessStageEvent(Vector2 mousePosition)
 	{
+		Ray ray = Camera.main.ScreenPointToRay( mousePosition );
+		RaycastHit hitinfo;
 
+		if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "Human" ) ))
+		{
+			Human human = hitinfo.collider.gameObject.GetComponent<Human>();
+			if(human.OnBargain)
+			{
+				storeUI.PopUpBargain( human );
+			}
+		}
 	}
 
 	//store cropitem
@@ -128,11 +140,17 @@ public class StoreManager : MonoBehaviour
 	{
 		for(int i = 0; i < storeFieldGroup.Length; i++)
 		{
-			if(!storeFieldGroup[i].Onstore)
+			if(!storeFieldGroup[i].OnStore)
 				return true;
 		}
 	
 		return false;
+	}
+
+	//sold or kill thief
+	public void AddMoney(int value)
+	{
+		money += value;
 	}
 
 	//get / set method
@@ -153,4 +171,10 @@ public class StoreManager : MonoBehaviour
 
 		return null;
 	}
+
+	public Crop[] GetCropGroup()
+	{
+		return cropGroup;
+	}
+
 }

@@ -21,6 +21,8 @@ public class StoreUI : MonoBehaviour
 	Scrollbar timeBar;
 	StoreManager manager;
 	GameObject priceSetPopUp;
+	GameObject bargainPopUp;
+	Human presentBargainCustomer;
 
 	// initialize this script
 	void Start( )
@@ -29,6 +31,8 @@ public class StoreUI : MonoBehaviour
 		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
 		priceSetPopUp = GameObject.Find( "PriceSetPopUp" );
 		priceSetPopUp.GetComponent<Canvas>().enabled = false;
+		bargainPopUp = GameObject.Find( "BargainPopUp" );
+		bargainPopUp.GetComponent<Canvas>().enabled = false;
 	}
 
 	//another method
@@ -58,7 +62,7 @@ public class StoreUI : MonoBehaviour
 		//button create
 		button = new GameObject[cropData.Length];
 		for (int i = 0; i < cropData.Length; i++)
-			button[i] = MakeNewItemButton( cropData[i], i );
+			button[i] = CreateNewItemButton( cropData[i], i );
 	
 	}
 
@@ -70,7 +74,7 @@ public class StoreUI : MonoBehaviour
 	}
 
 	//make button method
-	GameObject MakeNewItemButton( CropItem itemData, int index )
+	GameObject CreateNewItemButton( CropItem itemData, int index )
 	{
 		//create button object
 		GameObject button = new GameObject();
@@ -112,13 +116,14 @@ public class StoreUI : MonoBehaviour
 		return null;
 	}
 
+	//section pop up cropItem
 	//button event method - dynamic crop button
 	public void PopUpCropItem( CropItem data, int index )
 	{
-		if(!manager.CheckAllField())
+		if (!manager.CheckAllField())
 		{
 			//pop up message
-			Debug.Log("Store field is full");
+			Debug.Log( "Store field is full" );
 			return;
 		}
 		price = 0;
@@ -127,6 +132,32 @@ public class StoreUI : MonoBehaviour
 		priceSetPopUp.transform.Find( "AveragePrice" ).GetComponent<Image>().sprite = manager.SetAverageCropTable( data.Name );
 	}
 
+	//button event method - price +-
+	public void SetPrice( int key, bool check )
+	{
+		switch(key)
+		{
+			case 100:
+				if (check)
+					price += 100;
+				else
+					price -= 100;
+				break;
+			case 10:
+				if (check)
+					price += 10;
+				else
+					price -= 10;
+				break;
+			case 1:
+				if (check)
+					price += 1;
+				else
+					price -= 1;
+				break;
+		}
+	}
+		
 	//button event method - confirm price and send crop item by store manager
 	public void ConfirmPrice( )
 	{
@@ -150,5 +181,26 @@ public class StoreUI : MonoBehaviour
 	public void StolenCrop( int index )
 	{
 		button[index].GetComponent<Image>().sprite = stolenCrop;
+	}
+
+	//section pop up bargain
+	//button event method
+	public void PopUpBargain( Human human )
+	{
+		//pop up canvas for bargain
+		bargainPopUp.GetComponent<Canvas>().enabled = true;
+		human = presentBargainCustomer;
+	}
+
+	public void ComfirmBargain()
+	{
+		bargainPopUp.GetComponent<Canvas>().enabled = false;
+		presentBargainCustomer.SuccessBargain();
+	}
+
+	public void RejectBargain()
+	{
+		bargainPopUp.GetComponent<Canvas>().enabled = false;
+		presentBargainCustomer.FailureBargain();
 	}
 }
