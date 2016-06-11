@@ -14,7 +14,6 @@ public class StoreFieldPolicy : MonoBehaviour
 	// initialize this script
 	void Start( )
 	{
-		onStore = false;
 		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
 		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
 	}
@@ -35,9 +34,10 @@ public class StoreFieldPolicy : MonoBehaviour
 	//click event process - mouse click event
 	public void ProcessEvent( CropItem data, int index )
 	{
-		if (!onStore)
+		if (!onStore)			
 		{
 			SetCropItem( data, index );
+			onStore = true;
 		}
 	}
 
@@ -52,7 +52,7 @@ public class StoreFieldPolicy : MonoBehaviour
 
 	}
 
-	//customer to player baergaining
+	//customer to player bargaining
 	public void BargainSoldOutCrop( int price )
 	{
 		onStore = false;
@@ -65,7 +65,9 @@ public class StoreFieldPolicy : MonoBehaviour
 	public void SoldOutCropItem( )
 	{
 		//Destroy( presentItem );
+		Debug.Log("Enter Sold Out Crop Item method");
 		onStore = false;
+		presentCrop = null;
 		manager.AddMoney(presentCrop.Price);
 
 		//send renewal data by store UI

@@ -183,6 +183,15 @@ public class StoreUI : MonoBehaviour
 		button[index].GetComponent<Image>().sprite = stolenCrop;
 	}
 
+	//clear button object
+	public void ClearItemButton( )
+	{
+		for (int i = 0; i < button.Length; i++)
+		{
+			Destroy( button[i] );
+		}
+	}
+		
 	//section pop up bargain
 	//button event method
 	public void PopUpBargain( Human human )
@@ -192,13 +201,13 @@ public class StoreUI : MonoBehaviour
 		human = presentBargainCustomer;
 	}
 
-	public void ComfirmBargain()
+	public void ComfirmBargain( )
 	{
 		bargainPopUp.GetComponent<Canvas>().enabled = false;
 		presentBargainCustomer.SuccessBargain();
 	}
 
-	public void RejectBargain()
+	public void RejectBargain( )
 	{
 		bargainPopUp.GetComponent<Canvas>().enabled = false;
 		presentBargainCustomer.FailureBargain();

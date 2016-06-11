@@ -92,7 +92,6 @@ public class GameManager : MonoBehaviour
 		farmUI.WakeUpCanvas();
 		farmStage.StartFarmGame();
 	}
-
 	public void EndFarmGame( )
 	{
 		farmStage.EndFarmGame();
@@ -112,11 +111,11 @@ public class GameManager : MonoBehaviour
 	
 
 	}
-
 	public void EndStoreGame( )
 	{
 		storeStage.EndStoreGame();
 		storeUI.SleepCanvas();
+		storeUI.ClearItemButton();
 		storeUI.enabled = false;
 		gameTime = 0.0f;
 		//mainUI.enabled = true;

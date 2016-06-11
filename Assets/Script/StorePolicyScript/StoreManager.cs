@@ -12,7 +12,7 @@ public class StoreManager : MonoBehaviour
 	public int presentCropIndex;
 
 	//complex data field
-	//this array will be set automaic
+	//this array will be set automatic
 	public CropItem presentCrop;
 	public GameObject[] cropData;
 	public Crop[] cropGroup;

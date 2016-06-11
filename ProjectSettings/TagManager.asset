@@ -15,8 +15,9 @@ TagManager:
   - FarmCanvas
   - StoreCanvas
   - MainCanvas
-  - Goal
+  - StartPos
   - StoreCanvas
+  - TestObject
   layers:
   - Default
   - TransparentFX

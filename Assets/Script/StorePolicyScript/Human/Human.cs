@@ -6,6 +6,7 @@ public class Human : MonoBehaviour
 {
 	//simple data field
 	public float moveSpeed;
+	public float interpolate;
 	public float disposition;
 	public State state;
 	public Transform target;
@@ -57,14 +58,24 @@ public class Human : MonoBehaviour
 		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
 		popUpImage = transform.Find( "PopUpHuman" ).GetComponent<Image>();
 		popUpImage.enabled = false;
-		target = transform;
+		target = GameObject.FindGameObjectWithTag( "TestObject" ).GetComponent<Transform>();
+		moveSpeed = 5f;
 	}
 
 	void Update( )
 	{
-		transform.position = Vector3.Lerp(transform.position, target.position, moveSpeed * Time.deltaTime);
+		if (onMove && !onShopping)
+		{
+			interpolate = (target.position.sqrMagnitude / transform.position.sqrMagnitude) * 0.01f;
+			transform.position = (Vector3.Lerp( transform.position, target.position, moveSpeed * interpolate ));
+		}
+		else if (onMove && onShopping)
+		{
+			transform.position = (Vector3.Lerp( transform.position, target.position, moveSpeed * 0.0005f ));
+		}
+
 		if (onShopping)
-			;
+			target = GameObject.FindGameObjectWithTag( "StartPos" ).GetComponent<Transform>();
 	}
 
 	//property
@@ -123,18 +134,18 @@ public class Human : MonoBehaviour
 		Crop[] cropData = manager.GetCropGroup();
 		float averagePrice = 0.0f;
 
-		for (int i = 0; i < cropData.Length; i++)
+//		for (int i = 0; i < cropData.Length; i++)
+//		{
+		if (cropData[0].Name == field.PresentItem.Name)
 		{
-			if (cropData[i].Name == field.PresentItem.Name)
-			{
-				averagePrice = cropData[i].GetAveragePrice( field.PresentItem.Rank );
-			}
+			averagePrice = cropData[0].GetAveragePrice( field.PresentItem.Rank );
 		}
+//		}
 
 		//if no data in average price -> no buy
 		if (field.PresentItem.Price <= disposition * averagePrice)
 		{
-			bargainPrice = (disposition * averagePrice) * 0.95f;
+			Debug.Log( "Enter Buy Crop 1st if" );
 			field.SoldOutCropItem();
 			onShopping = true;
 		}
@@ -149,6 +160,7 @@ public class Human : MonoBehaviour
 		else
 		{
 			//no buy
+			Debug.Log( "Enter No Buy" );
 			onShopping = true;
 		}
 	}

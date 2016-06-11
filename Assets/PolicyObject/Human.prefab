@@ -12,7 +12,7 @@ GameObject:
   - 222: {fileID: 22205972}
   - 114: {fileID: 11415238}
   m_Layer: 11
-  m_Name: PopupHuman
+  m_Name: PopUpHuman
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 128822}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -11.999}
+  m_LocalPosition: {x: -1.1, y: 1, z: -31.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 22411806}
@@ -138,11 +138,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
+  interpolate: 0
   disposition: 0
   state: 0
   target: {fileID: 0}
-  onWork: 0
+  onShopping: 0
+  onMove: 1
+  onBargain: 0
+  bargainPrice: 0
   popUpImage: {fileID: 0}
+  image:
+  - {fileID: 21300000, guid: da9e0b76ede4f4854979eae9e7268ee3, type: 3}
+  - {fileID: 21300000, guid: eb521390e559742888e0a00ae67937f8, type: 3}
+  presentStore: {fileID: 0}
 --- !u!136 &13692418
 CapsuleCollider:
   m_ObjectHideFlags: 1
