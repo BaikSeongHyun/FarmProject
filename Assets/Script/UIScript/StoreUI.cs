@@ -15,7 +15,8 @@ public class StoreUI : MonoBehaviour
 	//complex data field
 	public Sprite soldCrop;
 	public Sprite stolenCrop;
-	public Sprite[] itemSprite;
+	public Sprite[] itemSpriteColor;
+	public Sprite[] itemSpriteGray;
 	public CropItem[] cropData;
 	public GameObject[] button;
 	Scrollbar timeBar;
@@ -89,9 +90,11 @@ public class StoreUI : MonoBehaviour
 
 		//set button object information
 		//pos
-		button.transform.position = new Vector3( 20f, 20f, 0f );
+		button.transform.localPosition = new Vector3( -340f + (index * 60f), 150f, 0f );
+		button.transform.localScale = new Vector3( 0.5f, 0.5f, 0.5f );
+		//button.transform.GetComponent<RectTransform>().sizeDelta = ( new Vector2( 0.5f, 0.5f ) );
 		//image
-		button.GetComponent<Image>().sprite = SetSprite( itemData.Name );
+		button.GetComponent<Image>().sprite = SetSprite( itemData.Name, false );
 		//add call back method
 		button.GetComponent<Button>().onClick.AddListener( ( ) =>
 		{
@@ -103,14 +106,31 @@ public class StoreUI : MonoBehaviour
 	}
 
 	//button sprite select
-	Sprite SetSprite( string name )
+	Sprite SetSprite( string name, bool place )
 	{
-		switch(name)
+		if (!place)
 		{
-			case "Corn":
-				return itemSprite[0];
-			case "WaterMelon":
-				return itemSprite[1];
+			switch(name)
+			{
+				case "Corn":
+					return itemSpriteColor[0];
+				case "Carrot":
+					return itemSpriteColor[1];
+				case "Pumpkin":
+					return itemSpriteColor[2];
+			}
+		}
+		if (place)
+		{
+			switch(name)
+			{
+				case "Corn":
+					return itemSpriteGray[0];
+				case "Carrot":
+					return itemSpriteGray[1];
+				case "Pumpkin":
+					return itemSpriteGray[2];
+			}
 		}
 
 		return null;
@@ -165,7 +185,7 @@ public class StoreUI : MonoBehaviour
 		//send object and destroy object
 		if (manager.LinkPresentCropItem( cropData[presentIndex], presentIndex ))
 		{
-			//button[index].GetComponent<Image>().sprite = soldCrop;
+			button[presentIndex].GetComponent<Image>().sprite = SetSprite( cropData[presentIndex].Name, true );
 			button[presentIndex].GetComponent<Button>().enabled = false;
 			priceSetPopUp.GetComponent<Canvas>().enabled = false;
 		}

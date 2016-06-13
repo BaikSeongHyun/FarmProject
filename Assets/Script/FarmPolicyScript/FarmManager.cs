@@ -7,12 +7,12 @@ public class FarmManager : MonoBehaviour
 	//simple data field
 	public bool onGame;
 	const float RayCastMaxDistance = 100.0f;
+	public Crop.Resource presentResource;
 
 	//complex data field
-	public CropItem tempCropItem;
-	public Crop.Resource presentResource;
+	public Crop presentSeed;
+	public CropItem outputCropItem;
 	//this array will be set automaic
-	public GameObject[] tempData;
 	public FarmFieldPolicy[] farmFieldGroup;
 	public Crop[] cropGroup;
 	public List<CropItem> saveCropItem;
@@ -24,7 +24,7 @@ public class FarmManager : MonoBehaviour
 		presentResource = Crop.Resource.Default;
 		LinkFarmFieldPolicy();
 		LinkCropData();
-		tempCropItem = new CropItem();
+		outputCropItem = new CropItem();
 		saveCropItem = new List<CropItem>();
 	}
 
@@ -32,7 +32,7 @@ public class FarmManager : MonoBehaviour
 	//initialize game data
 	void LinkFarmFieldPolicy( )
 	{
-		tempData = GameObject.FindGameObjectsWithTag( "FarmField" );
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "FarmField" );
 		farmFieldGroup = new FarmFieldPolicy[tempData.Length];
 		for (int i = 0; i < farmFieldGroup.Length; i++)
 		{
@@ -45,11 +45,14 @@ public class FarmManager : MonoBehaviour
 	}
 	void LinkCropData( )
 	{
-		tempData = GameObject.FindGameObjectsWithTag( "Crop" );
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Crop" );
 		cropGroup = new Crop[tempData.Length];
-		GameObject temp = GameObject.FindGameObjectWithTag( "Crop" );
-		if (temp != null)
-			cropGroup[0] = temp.GetComponent<Crop>();		
+
+		for (int i = 0; i < tempData.Length; i++)
+		{
+			if (tempData[i] != null)
+				cropGroup[i] = tempData[i].GetComponent<Crop>();	
+		}
 	}
 
 	//farm enable set false
@@ -70,8 +73,8 @@ public class FarmManager : MonoBehaviour
 				GameObject tempSearch = hitinfo.collider.gameObject;
 				FarmFieldPolicy tempPolicy = tempSearch.GetComponent<FarmFieldPolicy>();
 				tempPolicy.enabled = true;
-				tempPolicy.ProcessEvent( cropGroup[0], tempCropItem, presentResource );
-				AddCropItem( tempCropItem, tempPolicy );
+				tempPolicy.ProcessEvent( presentSeed, outputCropItem, presentResource );
+				AddCropItem( outputCropItem, tempPolicy );
 			}
 
 			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "Resource" ) ))

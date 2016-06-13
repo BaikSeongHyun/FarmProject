@@ -1,14 +1,13 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-public class Corn : Crop
+public class Pumpkin : Crop
 {
-	//constructor - corn
-	public Corn()
+	//constructor - strawberry
+	public Pumpkin()
 	{
-		cropName = "Corn";
-		growTime = 20f;
+		cropName = "Pumpkin";
+		growTime = 30f;
 		requireResource = new Resource[2];
 		requireResource[0] = Resource.Water; 
 		requireResource[1] = Resource.Fertilizer;

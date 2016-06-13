@@ -103,6 +103,5 @@ public class Crop : MonoBehaviour
 	{
 		return resourceImage[data];
 	}
-
 }
 

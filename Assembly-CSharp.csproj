@@ -58,11 +58,11 @@
      <Compile Include="Assets\Script\BackGroundScript\DestroyLogic.cs" />
      <Compile Include="Assets\Script\BackGroundScript\GenerateClouds.cs" />
      <Compile Include="Assets\Script\BackGroundScript\MoveCloud.cs" />
+     <Compile Include="Assets\Script\FarmPolicyScript\Crop\Carrot.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Corn.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Crop.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\CropItem.cs" />
-     <Compile Include="Assets\Script\FarmPolicyScript\Crop\StrawBerry.cs" />
-     <Compile Include="Assets\Script\FarmPolicyScript\Crop\Watermelon.cs" />
+     <Compile Include="Assets\Script\FarmPolicyScript\Crop\Pumpkin.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\FarmFieldPolicy.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\FarmManager.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Resource\Fertilizer.cs" />

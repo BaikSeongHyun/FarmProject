@@ -10,7 +10,7 @@ public class FarmUI : MonoBehaviour
 	float gameTime;
 
 	//complex data field
-	public Texture tempData;
+	public Texture[] cropTexture;
 	Button[] cropItem;
 	CropItem[] itemList;
 	Scrollbar timeBar;
@@ -25,15 +25,33 @@ public class FarmUI : MonoBehaviour
 	//draw UI & Update data;
 	void OnGUI( )
 	{
-		moveX = 10;
+		moveX = 0;
 
 		for (int i = 0; i < itemList.Length; i++)
 		{
-			moveX += 20;
-			GUI.DrawTexture( new Rect( 10 + moveX, 10, 10, 10 ), tempData );
+			moveX += 80;
+			GUI.DrawTexture( new Rect( moveX, 40, 50, 50 ), SetTexture( itemList[i].Name ) );
+
 		}
 
 		timeBar.value = (1 - gameTime / 60f);
+	}
+
+	//button sprite select
+	Texture SetTexture( string name )
+	{
+		switch(name)
+		{
+			case "Corn":
+				return cropTexture[0];
+			case "Carrot":
+				return cropTexture[1];
+			case "Pumpkin":
+				return cropTexture[2];
+		}
+
+		return null;
+
 	}
 
 	//property
@@ -45,14 +63,14 @@ public class FarmUI : MonoBehaviour
 	//another method
 
 	//wake up canvas - UI activate step
-	public void WakeUpCanvas()
+	public void WakeUpCanvas( )
 	{
 		Canvas temp = GetComponent<Canvas>();
 		temp.enabled = true;
 	}
 
 	//sleep canvas - UI sleep step
-	public void SleepCanvas()
+	public void SleepCanvas( )
 	{
 		Canvas temp = GetComponent<Canvas>();
 		temp.enabled = false;
@@ -67,9 +85,9 @@ public class FarmUI : MonoBehaviour
 	}
 
 	//set game time and renewal scroll bar value
-	public void SetGameTime(float time)
+	public void SetGameTime( float time )
 	{
 		gameTime = time;
 		timeBar.value = (1 - gameTime / 60f);
-	}	
+	}
 }

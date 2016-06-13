@@ -17,7 +17,6 @@ public class StoreManager : MonoBehaviour
 	public GameObject[] cropData;
 	public Crop[] cropGroup;
 	public Sprite[] cropAverageTable;
-	public GameObject[] tempData;
 	public StoreFieldPolicy[] storeFieldGroup;
 	public StoreUI storeUI;
 
@@ -42,15 +41,18 @@ public class StoreManager : MonoBehaviour
 	//initialize game data
 	void LinkCropData( )
 	{
-		cropData = GameObject.FindGameObjectsWithTag( "Crop" );
-		cropGroup = new Crop[cropData.Length];
-		GameObject temp = GameObject.FindGameObjectWithTag( "Crop" );
-		if (temp != null)
-			cropGroup[0] = temp.GetComponent<Crop>();		
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Crop" );
+		cropGroup = new Crop[tempData.Length];
+
+		for (int i = 0; i < tempData.Length; i++)
+		{
+			if (tempData[i] != null)
+				cropGroup[i] = tempData[i].GetComponent<Crop>();	
+		}
 	}
 	void LinkstoreFieldPolicy( )
 	{
-		tempData = GameObject.FindGameObjectsWithTag( "StoreField" );
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "StoreField" );
 		storeFieldGroup = new StoreFieldPolicy[tempData.Length];
 		for (int i = 0; i < storeFieldGroup.Length; i++)
 		{

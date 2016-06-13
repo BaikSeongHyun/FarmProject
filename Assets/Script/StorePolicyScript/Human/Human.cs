@@ -134,13 +134,13 @@ public class Human : MonoBehaviour
 		Crop[] cropData = manager.GetCropGroup();
 		float averagePrice = 0.0f;
 
-//		for (int i = 0; i < cropData.Length; i++)
-//		{
-		if (cropData[0].Name == field.PresentItem.Name)
+		for (int i = 0; i < cropData.Length; i++)
 		{
-			averagePrice = cropData[0].GetAveragePrice( field.PresentItem.Rank );
+			if (cropData[0].Name == field.PresentItem.Name)
+			{
+				averagePrice = cropData[0].GetAveragePrice( field.PresentItem.Rank );
+			}
 		}
-//		}
 
 		//if no data in average price -> no buy
 		if (field.PresentItem.Price <= disposition * averagePrice)
