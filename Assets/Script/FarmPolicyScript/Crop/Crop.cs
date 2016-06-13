@@ -13,6 +13,7 @@ public class Crop : MonoBehaviour
 	public Dictionary<Rank, float> averagePrice;
 	public Resource[] requireResource;
 	public Sprite[] resourceImage;
+	public Sprite[] cropIcon;
 	public GameObject[] textureData = new GameObject[growStep];
 
 
@@ -37,17 +38,17 @@ public class Crop : MonoBehaviour
 
 	//constructor
 	//no parameter - for inheritance instance
-	public Crop()
+	public Crop ()
 	{
-		averagePrice = new Dictionary<Rank, float>();
+		averagePrice = new Dictionary<Rank, float> ();
 	}
 
 	//crop parameter - self parameter
-	public Crop( Crop data )
+	public Crop (Crop data)
 	{
 		this.cropName = data.cropName;
 		this.growTime = data.growTime;
-		SetResource( data.requireResource );
+		SetResource (data.requireResource);
 		this.averagePrice = data.averagePrice;
 	}
 
@@ -66,42 +67,54 @@ public class Crop : MonoBehaviour
 
 	//get / set method
 	//resource
-	public void SetResource( Resource[] data )
+	public void SetResource (Resource[] data)
 	{
 		requireResource = new Resource[data.Length];
 		for (int i = 0; i < requireResource.Length; i++)
-			requireResource[i] = data[i];
+			requireResource [i] = data [i];
 	}
 
-	public Resource GetRequireResource( int i )
+	public Resource GetRequireResource (int i)
 	{
 		//only use one/two
-		return requireResource[i];
+		return requireResource [i];
 	}
 
 	//averagePrice
-	public Dictionary<Rank, float> GetAveragePrice( )
+	public Dictionary<Rank, float> GetAveragePrice ()
 	{
 		return averagePrice;
 	}
-	public float GetAveragePrice(Rank rank)
+
+	public float GetAveragePrice (Rank rank)
 	{
 		float result;
-		averagePrice.TryGetValue( rank, out result );
+		averagePrice.TryGetValue (rank, out result);
 
 		return result;
 	}
 
 	//texture
-	public GameObject GetTexture( int step )
+	public GameObject GetTexture (int step)
 	{
-		return textureData[step];
+		return textureData [step];
 	}
 
 	//resource image sprite
-	public Sprite GerResourceImage( int data )
+	public Sprite GetResourceImage (int data)
 	{
-		return resourceImage[data];
+		return resourceImage [data];
+	}
+
+	//IconImage
+	public Sprite GetIcon (int index)
+	{
+		if (index == 0)
+			return cropIcon [0];
+		else if (index == 1)
+			return cropIcon [1];
+
+		return null;
 	}
 }
 

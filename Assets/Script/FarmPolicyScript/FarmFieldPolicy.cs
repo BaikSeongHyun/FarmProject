@@ -132,7 +132,7 @@ public class FarmFieldPolicy : MonoBehaviour
 		{
 			//require resource on - water
 			resourceImage.enabled = true;
-			resourceImage.sprite = presentCrop.GerResourceImage( 0 );
+			resourceImage.sprite = presentCrop.GetResourceImage( 0 );
 
 			//crop texture update
 			Destroy( presentTexture );
@@ -143,7 +143,7 @@ public class FarmFieldPolicy : MonoBehaviour
 		{
 			//require resource change - fertilizer
 			resourceImage.enabled = true;
-			resourceImage.sprite = presentCrop.GerResourceImage( 1 );
+			resourceImage.sprite = presentCrop.GetResourceImage( 1 );
 
 			//crop texture update
 			Destroy( presentTexture );

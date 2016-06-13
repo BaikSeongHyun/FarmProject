@@ -21,14 +21,14 @@ public class StoreManager : MonoBehaviour
 	public StoreUI storeUI;
 
 	//initialize this script
-	void Start( )
+	void Start ()
 	{
 		onGame = false;
 		placeComplete = false;
 		money = 100;
-		LinkCropData();
-		LinkstoreFieldPolicy();
-		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
+		LinkCropData ();
+		LinkstoreFieldPolicy ();
+		storeUI = GameObject.FindGameObjectWithTag ("StoreCanvas").GetComponent<StoreUI> ();
 	}
 
 	//property
@@ -39,98 +39,99 @@ public class StoreManager : MonoBehaviour
 
 	//another method
 	//initialize game data
-	void LinkCropData( )
+	void LinkCropData ()
 	{
-		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Crop" );
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag ("Crop");
 		cropGroup = new Crop[tempData.Length];
 
 		for (int i = 0; i < tempData.Length; i++)
 		{
-			if (tempData[i] != null)
-				cropGroup[i] = tempData[i].GetComponent<Crop>();	
+			if (tempData [i] != null)
+				cropGroup [i] = tempData [i].GetComponent<Crop> ();	
 		}
 	}
-	void LinkstoreFieldPolicy( )
+
+	void LinkstoreFieldPolicy ()
 	{
-		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "StoreField" );
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag ("StoreField");
 		storeFieldGroup = new StoreFieldPolicy[tempData.Length];
 		for (int i = 0; i < storeFieldGroup.Length; i++)
 		{
-			if (tempData[i] != null)
+			if (tempData [i] != null)
 			{
-				storeFieldGroup[i] = tempData[i].GetComponent<StoreFieldPolicy>();
-				SleepStoreField( storeFieldGroup[i] );
+				storeFieldGroup [i] = tempData [i].GetComponent<StoreFieldPolicy> ();
+				SleepStoreField (storeFieldGroup [i]);
 			}
 		}
 	}
 
 	//store field enable set false
-	void SleepStoreField(StoreFieldPolicy store)
+	void SleepStoreField (StoreFieldPolicy store)
 	{
 		store.enabled = false;
 	}
 
 	//process placement step
-	public void ProcessPlacementEvent( Vector2 mousePosition )
+	public void ProcessPlacementEvent (Vector2 mousePosition)
 	{
-		if (Input.GetButtonDown( "Click" ))
+		if (Input.GetButtonDown ("Click"))
 		{
-			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
+			Ray ray = Camera.main.ScreenPointToRay (mousePosition);
 			RaycastHit hitinfo;
 
-			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "StoreField" ) ))
+			if (Physics.Raycast (ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer ("StoreField")))
 			{
 				GameObject tempSearch = hitinfo.collider.gameObject;
-				StoreFieldPolicy tempPolicy = tempSearch.GetComponent<StoreFieldPolicy>();
+				StoreFieldPolicy tempPolicy = tempSearch.GetComponent<StoreFieldPolicy> ();
 				tempPolicy.enabled = true;
-				tempPolicy.ProcessEvent(presentCrop, presentCropIndex);
+				tempPolicy.ProcessEvent (presentCrop, presentCropIndex);
 			}
 
 		}
 	}
 
 	//process game event - moveclick event
-	public void ProcessStageEvent(Vector2 mousePosition)
+	public void ProcessStageEvent (Vector2 mousePosition)
 	{
-		Ray ray = Camera.main.ScreenPointToRay( mousePosition );
+		Ray ray = Camera.main.ScreenPointToRay (mousePosition);
 		RaycastHit hitinfo;
 
-		if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "Human" ) ))
+		if (Physics.Raycast (ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer ("Human")))
 		{
-			Human human = hitinfo.collider.gameObject.GetComponent<Human>();
-			if(human.OnBargain)
+			Human human = hitinfo.collider.gameObject.GetComponent<Human> ();
+			if (human.OnBargain)
 			{
-				storeUI.PopUpBargain( human );
+				storeUI.PopUpBargain (human);
 			}
 		}
 	}
 
 	//store cropitem
-	public void storeCrop( int cropIndex )
+	public void storeCrop (int cropIndex)
 	{
 		//add money & remove crop item in list
 	
 	}
 
 	//store game start or restart
-	public void StartStoreGame( )
+	public void StartStoreGame ()
 	{
 		onGame = true;
 	}
 
 	//store game close
-	public void EndStoreGame( )
+	public void EndStoreGame ()
 	{
 		onGame = false;
 	}
 
-	//crop button click 
-	public bool LinkPresentCropItem(CropItem item, int index)
+	//crop button click
+	public bool LinkPresentCropItem (CropItem item, int index)
 	{
-		if (CheckAllField())
+		if (CheckAllField ())
 		{
 			presentCropIndex = index;
-			presentCrop = new CropItem( item );
+			presentCrop = new CropItem (item);
 			return true;
 		}
 		else
@@ -138,11 +139,11 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//check empty store field
-	public bool CheckAllField()
+	public bool CheckAllField ()
 	{
-		for(int i = 0; i < storeFieldGroup.Length; i++)
+		for (int i = 0; i < storeFieldGroup.Length; i++)
 		{
-			if(!storeFieldGroup[i].OnStore)
+			if (!storeFieldGroup [i].OnStore)
 				return true;
 		}
 	
@@ -150,7 +151,7 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//sold or kill thief
-	public void AddMoney(int value)
+	public void AddMoney (int value)
 	{
 		money += value;
 	}
@@ -158,23 +159,27 @@ public class StoreManager : MonoBehaviour
 	//get / set method
 
 	//on game
-	public bool CheckOnGame( )
+	public bool CheckOnGame ()
 	{
 		return onGame;
 	}
 
-	public Sprite SetAverageCropTable(string name)
+	public Sprite SetAverageCropTable (string name)
 	{
-		switch(name)
+		switch (name)
 		{
 			case "Corn":
-				return cropAverageTable[0];
+				return cropAverageTable [0];
+			case "Carrot":
+				return cropAverageTable [1];
+			case "Pumpkin":
+				return cropAverageTable [2];
 		}
 
 		return null;
 	}
 
-	public Crop[] GetCropGroup()
+	public Crop[] GetCropGroup ()
 	{
 		return cropGroup;
 	}
