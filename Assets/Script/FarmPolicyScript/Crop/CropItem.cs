@@ -44,5 +44,13 @@ public class CropItem
 		set { price = value; }
 		get { return price; }
 	}
+
+	//another method
+	public void SetDefault()
+	{
+		cropName = null;
+		cropRank = Crop.Rank.Default;
+		price = 0;
+	}
 		
 }

@@ -53,18 +53,11 @@ public class FarmFieldPolicy : MonoBehaviour
 		presentRotation = transform.rotation;
 		SetFarmState();
 
-		if (presentCrop != null)
+		if (onCrop)
 		{
-			onCrop = true;
 			grewTime += Time.deltaTime;	
 			GrowCrop();
-		}
-		else
-		{
-			onCrop = false;
-			grewTime = 0.0f;
-		}
-		
+		}	
 	}
 
 	//another method
@@ -86,8 +79,10 @@ public class FarmFieldPolicy : MonoBehaviour
 
 	//click event process
 	public void ProcessEvent( Crop data, CropItem itemData, Crop.Resource resource )
-	{
+	{			
 		itemData.Name = null;
+		tempRank = Crop.Rank.Default;
+
 		switch(presentState)
 		{
 			case FarmState.Empty:
@@ -103,7 +98,7 @@ public class FarmFieldPolicy : MonoBehaviour
 				break;
 			case FarmState.Complete:
 				itemData.Name = presentCrop.Name;
-				HarvestCrop( out tempRank );
+				HarvestCrop( ref tempRank, resource);
 				itemData.Rank = tempRank;
 				break;
 		}
@@ -112,8 +107,13 @@ public class FarmFieldPolicy : MonoBehaviour
 
 	//plant crop
 	void PlantCrop( Crop data )
-	{
+	{		
+		if (data.SeedCount <= 0)
+			return;
+
+		onCrop = true;
 		presentCrop = data;
+		data.SeedCount--;
 		InitialzeResource();
 		resourceTime = ((1 / presentCrop.GrowTime) * 100) + 1;
 
@@ -163,12 +163,16 @@ public class FarmFieldPolicy : MonoBehaviour
 	}
 
 	//harvestCrop
-	void HarvestCrop( out Crop.Rank data )
+	void HarvestCrop( ref Crop.Rank data, Crop.Resource resource )
 	{
+		if (resource != Crop.Resource.Default)
+			return;
+
 		presentCrop = null;
 		Destroy( presentTexture );
 		presentState = FarmState.Empty;
 		InitialzeCreate();
+		onCrop = false;
 		grewTime = 0.0f;
 		data = SetCropRank();
 	}

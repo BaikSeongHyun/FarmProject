@@ -75,8 +75,8 @@
      <Compile Include="Assets\Script\StorePolicyScript\StoreFieldPolicy.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\StoreManager.cs" />
      <Compile Include="Assets\Script\UIScript\FarmUI.cs" />
+     <Compile Include="Assets\Script\UIScript\MainUI.cs" />
      <Compile Include="Assets\Script\UIScript\StoreUI.cs" />
-     <Compile Include="Assets\Script\UIScript\UIManager.cs" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_jp.txt" />
      <None Include="Assets\Data\FancyCarven\Readme.txt" />
      <None Include="Assets\Data\Baker House\Readme.txt" />

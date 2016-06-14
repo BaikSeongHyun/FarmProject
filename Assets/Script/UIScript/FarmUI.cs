@@ -12,31 +12,43 @@ public class FarmUI : MonoBehaviour
 	//complex data field
 	public Texture[] cropTexture;
 	public Sprite[] resourceSprite;
+	int[] buySeedCount;
 	Button[] cropItem;
 	CropItem[] itemList;
 	Scrollbar timeBar;
+	Canvas preProcessPopUp;
+	public MainUI mainUI;
 	public FarmManager manager;
 
 	// initialize this script
-	void Start ()
+	void Start( )
 	{
-		timeBar = transform.Find ("TimeBar").GetComponent<Scrollbar> ();
+		timeBar = transform.Find( "TimeBar" ).GetComponent<Scrollbar>();
+		preProcessPopUp = transform.Find( "PreProcessFarmGame" ).GetComponent<Canvas>();
 		itemList = new CropItem[0];
-		manager = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<FarmManager> ();
+		mainUI = GameObject.FindGameObjectWithTag( "MainCanvas" ).GetComponent<MainUI>(); 
+		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<FarmManager>();
+		buySeedCount = new int[3];
+		buySeedCount[0] = 0;
+		buySeedCount[1] = 0;
+		buySeedCount[2] = 0;
+		SeedUpdate();
+		StageMoneyUpdate();
 	}
 
 	//draw UI & Update data;
-	void OnGUI ()
+	void OnGUI( )
 	{
 		moveX = 0;
 
 		for (int i = 0; i < itemList.Length; i++)
 		{
 			moveX += 80;
-			GUI.DrawTexture (new Rect (moveX, 40, 50, 50), SetTexture (itemList [i].Name));
+			GUI.DrawTexture( new Rect( moveX, 40, 50, 50 ), SetTexture( itemList[i].Name ) );
 		}
 
 		timeBar.value = (1 - gameTime / 60f);
+		UpdateSeedCount();
 	}
 
 	//property
@@ -48,73 +60,122 @@ public class FarmUI : MonoBehaviour
 	//another method
 
 	//wake up canvas - UI activate step
-	public void WakeUpCanvas ()
+	public void WakeUpCanvas( )
 	{
-		Canvas temp = GetComponent<Canvas> ();
+		Canvas temp = GetComponent<Canvas>();
 		temp.enabled = true;
 	}
 
 	//sleep canvas - UI sleep step
-	public void SleepCanvas ()
+	public void SleepCanvas( )
 	{
-		Canvas temp = GetComponent<Canvas> ();
+		Canvas temp = GetComponent<Canvas>();
 		temp.enabled = false;
 	}
 
 	//button sprite select
-	Texture SetTexture (string name)
+	Texture SetTexture( string name )
 	{
-		switch (name)
+		switch(name)
 		{
 			case "Corn":
-				return cropTexture [0];
+				return cropTexture[0];
 			case "Carrot":
-				return cropTexture [1];
+				return cropTexture[1];
 			case "Pumpkin":
-				return cropTexture [2];
+				return cropTexture[2];
 		}
 
 		return null;
 	}
 
 	//link crop item data
-	public void LinkCropItem (List<CropItem> data)
+	public void LinkCropItem( List<CropItem> data )
 	{
-		itemList = new CropItem[data.ToArray ().Length];
-		itemList = data.ToArray ();
+		itemList = new CropItem[data.ToArray().Length];
+		itemList = data.ToArray();
 	}
 
 	//set game time and renewal scroll bar value
-	public void SetGameTime (float time)
+	public void SetGameTime( float time )
 	{
 		gameTime = time;
 		timeBar.value = (1 - gameTime / 60f);
 	}
 
+	//open preprocess popup
+	public void OpenPreprocessPopUp( )
+	{
+		preProcessPopUp.enabled = true;
+	}
+
+	//mouse click event method - seedCount for preprocess
+	public void SeedAdd( int index )
+	{
+		if (buySeedCount[index] + 1 > 9)
+			return;
+
+		if (!manager.SetStageMoney( index, true ))
+			return;
+		
+		buySeedCount[index]++;
+		SeedUpdate();
+		StageMoneyUpdate();
+	}
+
+	public void SeedSubtract( int index )
+	{
+		if (buySeedCount[index] - 1 < 0)
+			return;
+		if (!manager.SetStageMoney( index, false ))
+			return;
+		buySeedCount[index]--;
+		SeedUpdate();
+		StageMoneyUpdate();
+	}
+
+	//mouse click event method - confirm buy seed
+	public void ConfirmBuySeed( )
+	{
+		manager.GetCropInformation( "Corn" ).SeedCount = buySeedCount[0];
+		manager.GetCropInformation( "Carrot" ).SeedCount = buySeedCount[1];
+		manager.GetCropInformation( "Pumpkin" ).SeedCount = buySeedCount[2];
+
+		preProcessPopUp.enabled = false;
+		WakeUpCanvas();
+		GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<GameManager>().StartFarmGame();
+	}
+
+	//mouse clieck event method - cancel preprocess
+	public void CancelPreProcess( )
+	{
+		preProcessPopUp.enabled = false;
+		mainUI.MainMenuControl( true );
+	}
 
 	//mouse click event method - present seed
-	public void InputPresentSeed (int index)
+	public void InputPresentSeed( int index )
 	{
-		switch (index)
+		switch(index)
 		{
 			case 0:
-				manager.PresentSeed = manager.GetCropGroup () [0];
+				manager.PresentSeed = manager.GetCropGroup()[0];
 				break;
 			case 1:
-				manager.PresentSeed = manager.GetCropGroup () [1];
+				manager.PresentSeed = manager.GetCropGroup()[1];
 				break;
 			case 2:
-				manager.PresentSeed = manager.GetCropGroup () [2];
+				manager.PresentSeed = manager.GetCropGroup()[2];
 				break;
 		}
 
-		transform.Find ("SeedPresent").GetComponent<Image> ().sprite = manager.PresentSeed.GetIcon(0);
+		transform.Find( "SeedPresent" ).GetComponent<Image>().sprite = manager.PresentSeed.GetIcon( 0 );
 	}
 
 	//mouse click event method - present resource
-	public void SetResource (int index)
+	public void SetResource( int index )
 	{
-		switch (index)
+		switch(index)
 		{
 			case 0:
 				manager.PresentResource = Crop.Resource.Water;
@@ -127,7 +188,28 @@ public class FarmUI : MonoBehaviour
 				break;
 		}
 
-		transform.Find("ResourcePresent").GetComponent<Image>().sprite = resourceSprite[index];
+		transform.Find( "ResourcePresent" ).GetComponent<Image>().sprite = resourceSprite[index];
 	}
 
+	//update seedCount for preprocess
+	void SeedUpdate( )
+	{
+		transform.Find( "PreProcessFarmGame" ).Find( "Crop01Text" ).GetComponent<Text>().text = buySeedCount[0].ToString();
+		transform.Find( "PreProcessFarmGame" ).Find( "Crop02Text" ).GetComponent<Text>().text = buySeedCount[1].ToString();
+		transform.Find( "PreProcessFarmGame" ).Find( "Crop03Text" ).GetComponent<Text>().text = buySeedCount[2].ToString();
+	}
+
+	//update pre process stage money
+	void StageMoneyUpdate( )
+	{
+		transform.Find( "PreProcessFarmGame" ).Find( "MoneyText" ).GetComponent<Text>().text = manager.StageMoney.ToString();
+	}
+
+	//update seed count
+	void UpdateSeedCount( )
+	{
+		transform.Find( "Seed1stText" ).GetComponent<Text>().text = manager.GetCropInformation( "Corn" ).SeedCount + " pcs";
+		transform.Find( "Seed2ndText" ).GetComponent<Text>().text = manager.GetCropInformation( "Carrot" ).SeedCount + " pcs";
+		transform.Find( "Seed3rdText" ).GetComponent<Text>().text = manager.GetCropInformation( "Pumpkin" ).SeedCount + " pcs";
+	}
 }

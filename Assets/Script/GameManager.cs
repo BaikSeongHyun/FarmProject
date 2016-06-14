@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 	StoreManager storeStage;
 	public FarmUI farmUI;
 	public StoreUI storeUI;
+	public MainUI mainUI;
 
 	// Use this for initialization
 	void Start( )
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour
 		storeStage = GetComponent<StoreManager>();
 
 		//link UI data
+		mainUI = GameObject.FindGameObjectWithTag( "MainCanvas" ).GetComponent<MainUI>();
 		farmUI = GameObject.FindGameObjectWithTag( "FarmCanvas" ).GetComponent<FarmUI>();
 		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
 	}
@@ -85,13 +87,19 @@ public class GameManager : MonoBehaviour
 
 	//game start / end policy
 	//farm
-	public void StartFarmGame( )
+	public void StartPreProcessFarmGame( )
 	{
-		//mainUI.enabled = false;
+		//buy seed and check stage/resource
 		farmUI.enabled = true;
-		farmUI.WakeUpCanvas();
+		farmUI.OpenPreprocessPopUp();
+		mainUI.MainMenuControl( false );
+	}
+
+	public void StartFarmGame( )
+	{	
 		farmStage.StartFarmGame();
 	}
+
 	public void EndFarmGame( )
 	{
 		farmStage.EndFarmGame();
@@ -100,17 +108,21 @@ public class GameManager : MonoBehaviour
 		gameTime = 0.0f;
 	}
 
+
 	//store
-	public void StartStoreGame( )
+	public void StartPreProcessStoreGame( )
 	{
-		
+		//place cropItem
 		storeUI.enabled = true;
 		storeUI.WakeUpCanvas();
 		storeUI.LinkCropItem( farmStage.GetCropItem().ToArray() );
-		storeStage.StartStoreGame();
-	
-
 	}
+
+	public void StartStoreGame( )
+	{
+		storeStage.StartStoreGame();
+	}
+
 	public void EndStoreGame( )
 	{
 		storeStage.EndStoreGame();
@@ -118,8 +130,14 @@ public class GameManager : MonoBehaviour
 		storeUI.ClearItemButton();
 		storeUI.enabled = false;
 		gameTime = 0.0f;
-		//mainUI.enabled = true;
+		mainUI.MainMenuControl( true );
 	}
+
+	void DataReset( )
+	{
+
+	}
+		
 
 
 

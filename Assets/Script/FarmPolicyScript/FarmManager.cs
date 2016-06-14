@@ -6,6 +6,7 @@ public class FarmManager : MonoBehaviour
 {
 	//simple data field
 	public bool onGame;
+	public int stageMoney;
 	const float RayCastMaxDistance = 100.0f;
 	public Crop.Resource presentResource;
 
@@ -19,16 +20,23 @@ public class FarmManager : MonoBehaviour
 
 
 	// initialize this script
-	void Start ()
+	void Start( )
 	{
+		stageMoney = 200;
 		presentResource = Crop.Resource.Default;
-		LinkFarmFieldPolicy ();
-		LinkCropData ();
-		outputCropItem = new CropItem ();
-		saveCropItem = new List<CropItem> ();
+		LinkFarmFieldPolicy();
+		LinkCropData();
+		outputCropItem = new CropItem();
+		saveCropItem = new List<CropItem>();
 	}
 
 	//property
+	public int StageMoney
+	{
+		get { return stageMoney; }
+		set { stageMoney = value; }
+	}
+
 	public Crop PresentSeed
 	{
 		get { return presentSeed; }
@@ -44,99 +52,125 @@ public class FarmManager : MonoBehaviour
 
 	//another method
 	//initialize game data
-	void LinkFarmFieldPolicy ()
+	void LinkFarmFieldPolicy( )
 	{
-		GameObject[] tempData = GameObject.FindGameObjectsWithTag ("FarmField");
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "FarmField" );
 		farmFieldGroup = new FarmFieldPolicy[tempData.Length];
 		for (int i = 0; i < farmFieldGroup.Length; i++)
 		{
-			if (tempData [i] != null)
+			if (tempData[i] != null)
 			{
-				farmFieldGroup [i] = tempData [i].GetComponent<FarmFieldPolicy> ();
-				SleepFarm (farmFieldGroup [i]);
+				farmFieldGroup[i] = tempData[i].GetComponent<FarmFieldPolicy>();
+				SleepFarm( farmFieldGroup[i] );
 			}
 		}
 	}
 
-	void LinkCropData ()
+	void LinkCropData( )
 	{
-		GameObject[] tempData = GameObject.FindGameObjectsWithTag ("Crop");
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Crop" );
 		cropGroup = new Crop[tempData.Length];
 
 		for (int i = 0; i < tempData.Length; i++)
 		{
-			if (tempData [i] != null)
-				cropGroup [i] = tempData [i].GetComponent<Crop> ();	
+			if (tempData[i] != null)
+				cropGroup[i] = tempData[i].GetComponent<Crop>();	
 		}
 	}
 
 	//farm enable set false
-	void SleepFarm (FarmFieldPolicy farm)
+	void SleepFarm( FarmFieldPolicy farm )
 	{
 		farm.enabled = false;
 	}
 
 	//precess game event - mouse click event
-	public void ProcessStageEvent (Vector2 mousePosition)
+	public void ProcessStageEvent( Vector2 mousePosition )
 	{
-		if (Input.GetButtonDown ("Click"))
+		if (Input.GetButtonDown( "Click" ))
 		{
-			Ray ray = Camera.main.ScreenPointToRay (mousePosition);
+			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
 			RaycastHit hitinfo;
-			if (Physics.Raycast (ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer ("FarmField")))
+			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "FarmField" ) ))
 			{
 				GameObject tempSearch = hitinfo.collider.gameObject;
-				FarmFieldPolicy tempPolicy = tempSearch.GetComponent<FarmFieldPolicy> ();
+				FarmFieldPolicy tempPolicy = tempSearch.GetComponent<FarmFieldPolicy>();
 				tempPolicy.enabled = true;
-				tempPolicy.ProcessEvent (presentSeed, outputCropItem, presentResource);
-				AddCropItem (outputCropItem, tempPolicy);
-			}
-
-			if (Physics.Raycast (ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer ("Resource")))
-			{
-				GameObject tempSearch = hitinfo.collider.gameObject;
-				Resource temp = tempSearch.GetComponent<Resource> ();
-				presentResource = temp.GetResource ();
+				tempPolicy.ProcessEvent( presentSeed, outputCropItem, presentResource );
+				AddCropItem( outputCropItem, tempPolicy );
 			}
 		}
 	}
 
 	//harvest crop and input storage
-	void AddCropItem (CropItem data, FarmFieldPolicy farm)
+	void AddCropItem( CropItem data, FarmFieldPolicy farm )
 	{
-		if (data.Name != null)
+		if (data.Rank != Crop.Rank.Default)
 		{			
-			saveCropItem.Add (new CropItem (data));
-			SleepFarm (farm);
+			saveCropItem.Add( new CropItem( data ) );
+			data.SetDefault();
+			SleepFarm( farm );
 		}
 	}
 
 	//farm game start or restart
-	public void StartFarmGame ()
+	public void StartFarmGame( )
 	{
 		onGame = true;
 	}
 
 	//farm game close
-	public void EndFarmGame ()
+	public void EndFarmGame( )
 	{
 		onGame = false;
 	}
 
 	//get / set method
 	//on game
-	public bool CheckOnGame ()
+	public bool CheckOnGame( )
 	{
 		return onGame;
 	}
 
+	//stageMoney - return false => no add item
+	public bool SetStageMoney( int index, bool add )
+	{
+		if (add)
+		{
+			if ((stageMoney - cropGroup[index].SeedPrice) < 0)
+				return false;
+			else
+			{
+				stageMoney -= cropGroup[index].SeedPrice;
+				return true;
+			}			
+		}
+		else
+		{
+			stageMoney += cropGroup[index].SeedPrice;
+			return true;
+		}
+	}
+
+	//crop group
+	public Crop GetCropInformation( string name )
+	{
+		for (int i = 0; i < cropGroup.Length; i++)
+		{
+			if (cropGroup[i].Name == name)
+				return cropGroup[i];
+		}
+
+		return null;
+	}
+
 	//crop item
-	public List<CropItem> GetCropItem ()
+	public List<CropItem> GetCropItem( )
 	{
 		return saveCropItem;
 	}
 
-	public Crop[] GetCropGroup ()
+	public Crop[] GetCropGroup( )
 	{
 		return cropGroup;
 	}

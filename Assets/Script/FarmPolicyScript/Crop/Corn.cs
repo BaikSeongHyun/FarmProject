@@ -9,6 +9,8 @@ public class Corn : Crop
 	{
 		cropName = "Corn";
 		growTime = 20f;
+		seedCount = 0;
+		seedPrice = 15;
 		requireResource = new Resource[2];
 		requireResource[0] = Resource.Water; 
 		requireResource[1] = Resource.Fertilizer;
