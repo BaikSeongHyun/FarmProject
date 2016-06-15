@@ -34,7 +34,7 @@ public class Human : MonoBehaviour
 	public Human()
 	{
 		moveSpeed = 0f;
-		disposition = 0.0f;
+		disposition = 1.0f;
 		state = State.Default;
 		onShopping = false;
 		onMove = true;
@@ -49,6 +49,24 @@ public class Human : MonoBehaviour
 		state = data.state;
 	}
 
+	//property
+	public bool OnBargain
+	{
+		get { return onBargain; }
+	}
+
+	public int BargainPrice
+	{
+		get { return (int)bargainPrice; }
+	}
+
+	public StoreFieldPolicy Store
+	{
+		get { return presentStore; }
+	}
+
+
+	//standard method
 	//initialize this script
 	void Start( )
 	{
@@ -76,12 +94,6 @@ public class Human : MonoBehaviour
 
 		if (onShopping)
 			target = GameObject.FindGameObjectWithTag( "StartPos" ).GetComponent<Transform>();
-	}
-
-	//property
-	public bool OnBargain
-	{
-		get { return onBargain; }
 	}
 
 	//another method
@@ -136,11 +148,14 @@ public class Human : MonoBehaviour
 
 		for (int i = 0; i < cropData.Length; i++)
 		{
-			if (cropData[0].Name == field.PresentItem.Name)
+			if (cropData[i].Name == field.PresentItem.Name)
 			{
-				averagePrice = cropData[0].GetAveragePrice( field.PresentItem.Rank );
+				averagePrice = cropData[i].GetAveragePrice( field.PresentItem.Rank );
 			}
 		}
+
+		Debug.Log( averagePrice );
+		Debug.Log( disposition );
 
 		//if no data in average price -> no buy
 		if (field.PresentItem.Price <= disposition * averagePrice)
@@ -149,9 +164,9 @@ public class Human : MonoBehaviour
 			field.SoldOutCropItem();
 			onShopping = true;
 		}
-		else if (disposition * averagePrice <= (field.PresentItem.Price) * 0.95f)
+		else if ((disposition * averagePrice) / (field.PresentItem.Price) >= 0.85f)
 		{
-			bargainPrice = (disposition * averagePrice) * 0.95f;
+			bargainPrice = (disposition * averagePrice);
 			onBargain = true;
 			onMove = false;
 			popUpImage.enabled = true;
@@ -175,15 +190,13 @@ public class Human : MonoBehaviour
 
 	public void FailureBargain( )
 	{
+		Debug.Log( "Bargain failure" );
 		popUpImage.enabled = false;
 		onShopping = true;
 		onMove = true;
 	}
 
 	//get / set method
-	public int BargainPrice( )
-	{
-		return (int)bargainPrice;
-	}
+
 
 }

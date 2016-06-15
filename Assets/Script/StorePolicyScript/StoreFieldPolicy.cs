@@ -11,6 +11,8 @@ public class StoreFieldPolicy : MonoBehaviour
 	public CropItem presentCrop;
 	public StoreManager manager;
 	public StoreUI storeUI;
+
+	//standard method
 	// initialize this script
 	void Start( )
 	{
@@ -24,17 +26,23 @@ public class StoreFieldPolicy : MonoBehaviour
 		get{ return onStore; }
 	}
 
+	public int CropIndex
+	{
+		get { return presentCropIndex; }
+	}
+
 	public CropItem PresentItem
 	{
 		get { return presentCrop; }
 	}
+
 
 	//another method
 
 	//click event process - mouse click event
 	public void ProcessEvent( CropItem data, int index )
 	{
-		if (!onStore)			
+		if (!onStore)
 		{
 			SetCropItem( data, index );
 			onStore = true;
@@ -56,7 +64,7 @@ public class StoreFieldPolicy : MonoBehaviour
 	public void BargainSoldOutCrop( int price )
 	{
 		onStore = false;
-		manager.AddMoney(price);
+		manager.AddMoney( price );
 
 		//send renewal data by store UI
 	}
@@ -65,10 +73,10 @@ public class StoreFieldPolicy : MonoBehaviour
 	public void SoldOutCropItem( )
 	{
 		//Destroy( presentItem );
-		Debug.Log("Enter Sold Out Crop Item method");
+		Debug.Log( "Enter Sold Out Crop Item method" );
+		manager.AddMoney( presentCrop.Price );
 		onStore = false;
 		presentCrop = null;
-		manager.AddMoney(presentCrop.Price);
 
 		//send renewal data by store UI
 

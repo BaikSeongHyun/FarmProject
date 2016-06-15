@@ -18,7 +18,7 @@ public class GenerateClouds : MonoBehaviour
 
 	//IEnumerator -> make cloud
 	IEnumerator GenerateCloud( )
-	{
+	{		
 		//loop
 		while (true)
 		{
@@ -43,7 +43,6 @@ public class GenerateClouds : MonoBehaviour
 				yield return new WaitForSeconds( cycle );
 			}
 		}
-
 	}
 
 }

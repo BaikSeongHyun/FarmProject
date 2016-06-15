@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 	public StoreUI storeUI;
 	public MainUI mainUI;
 
-	// Use this for initialization
+	// initialize this script
 	void Start( )
 	{
 		gameTime = 0.0f;
@@ -79,18 +79,14 @@ public class GameManager : MonoBehaviour
 		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
 	}
 
-	//move crop item data (farm to store)
-	void TransferCropItem( )
-	{
-		cropData = farmStage.GetCropItem().ToArray();
-	}
-
 	//game start / end policy
+
 	//farm
 	public void StartPreProcessFarmGame( )
 	{
-		//buy seed and check stage/resource
+		//start ui alogorithm -> no active canvas ( for pop up only)
 		farmUI.enabled = true;
+		farmUI.DataLink();
 		farmUI.OpenPreprocessPopUp();
 		mainUI.MainMenuControl( false );
 	}
@@ -114,8 +110,10 @@ public class GameManager : MonoBehaviour
 	{
 		//place cropItem
 		storeUI.enabled = true;
+		storeUI.DataLink();
 		storeUI.WakeUpCanvas();
 		storeUI.LinkCropItem( farmStage.GetCropItem().ToArray() );
+		storeUI.ControlStoreGameButton( true );
 	}
 
 	public void StartStoreGame( )
@@ -133,13 +131,9 @@ public class GameManager : MonoBehaviour
 		mainUI.MainMenuControl( true );
 	}
 
-	void DataReset( )
+	//if game over -> all game data reset 
+	public void InitializeGameData( )
 	{
 
 	}
-		
-
-
-
-
 }

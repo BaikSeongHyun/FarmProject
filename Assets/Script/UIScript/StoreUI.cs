@@ -15,6 +15,7 @@ public class StoreUI : MonoBehaviour
 	//complex data field
 	public Sprite soldCrop;
 	public Sprite stolenCrop;
+	public Canvas snipingMode;
 	public Sprite[] rankSprite;
 	public Sprite[] numberSprite;
 	public Sprite[] itemSpriteColor;
@@ -27,15 +28,11 @@ public class StoreUI : MonoBehaviour
 	GameObject bargainPopUp;
 	Human presentBargainCustomer;
 
+	//standard method
 	// initialize this script
 	void Start( )
 	{
-		timeBar = transform.Find( "TimeBar" ).GetComponent<Scrollbar>();
-		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
-		priceSetPopUp = GameObject.Find( "PriceSetPopUp" );
-		priceSetPopUp.GetComponent<Canvas>().enabled = false;
-		bargainPopUp = GameObject.Find( "BargainPopUp" );
-		bargainPopUp.GetComponent<Canvas>().enabled = false;
+		DataLink();
 	}
 
 	//another method
@@ -52,6 +49,17 @@ public class StoreUI : MonoBehaviour
 	{
 		Canvas temp = GetComponent<Canvas>();
 		temp.enabled = false;
+	}
+
+	//initialize data for start UI - priority check
+	public void DataLink( )
+	{
+		timeBar = transform.Find( "TimeBar" ).GetComponent<Scrollbar>();
+		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
+		priceSetPopUp = GameObject.Find( "PriceSetPopUp" );
+		priceSetPopUp.GetComponent<Canvas>().enabled = false;
+		bargainPopUp = GameObject.Find( "BargainPopUp" );
+		bargainPopUp.GetComponent<Canvas>().enabled = false;
 	}
 
 	//link crop item data and create button
@@ -138,6 +146,13 @@ public class StoreUI : MonoBehaviour
 		return null;
 	}
 
+	//dynamic crop button on/off
+	void ControlCropButton( bool state )
+	{
+		for (int i = 0; i < button.Length; i++)
+			button[i].GetComponent<Image>().enabled = state;
+	}
+
 	//section pop up cropItem
 	//button event method - dynamic crop button
 	public void PopUpCropItem( CropItem data, int index )
@@ -148,6 +163,9 @@ public class StoreUI : MonoBehaviour
 			Debug.Log( "Store field is full" );
 			return;
 		}
+
+		ControlCropButton( false );
+
 		price = 0;
 		transform.Find( "PriceSetPopUp" ).transform.Find( "Rank" ).GetComponent<Image>().sprite = SetRankSprite( data.Rank );
 		transform.Find( "PriceSetPopUp" ).transform.Find( "Item" ).GetComponent<Image>().sprite = SetSprite( data.Name, false );
@@ -181,12 +199,18 @@ public class StoreUI : MonoBehaviour
 		switch(key)
 		{
 			case 100:
+				if (FindNumberIndex( 100 ) == 9)
+					break;
 				price += 100;
 				break;
 			case 10:
+				if (FindNumberIndex( 10 ) == 9)
+					break;
 				price += 10;
 				break;
 			case 1:
+				if (FindNumberIndex( 1 ) == 9)
+					break;
 				price += 1;
 				break;
 		}
@@ -199,12 +223,18 @@ public class StoreUI : MonoBehaviour
 		switch(key)
 		{
 			case 100:
+				if (FindNumberIndex( 100 ) == 0)
+					break;
 				price -= 100;
 				break;
 			case 10:
+				if (FindNumberIndex( 10 ) == 0)
+					break;
 				price -= 10;
 				break;
 			case 1:
+				if (FindNumberIndex( 1 ) == 0)
+					break;
 				price -= 1;
 				break;
 		}
@@ -236,12 +266,14 @@ public class StoreUI : MonoBehaviour
 	}
 
 	//button event method - cancel set price
-	public void CancelPopUp(string name )
+	public void CancelPopUp( string name )
 	{
-		if(name == "Price")
+		if (name == "Price")
 			priceSetPopUp.GetComponent<Canvas>().enabled = false;
 		else if (name == "Bargain")
 			bargainPopUp.GetComponent<Canvas>().enabled = false;
+
+		ControlCropButton( true );
 	}
 		
 	//button event method - confirm price and send crop item by store manager
@@ -255,6 +287,8 @@ public class StoreUI : MonoBehaviour
 			button[presentIndex].GetComponent<Button>().enabled = false;
 			priceSetPopUp.GetComponent<Canvas>().enabled = false;
 		}
+
+		ControlCropButton( true );
 	}
 
 	//sprite set sold out
@@ -283,19 +317,68 @@ public class StoreUI : MonoBehaviour
 	public void PopUpBargain( Human human )
 	{
 		//pop up canvas for bargain
+		presentBargainCustomer = human;
 		bargainPopUp.GetComponent<Canvas>().enabled = true;
-		human = presentBargainCustomer;
+		ControlCropButton( false );
+		Debug.Log( "Open Pop up UI" );
+
+		//set pop up data
+		int index = human.Store.CropIndex;
+
+		transform.Find( "BargainPopUp" ).Find( "Item" ).GetComponent<Image>().sprite = SetSprite( cropData[index].Name, false );
+		transform.Find( "BargainPopUp" ).Find( "Rank" ).GetComponent<Image>().sprite = SetRankSprite( cropData[index].Rank );
+		price = human.BargainPrice;
+		transform.Find( "BargainPopUp" ).Find( "Hundred" ).GetComponent<Image>().sprite = numberSprite[FindNumberIndex( 100 )];
+		transform.Find( "BargainPopUp" ).Find( "Ten" ).GetComponent<Image>().sprite = numberSprite[FindNumberIndex( 10 )];
+		transform.Find( "BargainPopUp" ).Find( "One" ).GetComponent<Image>().sprite = numberSprite[FindNumberIndex( 1 )];
+
 	}
 
 	public void ComfirmBargain( )
 	{
 		bargainPopUp.GetComponent<Canvas>().enabled = false;
 		presentBargainCustomer.SuccessBargain();
+		ControlCropButton( true );
 	}
 
 	public void RejectBargain( )
 	{
 		bargainPopUp.GetComponent<Canvas>().enabled = false;
 		presentBargainCustomer.FailureBargain();
+		ControlCropButton( true );
+	}
+
+	public void ControlStoreGameButton( bool state )
+	{		
+		transform.Find( "StartStoreGame" ).GetComponent<Image>().enabled = state;
+	}
+		
+
+	//skill section
+	//mode default
+	public void ModeDefault()
+	{
+		Cursor.visible = true;
+	}
+	public void ModeSkillOn(int index)
+	{
+		switch(index)
+		{
+			case 0:
+				//snipe action
+				break; 
+		}
+	}
+	//mode snipe
+	public void ModeSnipe( )
+	{
+		//Cursor.visible = false;
+		transform.Find("SkillCanvas").transform.Find( "SniperMode" ).GetComponent<Image>().enabled = true;
+		transform.Find("SkillCanvas").transform.Find( "SniperMode" ).GetComponent<RectTransform>().position = Camera.main.ScreenToWorldPoint( Input.mousePosition );
+	}
+	//mode lighting
+	public void ModeLighting()
+	{
+
 	}
 }

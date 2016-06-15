@@ -23,17 +23,7 @@ public class FarmUI : MonoBehaviour
 	// initialize this script
 	void Start( )
 	{
-		timeBar = transform.Find( "TimeBar" ).GetComponent<Scrollbar>();
-		preProcessPopUp = transform.Find( "PreProcessFarmGame" ).GetComponent<Canvas>();
-		itemList = new CropItem[0];
-		mainUI = GameObject.FindGameObjectWithTag( "MainCanvas" ).GetComponent<MainUI>(); 
-		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<FarmManager>();
-		buySeedCount = new int[3];
-		buySeedCount[0] = 0;
-		buySeedCount[1] = 0;
-		buySeedCount[2] = 0;
-		SeedUpdate();
-		StageMoneyUpdate();
+		DataLink();
 	}
 
 	//draw UI & Update data;
@@ -59,6 +49,21 @@ public class FarmUI : MonoBehaviour
 
 	//another method
 
+	//initialize data for start UI - priority check
+	public void DataLink()
+	{
+		timeBar = transform.Find( "TimeBar" ).GetComponent<Scrollbar>();
+		preProcessPopUp = transform.Find( "PreProcessFarmGame" ).GetComponent<Canvas>();
+		itemList = new CropItem[0];
+		mainUI = GameObject.FindGameObjectWithTag( "MainCanvas" ).GetComponent<MainUI>(); 
+		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<FarmManager>();
+		buySeedCount = new int[3];
+		buySeedCount[0] = 0;
+		buySeedCount[1] = 0;
+		buySeedCount[2] = 0;
+		SeedUpdate();
+		StageMoneyUpdate();
+	}
 	//wake up canvas - UI activate step
 	public void WakeUpCanvas( )
 	{
@@ -101,6 +106,14 @@ public class FarmUI : MonoBehaviour
 	{
 		gameTime = time;
 		timeBar.value = (1 - gameTime / 60f);
+	}
+
+	//control farm select section
+	public void ControlFarmMenu( bool state )
+	{
+
+
+
 	}
 
 	//open preprocess popup
