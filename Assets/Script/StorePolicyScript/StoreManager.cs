@@ -7,6 +7,7 @@ public class StoreManager : MonoBehaviour
 	//simple data field
 	public bool onGame;
 	public bool placeComplete;
+	public bool onSkill;
 	const float RayCastMaxDistance = 100.0f;
 	public int money;
 	public int presentCropIndex;
@@ -16,17 +17,22 @@ public class StoreManager : MonoBehaviour
 	public CropItem presentCrop;
 	public GameObject[] cropData;
 	public Crop[] cropGroup;
+	public Skill[] skillGroup;
 	public Sprite[] cropAverageTable;
+	public Skill presentSkill;
 	public StoreFieldPolicy[] storeFieldGroup;
 	public StoreUI storeUI;
+
 
 	//initialize this script
 	void Start( )
 	{
 		onGame = false;
 		placeComplete = false;
+		onSkill = false;
 		money = 100;
 		LinkCropData();
+		LinkSkillData();
 		LinkstoreFieldPolicy();
 		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
 	}
@@ -39,18 +45,31 @@ public class StoreManager : MonoBehaviour
 
 	//another method
 	//initialize game data
+	//crop data
 	void LinkCropData( )
 	{
 		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Crop" );
 		cropGroup = new Crop[tempData.Length];
 
-		for (int i = 0; i < tempData.Length; i++)
+		for (int i = 0; i < cropData.Length; i++)
 		{
 			if (tempData[i] != null)
 				cropGroup[i] = tempData[i].GetComponent<Crop>();	
 		}
 	}
+	//skill data
+	void LinkSkillData()
+	{
+		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Skill" );
+		skillGroup = new Skill[tempData.Length];
 
+		for(int i = 0; i < skillGroup.Length; i++)
+		{
+			if (tempData[i] != null)
+				skillGroup[i] = tempData[i].GetComponent<Skill>();
+		}
+	}
+	//store field policy script
 	void LinkstoreFieldPolicy( )
 	{
 		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "StoreField" );
@@ -93,6 +112,17 @@ public class StoreManager : MonoBehaviour
 	//process game event - moveclick event
 	public void ProcessStageEvent( Vector2 mousePosition )
 	{
+		//skill event
+		if (Input.GetButtonDown( "Click" ) && onSkill)
+		{
+			presentSkill.ActiveSkill();
+			if (presentSkill.CheckSkillIsEmpty())
+			{
+				ResetSkill();
+			}
+		}
+
+		//human event
 		if (Input.GetButtonDown( "Click" ))
 		{
 			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
@@ -160,12 +190,31 @@ public class StoreManager : MonoBehaviour
 		money += value;
 	}
 
-	//mode for skill
-	public void ModeDefault()
+	//set present skill
+	public void SetPresentSkill( string name )
 	{
-
+		for (int i = 0; i < skillGroup.Length; i++)
+		{
+			if (skillGroup[i].SkillName == name)
+			{
+				if (money >= skillGroup[i].Cost)
+				{
+					money -= skillGroup[i].Cost;
+					onSkill = true;
+					presentSkill = skillGroup[i];
+					return;
+				}
+			}
+		}
 	}
 
+	//reset skill
+	public void ResetSkill( )
+	{
+		money += presentSkill.ResetSkill();
+		presentSkill = null;
+		onSkill = false;
+	}
 
 	//get / set method
 
@@ -175,6 +224,7 @@ public class StoreManager : MonoBehaviour
 		return onGame;
 	}
 
+	//return crop infor (key = name)
 	public Sprite SetAverageCropTable( string name )
 	{
 		switch(name)
@@ -190,9 +240,11 @@ public class StoreManager : MonoBehaviour
 		return null;
 	}
 
+	//return crop group
 	public Crop[] GetCropGroup( )
 	{
 		return cropGroup;
 	}
+
 
 }

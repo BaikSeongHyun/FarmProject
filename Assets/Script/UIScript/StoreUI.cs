@@ -15,7 +15,6 @@ public class StoreUI : MonoBehaviour
 	//complex data field
 	public Sprite soldCrop;
 	public Sprite stolenCrop;
-	public Canvas snipingMode;
 	public Sprite[] rankSprite;
 	public Sprite[] numberSprite;
 	public Sprite[] itemSpriteColor;
@@ -352,33 +351,5 @@ public class StoreUI : MonoBehaviour
 	{		
 		transform.Find( "StartStoreGame" ).GetComponent<Image>().enabled = state;
 	}
-		
 
-	//skill section
-	//mode default
-	public void ModeDefault()
-	{
-		Cursor.visible = true;
-	}
-	public void ModeSkillOn(int index)
-	{
-		switch(index)
-		{
-			case 0:
-				//snipe action
-				break; 
-		}
-	}
-	//mode snipe
-	public void ModeSnipe( )
-	{
-		//Cursor.visible = false;
-		transform.Find("SkillCanvas").transform.Find( "SniperMode" ).GetComponent<Image>().enabled = true;
-		transform.Find("SkillCanvas").transform.Find( "SniperMode" ).GetComponent<RectTransform>().position = Camera.main.ScreenToWorldPoint( Input.mousePosition );
-	}
-	//mode lighting
-	public void ModeLighting()
-	{
-
-	}
 }

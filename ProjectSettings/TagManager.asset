@@ -18,6 +18,8 @@ TagManager:
   - StartPos
   - StoreCanvas
   - TestObject
+  - Skill
+  - Terrain
   layers:
   - Default
   - TransparentFX
@@ -31,7 +33,7 @@ TagManager:
   - Resource
   - StoreField
   - Human
-  - 
+  - Terrain
   - 
   - 
   - 

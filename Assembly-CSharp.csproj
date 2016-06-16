@@ -45,6 +45,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Data\Mega Toon FX Free Pack\Script\AutoDestory.cs" />
+     <Compile Include="Assets\Data\Mega Toon FX Free Pack\Script\CameraOrbit.cs" />
+     <Compile Include="Assets\Data\Mega Toon FX Free Pack\Script\SceneManager.cs" />
      <Compile Include="Assets\Data\PQAssets\Query-Chan-SD\Props\99_ShowTime\Scripts\DetectPanel.cs" />
      <Compile Include="Assets\Data\PQAssets\Query-Chan-SD\Props\99_ShowTime\Scripts\PanelPrefCollider.cs" />
      <Compile Include="Assets\Data\PQAssets\Query-Chan-SD\Scripts\GUIController\CameraAction.cs" />
@@ -58,6 +61,7 @@
      <Compile Include="Assets\Script\BackGroundScript\DestroyLogic.cs" />
      <Compile Include="Assets\Script\BackGroundScript\GenerateClouds.cs" />
      <Compile Include="Assets\Script\BackGroundScript\MoveCloud.cs" />
+     <Compile Include="Assets\Script\BackGroundScript\SelfDestroyLogic.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Carrot.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Corn.cs" />
      <Compile Include="Assets\Script\FarmPolicyScript\Crop\Crop.cs" />
@@ -72,6 +76,10 @@
      <Compile Include="Assets\Script\StorePolicyScript\Human\Customer.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\Human\Human.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\Human\Thief.cs" />
+     <Compile Include="Assets\Script\StorePolicyScript\Skill\BarrelDrop.cs" />
+     <Compile Include="Assets\Script\StorePolicyScript\Skill\Lighting.cs" />
+     <Compile Include="Assets\Script\StorePolicyScript\Skill\Skill.cs" />
+     <Compile Include="Assets\Script\StorePolicyScript\Skill\Snipe.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\StoreFieldPolicy.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\StoreManager.cs" />
      <Compile Include="Assets\Script\UIScript\FarmUI.cs" />
@@ -79,7 +87,7 @@
      <Compile Include="Assets\Script\UIScript\StoreUI.cs" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_jp.txt" />
      <None Include="Assets\Data\FancyCarven\Readme.txt" />
-     <None Include="Assets\Data\Baker House\Readme.txt" />
+     <None Include="Assets\Data\AxeyWorks Low Poly\Baker House\Readme.txt" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\Models\SD_QUERY_12_Okayama\Unlit_double.shader" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_en.txt" />
      <None Include="Assets\Data\PQAssets\Query-Chan-SD\Documents\ReadMe.txt" />
