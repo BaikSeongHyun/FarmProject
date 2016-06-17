@@ -87,7 +87,7 @@ public class FarmUI : MonoBehaviour
 				return cropTexture[0];
 			case "Carrot":
 				return cropTexture[1];
-			case "Pumpkin":
+			case "Barley":
 				return cropTexture[2];
 		}
 
@@ -152,7 +152,7 @@ public class FarmUI : MonoBehaviour
 	{
 		manager.GetCropInformation( "Corn" ).SeedCount = buySeedCount[0];
 		manager.GetCropInformation( "Carrot" ).SeedCount = buySeedCount[1];
-		manager.GetCropInformation( "Pumpkin" ).SeedCount = buySeedCount[2];
+		manager.GetCropInformation( "Barley" ).SeedCount = buySeedCount[2];
 
 		preProcessPopUp.enabled = false;
 		WakeUpCanvas();
@@ -223,6 +223,6 @@ public class FarmUI : MonoBehaviour
 	{
 		transform.Find( "Seed1stText" ).GetComponent<Text>().text = manager.GetCropInformation( "Corn" ).SeedCount + " pcs";
 		transform.Find( "Seed2ndText" ).GetComponent<Text>().text = manager.GetCropInformation( "Carrot" ).SeedCount + " pcs";
-		transform.Find( "Seed3rdText" ).GetComponent<Text>().text = manager.GetCropInformation( "Pumpkin" ).SeedCount + " pcs";
+		transform.Find( "Seed3rdText" ).GetComponent<Text>().text = manager.GetCropInformation( "Barley" ).SeedCount + " pcs";
 	}
 }

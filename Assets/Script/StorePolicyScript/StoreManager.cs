@@ -28,7 +28,7 @@ public class StoreManager : MonoBehaviour
 	void Start( )
 	{
 		onGame = false;
-		placeComplete = false;
+		placeComplete = true;
 		onSkill = false;
 		money = 100;
 		LinkCropData();
@@ -51,19 +51,19 @@ public class StoreManager : MonoBehaviour
 		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Crop" );
 		cropGroup = new Crop[tempData.Length];
 
-		for (int i = 0; i < cropData.Length; i++)
+		for (int i = 0; i < cropGroup.Length; i++)
 		{
 			if (tempData[i] != null)
 				cropGroup[i] = tempData[i].GetComponent<Crop>();	
 		}
 	}
 	//skill data
-	void LinkSkillData()
+	void LinkSkillData( )
 	{
 		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Skill" );
 		skillGroup = new Skill[tempData.Length];
 
-		for(int i = 0; i < skillGroup.Length; i++)
+		for (int i = 0; i < skillGroup.Length; i++)
 		{
 			if (tempData[i] != null)
 				skillGroup[i] = tempData[i].GetComponent<Skill>();
@@ -139,6 +139,15 @@ public class StoreManager : MonoBehaviour
 			}
 		}
 	}
+	//find texture for store field crop item texture
+	public GameObject FindCropItemTexture( string name )
+	{
+		for (int i = 0; i < cropGroup.Length; i++)
+			if (cropGroup[i].Name == name)
+				return cropGroup[i].GetItemTexture();
+
+		return null;
+	}
 
 	//store cropitem
 	public void storeCrop( int cropIndex )
@@ -148,6 +157,11 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//store game start or restart
+	public void StartPreProcess( )
+	{
+		placeComplete = false;
+	}
+
 	public void StartStoreGame( )
 	{
 		onGame = true;
@@ -216,6 +230,24 @@ public class StoreManager : MonoBehaviour
 		onSkill = false;
 	}
 
+	//human death process
+	public void CustomerDeath( )
+	{
+		money -= 100;
+	}
+
+	public void ThiefDeath( bool onShopping, int stealPrice )
+	{
+		if (onShopping)
+		{
+			money += (stealPrice * 2);
+		}
+		else
+		{
+			money -= 100;
+		}			
+	}
+
 	//get / set method
 
 	//on game
@@ -233,7 +265,7 @@ public class StoreManager : MonoBehaviour
 				return cropAverageTable[0];
 			case "Carrot":
 				return cropAverageTable[1];
-			case "Pumpkin":
+			case "Barley":
 				return cropAverageTable[2];
 		}
 

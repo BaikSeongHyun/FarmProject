@@ -8,6 +8,7 @@ public class StoreFieldPolicy : MonoBehaviour
 	public int presentCropIndex;
 
 	//complex data field
+	GameObject presentTexture;
 	public CropItem presentCrop;
 	public StoreManager manager;
 	public StoreUI storeUI;
@@ -55,6 +56,7 @@ public class StoreFieldPolicy : MonoBehaviour
 		presentCropIndex = index;
 		presentCrop = new CropItem( data );
 		onStore = true;
+		presentTexture = (GameObject)Instantiate( manager.FindCropItemTexture( data.Name ), transform.position, new Quaternion( 0f, 0f, 0f, 0f ) );
 
 		//draw texture image 
 
@@ -77,18 +79,21 @@ public class StoreFieldPolicy : MonoBehaviour
 		manager.AddMoney( presentCrop.Price );
 		onStore = false;
 		presentCrop = null;
-
+		Destroy( presentTexture );
 		//send renewal data by store UI
 
 	}
 
 	//thief has been stolen crop item
-	public void StealCrop( )
+	public void StealCrop( out int stealPrice )
 	{
 		//Destroy( presentItem );
 		onStore = false;
+		Destroy( presentTexture );
 
+		stealPrice = presentCrop.Price;
 		//send renewal data by store UI
+
 	}
 
 

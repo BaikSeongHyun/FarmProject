@@ -16,7 +16,8 @@ public class Crop : MonoBehaviour
 	public Resource[] requireResource;
 	public Sprite[] resourceImage;
 	public Sprite[] cropIcon;
-	public GameObject[] textureData = new GameObject[growStep];
+	public GameObject itemTextureData;
+	public GameObject[] growUpTextureData = new GameObject[growStep];
 
 
 	//enum field
@@ -116,9 +117,14 @@ public class Crop : MonoBehaviour
 	}
 
 	//texture
-	public GameObject GetTexture( int step )
+	public GameObject GetGrowTexture( int step )
 	{
-		return textureData[step];
+		return growUpTextureData[step];
+	}
+
+	public GameObject GetItemTexture( )
+	{
+		return itemTextureData;
 	}
 
 	//resource image sprite

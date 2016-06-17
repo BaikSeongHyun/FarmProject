@@ -14,6 +14,7 @@ public class Human : MonoBehaviour
 	public bool onMove;
 	public bool onBargain;
 	public float bargainPrice;
+	public int stealPrice;
 
 	//complex data field
 	StoreManager manager;
@@ -76,7 +77,6 @@ public class Human : MonoBehaviour
 		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
 		popUpImage = transform.Find( "PopUpHuman" ).GetComponent<Image>();
 		popUpImage.enabled = false;
-		target = GameObject.FindGameObjectWithTag( "TestObject" ).GetComponent<Transform>();
 		moveSpeed = 5f;
 	}
 
@@ -113,7 +113,8 @@ public class Human : MonoBehaviour
 	//collision at store field
 	void OnCollisionEnter( Collision col )
 	{
-		presentStore = col.gameObject.GetComponent<StoreFieldPolicy>();
+		if (col.gameObject.CompareTag( "StoreField" ))
+			presentStore = col.gameObject.GetComponent<StoreFieldPolicy>();
 
 		if (presentStore != null)
 		{
@@ -128,12 +129,27 @@ public class Human : MonoBehaviour
 					BuyCrop( presentStore );				
 			}
 		}
+
+		if (col.gameObject.layer.Equals( LayerMask.NameToLayer( "Skill" ) ))
+		{
+			Debug.Log( "Active this layer" );
+			if (state == State.Customer)
+			{
+				manager.CustomerDeath();
+				Destroy( this.gameObject );
+			}
+			else if (state == State.Thief)
+			{
+				manager.ThiefDeath( onShopping, stealPrice  );
+				Destroy( this.gameObject );
+			}
+		}
 	}
 
 	//thief policy method
 	public void StealCrop( StoreFieldPolicy field )
 	{
-		field.StealCrop();
+		field.StealCrop(out stealPrice);
 		popUpImage.enabled = true;
 		popUpImage.sprite = image[1];
 		//drawing canvas for steal

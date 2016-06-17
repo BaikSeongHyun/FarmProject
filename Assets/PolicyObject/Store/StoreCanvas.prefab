@@ -1138,15 +1138,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11466968}
-        m_MethodName: ModeSnipe
-        m_Mode: 1
+      - m_Target: {fileID: 0}
+        m_MethodName: SetPresentSkill
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Snipe
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -1544,7 +1544,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11467572}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: SetPresentSkill
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Lighting
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11443432
@@ -1586,15 +1597,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11466968}
-        m_MethodName: ModeSkillOn
-        m_Mode: 3
+      - m_Target: {fileID: 0}
+        m_MethodName: SetPresentSkill
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: BarrelDrop
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -2093,11 +2104,11 @@ MonoBehaviour:
   itemSpriteColor:
   - {fileID: 21300000, guid: 6639677eae857aa40b215863db07e413, type: 3}
   - {fileID: 21300000, guid: 95c4299bb21fee343b9563b7a23692d4, type: 3}
-  - {fileID: 21300000, guid: 90e3f8c137ae552448f6dc2d917aae85, type: 3}
+  - {fileID: 21300000, guid: d8cd0c9b5e0617648a226f34208cdb81, type: 3}
   itemSpriteGray:
   - {fileID: 21300000, guid: 7ba56b971d66a1145843ea702425c0f3, type: 3}
   - {fileID: 21300000, guid: a17f89d528d6bb34783f36c9dd70732f, type: 3}
-  - {fileID: 21300000, guid: 063eecbfbd0445147b71ba65c297f20f, type: 3}
+  - {fileID: 21300000, guid: 697132f89047efb4da2d6c905662e012, type: 3}
   cropData: []
   button: []
 --- !u!114 &11467572

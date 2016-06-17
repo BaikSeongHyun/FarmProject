@@ -46,12 +46,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Data\Mega Toon FX Free Pack\Editor\Mega_Toon_FX_Editor.js" />
-     <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_jp.txt" />
      <None Include="Assets\Data\FancyCarven\Readme.txt" />
      <None Include="Assets\Data\AxeyWorks Low Poly\Baker House\Readme.txt" />
-     <None Include="Assets\Data\PQAssets\Query-Chan-SD\Models\SD_QUERY_12_Okayama\Unlit_double.shader" />
-     <None Include="Assets\Data\PQAssets\Query-Chan-SD\license_en.txt" />
-     <None Include="Assets\Data\PQAssets\Query-Chan-SD\Documents\ReadMe.txt" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>

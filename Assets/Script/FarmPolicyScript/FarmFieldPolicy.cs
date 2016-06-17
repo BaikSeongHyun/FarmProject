@@ -44,13 +44,14 @@ public class FarmFieldPolicy : MonoBehaviour
 		presentTexture = null;
 		resourceImage = transform.Find( "FarmCanvas" ).GetComponent<Image>();
 		resourceImage.enabled = false;
+		presentRotation = new Quaternion( 0f, 0f, 0f, 0f );
 	}
 	
 	// Update is called once per frame
 	void Update( )
 	{
 		presentPosition = transform.position;
-		presentRotation = transform.rotation;
+
 		SetFarmState();
 
 		if (onCrop)
@@ -125,7 +126,7 @@ public class FarmFieldPolicy : MonoBehaviour
 		if (onCrop && presentState == FarmState.FirstStep && !create1st)
 		{
 			//crop texture update
-			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 0 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 0 ), presentPosition, presentRotation );
 			create1st = true;
 		}
 		else if (onCrop && presentState == FarmState.SecondStep && !create2nd)
@@ -136,7 +137,7 @@ public class FarmFieldPolicy : MonoBehaviour
 
 			//crop texture update
 			Destroy( presentTexture );
-			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 1 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 1 ), presentPosition, presentRotation );
 			create2nd = true;
 		}
 		else if (onCrop && presentState == FarmState.ThirdStep && !create3rd)
@@ -147,7 +148,7 @@ public class FarmFieldPolicy : MonoBehaviour
 
 			//crop texture update
 			Destroy( presentTexture );
-			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 2 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 2 ), presentPosition, presentRotation );
 			create3rd = true;
 		}
 		else if (onCrop && presentState == FarmState.Complete && !createComplete)
@@ -157,7 +158,7 @@ public class FarmFieldPolicy : MonoBehaviour
 
 			//crop texture update
 			Destroy( presentTexture );
-			presentTexture = (GameObject)Instantiate( presentCrop.GetTexture( 3 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 3 ), presentPosition, presentRotation );
 			createComplete = true;
 		}
 	}

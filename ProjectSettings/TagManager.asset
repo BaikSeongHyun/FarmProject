@@ -20,6 +20,7 @@ TagManager:
   - TestObject
   - Skill
   - Terrain
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -34,7 +35,7 @@ TagManager:
   - StoreField
   - Human
   - Terrain
-  - 
+  - Skill
   - 
   - 
   - 

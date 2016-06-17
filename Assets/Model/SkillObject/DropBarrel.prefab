@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 432706}
   - 33: {fileID: 3357460}
   - 23: {fileID: 2359464}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Mesh1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ GameObject:
   - 54: {fileID: 5410320}
   - 65: {fileID: 6500920}
   - 114: {fileID: 11403652}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: DropBarrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -125,7 +125,7 @@ public class StoreUI : MonoBehaviour
 					return itemSpriteColor[0];
 				case "Carrot":
 					return itemSpriteColor[1];
-				case "Pumpkin":
+				case "Barley":
 					return itemSpriteColor[2];
 			}
 		}
@@ -137,7 +137,7 @@ public class StoreUI : MonoBehaviour
 					return itemSpriteGray[0];
 				case "Carrot":
 					return itemSpriteGray[1];
-				case "Pumpkin":
+				case "Barley":
 					return itemSpriteGray[2];
 			}
 		}

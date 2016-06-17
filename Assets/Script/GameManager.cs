@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 		}
 
 		//store stage placement item step
-		if (!storeStage.PlaceComplete && !farmStage.CheckOnGame())
+		if (!storeStage.PlaceComplete)
 		{			
 			storeStage.ProcessPlacementEvent( mousePosition );
 		}
@@ -108,6 +108,8 @@ public class GameManager : MonoBehaviour
 	//store
 	public void StartPreProcessStoreGame( )
 	{
+		storeStage.StartPreProcess();
+
 		//place cropItem
 		storeUI.enabled = true;
 		storeUI.DataLink();

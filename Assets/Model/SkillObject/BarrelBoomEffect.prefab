@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 410460}
   - 198: {fileID: 19876580}
   - 199: {fileID: 19909998}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BarrelBoomEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
