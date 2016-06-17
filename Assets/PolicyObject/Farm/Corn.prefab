@@ -11,7 +11,7 @@ GameObject:
   - 114: {fileID: 11481656}
   m_Layer: 0
   m_Name: Corn
-  m_TagString: Untagged
+  m_TagString: Crop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39,11 +39,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d673a2d20fba3e4198f5dcae05cf977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureData:
-  - {fileID: 156002, guid: 141f6adc0d2439845aca6c236c8beb19, type: 2}
-  - {fileID: 113856, guid: d9b9fc92143f59a46a3432c330ae701e, type: 2}
-  - {fileID: 137400, guid: c0297a8f1bfa9194880d157abfdfc977, type: 2}
-  - {fileID: 124232, guid: 80b3fa3fa6f026449809e319b55ff386, type: 2}
+  cropName: Corn
+  growTime: 5
+  seedCount: 5
+  seedPrice: 15
+  requireResource: 0100000002000000
+  resourceImage:
+  - {fileID: 21300000, guid: dbffbe2295aa5d24ca3d924986be2e54, type: 3}
+  - {fileID: 21300000, guid: b635821996d07fe439f52842528c07be, type: 3}
+  cropIcon:
+  - {fileID: 21300000, guid: 6639677eae857aa40b215863db07e413, type: 3}
+  - {fileID: 21300000, guid: 7ba56b971d66a1145843ea702425c0f3, type: 3}
+  itemTextureData: {fileID: 102836, guid: f5ace7aea61270e429a799ef9018af1e, type: 2}
+  growUpTextureData:
+  - {fileID: 126974, guid: 141f6adc0d2439845aca6c236c8beb19, type: 2}
+  - {fileID: 177474, guid: d9b9fc92143f59a46a3432c330ae701e, type: 2}
+  - {fileID: 100396, guid: c0297a8f1bfa9194880d157abfdfc977, type: 2}
+  - {fileID: 145684, guid: ac242f02a525ca347b06e7dafa365863, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

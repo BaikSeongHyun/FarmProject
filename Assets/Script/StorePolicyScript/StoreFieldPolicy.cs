@@ -17,8 +17,7 @@ public class StoreFieldPolicy : MonoBehaviour
 	// initialize this script
 	void Start( )
 	{
-		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
-		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
+		LinkData();
 	}
 
 	//property
@@ -40,6 +39,12 @@ public class StoreFieldPolicy : MonoBehaviour
 
 	//another method
 
+	//link UI & manager
+	public void LinkData()
+	{
+		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
+		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
+	}
 	//click event process - mouse click event
 	public void ProcessEvent( CropItem data, int index )
 	{
@@ -53,10 +58,15 @@ public class StoreFieldPolicy : MonoBehaviour
 	//input store object
 	void SetCropItem( CropItem data, int index )
 	{
+		LinkData();
+
 		presentCropIndex = index;
 		presentCrop = new CropItem( data );
 		onStore = true;
-		presentTexture = (GameObject)Instantiate( manager.FindCropItemTexture( data.Name ), transform.position, new Quaternion( 0f, 0f, 0f, 0f ) );
+		Debug.Log(presentCrop);
+		Debug.Log(presentTexture);
+		Debug.Log(transform.position);
+		presentTexture = (GameObject)Instantiate( manager.FindCropItemTexture( presentCrop.Name ), transform.position, new Quaternion( 0f, 0f, 0f, 0f ) );
 
 		//draw texture image 
 

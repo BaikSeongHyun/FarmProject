@@ -214,5 +214,9 @@ public class Human : MonoBehaviour
 
 	//get / set method
 
+	public void SetTarget(Transform trans)
+	{
+		target = trans;
+	}
 
 }
