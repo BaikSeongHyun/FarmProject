@@ -15,26 +15,20 @@ public class MainUI : MonoBehaviour
 
 	//another method
 
+	//menu control
 	public void MainMenuControl(bool state)
 	{
 		//main menu on
-		if (state)
-		{
-			transform.Find( "MainMenuBack" ).GetComponent<Image>().enabled = true;
-			transform.Find( "StartPrototypeGameButton" ).GetComponent<Image>().enabled = true;
-			transform.Find( "ShopButton" ).GetComponent<Image>().enabled = true;
-			transform.Find( "SearchItemButton" ).GetComponent<Image>().enabled = true;
-			transform.Find( "ReplaceButton" ).GetComponent<Image>().enabled = true;		
-		}
-		//main menu off
-		else
-		{
-			transform.Find( "MainMenuBack" ).GetComponent<Image>().enabled = false;
-			transform.Find( "StartPrototypeGameButton" ).GetComponent<Image>().enabled = false;
-			transform.Find( "ShopButton" ).GetComponent<Image>().enabled = false;
-			transform.Find( "SearchItemButton" ).GetComponent<Image>().enabled = false;
-			transform.Find( "ReplaceButton" ).GetComponent<Image>().enabled = false;		
-		}
+
+		transform.Find( "MainMenuBack" ).GetComponent<Image>().enabled = state;
+		transform.Find( "StartPrototypeGameButton" ).GetComponent<Image>().enabled = state;
+		transform.Find( "ShopButton" ).GetComponent<Image>().enabled = state;
+		transform.Find( "SearchItemButton" ).GetComponent<Image>().enabled = state;
+		transform.Find( "ReplaceButton" ).GetComponent<Image>().enabled = state;		
 	}
 
+	public void SetMoneyInfor()
+	{
+		transform.Find( "UpsideItem" ).Find( "MoneyText" ).GetComponent<Text>().text = manager.Money.ToString();
+	}
 }

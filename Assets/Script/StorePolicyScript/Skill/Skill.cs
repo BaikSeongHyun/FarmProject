@@ -29,6 +29,11 @@ public class Skill : MonoBehaviour
 	{
 		get { return (skillPrice * originCounter); }
 	}
+	//skill counter - bullet
+	public int SkillCounter
+	{
+		get { return skillCounter; }
+	}
 
 	//another method
 
@@ -58,7 +63,6 @@ public class Skill : MonoBehaviour
 	public void ReloadCounter( )
 	{
 		skillCounter = originCounter;
-		Debug.Log( originCounter );
 	}
 
 }

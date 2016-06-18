@@ -19,6 +19,7 @@ public class FarmUI : MonoBehaviour
 	Canvas preProcessPopUp;
 	public MainUI mainUI;
 	public FarmManager manager;
+	public GameManager gameManager;
 
 	// initialize this script
 	void Start( )
@@ -57,6 +58,7 @@ public class FarmUI : MonoBehaviour
 		itemList = new CropItem[0];
 		mainUI = GameObject.FindGameObjectWithTag( "MainCanvas" ).GetComponent<MainUI>(); 
 		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<FarmManager>();
+		gameManager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<GameManager>();
 		buySeedCount = new int[3];
 		buySeedCount[0] = 0;
 		buySeedCount[1] = 0;
@@ -128,7 +130,7 @@ public class FarmUI : MonoBehaviour
 		if (buySeedCount[index] + 1 > 9)
 			return;
 
-		if (!manager.SetStageMoney( index, true ))
+		if (!manager.SetMoney( index, true ))
 			return;
 		
 		buySeedCount[index]++;
@@ -140,7 +142,7 @@ public class FarmUI : MonoBehaviour
 	{
 		if (buySeedCount[index] - 1 < 0)
 			return;
-		if (!manager.SetStageMoney( index, false ))
+		if (!manager.SetMoney( index, false ))
 			return;
 		buySeedCount[index]--;
 		SeedUpdate();
@@ -215,7 +217,7 @@ public class FarmUI : MonoBehaviour
 	//update pre process stage money
 	void StageMoneyUpdate( )
 	{
-		transform.Find( "PreProcessFarmGame" ).Find( "MoneyText" ).GetComponent<Text>().text = manager.StageMoney.ToString();
+		transform.Find( "PreProcessFarmGame" ).Find( "MoneyText" ).GetComponent<Text>().text = gameManager.Money.ToString();
 	}
 
 	//update seed count

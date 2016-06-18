@@ -19,8 +19,13 @@ public class StoreUI : MonoBehaviour
 	public Sprite[] numberSprite;
 	public Sprite[] itemSpriteColor;
 	public Sprite[] itemSpriteGray;
+	public Sprite[] skillIcon;
+	public Sprite[] moneyChangeIcon;
 	public CropItem[] cropData;
-	public GameObject[] button;
+	public List<string> moneyInfor;
+	public List<int> moneyChange;
+	GameObject[] button;
+	GameObject[] skillImage;
 	Scrollbar timeBar;
 	StoreManager manager;
 	GameObject priceSetPopUp;
@@ -59,6 +64,8 @@ public class StoreUI : MonoBehaviour
 		priceSetPopUp.GetComponent<Canvas>().enabled = false;
 		bargainPopUp = GameObject.Find( "BargainPopUp" );
 		bargainPopUp.GetComponent<Canvas>().enabled = false;
+		moneyInfor = new List<string>();
+		moneyChange = new List<int>();
 	}
 
 	//link crop item data and create button
@@ -103,7 +110,7 @@ public class StoreUI : MonoBehaviour
 		button.transform.localScale = new Vector3( 0.5f, 0.5f, 0.5f );
 		//button.transform.GetComponent<RectTransform>().sizeDelta = ( new Vector2( 0.5f, 0.5f ) );
 		//image
-		button.GetComponent<Image>().sprite = SetSprite( itemData.Name, false );
+		button.GetComponent<Image>().sprite = SetCropSprite( itemData.Name, false );
 		//add call back method
 		button.GetComponent<Button>().onClick.AddListener( ( ) =>
 		{
@@ -115,7 +122,7 @@ public class StoreUI : MonoBehaviour
 	}
 
 	//button sprite select
-	Sprite SetSprite( string name, bool place )
+	Sprite SetCropSprite( string name, bool place )
 	{
 		if (!place)
 		{
@@ -167,7 +174,7 @@ public class StoreUI : MonoBehaviour
 
 		price = 0;
 		transform.Find( "PriceSetPopUp" ).transform.Find( "Rank" ).GetComponent<Image>().sprite = SetRankSprite( data.Rank );
-		transform.Find( "PriceSetPopUp" ).transform.Find( "Item" ).GetComponent<Image>().sprite = SetSprite( data.Name, false );
+		transform.Find( "PriceSetPopUp" ).transform.Find( "Item" ).GetComponent<Image>().sprite = SetCropSprite( data.Name, false );
 		ChangeNumberImage();
 		presentIndex = index;
 		priceSetPopUp.GetComponent<Canvas>().enabled = true;
@@ -282,7 +289,7 @@ public class StoreUI : MonoBehaviour
 		//send object and destroy object
 		if (manager.LinkPresentCropItem( cropData[presentIndex], presentIndex ))
 		{
-			button[presentIndex].GetComponent<Image>().sprite = SetSprite( cropData[presentIndex].Name, true );
+			button[presentIndex].GetComponent<Image>().sprite = SetCropSprite( cropData[presentIndex].Name, true );
 			button[presentIndex].GetComponent<Button>().enabled = false;
 			priceSetPopUp.GetComponent<Canvas>().enabled = false;
 		}
@@ -324,7 +331,7 @@ public class StoreUI : MonoBehaviour
 		//set pop up data
 		int index = human.Store.CropIndex;
 
-		transform.Find( "BargainPopUp" ).Find( "Item" ).GetComponent<Image>().sprite = SetSprite( cropData[index].Name, false );
+		transform.Find( "BargainPopUp" ).Find( "Item" ).GetComponent<Image>().sprite = SetCropSprite( cropData[index].Name, false );
 		transform.Find( "BargainPopUp" ).Find( "Rank" ).GetComponent<Image>().sprite = SetRankSprite( cropData[index].Rank );
 		price = human.BargainPrice;
 		transform.Find( "BargainPopUp" ).Find( "Hundred" ).GetComponent<Image>().sprite = numberSprite[FindNumberIndex( 100 )];
@@ -352,4 +359,152 @@ public class StoreUI : MonoBehaviour
 		transform.Find( "StartStoreGame" ).GetComponent<Image>().enabled = state;
 	}
 
+	//make skill icon - use index
+	public void DrawSkillImage( string name, int skillCount )
+	{
+		OffSkillImage();	
+
+		skillImage = new GameObject[skillCount];
+
+		for (int i = 0; i < skillCount; i++)
+		{
+			skillImage[i] = MakeSkillImage( name, i );
+		}
+	}
+
+	//make skill icon image object
+	public GameObject MakeSkillImage( string name, int index )
+	{
+		//create component
+		GameObject image = new GameObject();
+		image.name = "SkillImage";
+		image.AddComponent<RectTransform>();
+		image.AddComponent<CanvasRenderer>();
+		image.AddComponent<Image>();
+
+		//move parent object
+		image.transform.parent = transform;
+
+		//set component
+		image.transform.localPosition = new Vector3( 230 + (index * 10f), 100f, 0f );
+		image.transform.localScale = new Vector3( 0.3f, 0.3f, 0.3f );
+
+		image.GetComponent<Image>().sprite = SetSkillSprite( name );
+
+		return image;
+	}
+
+	//set skill icon
+	public Sprite SetSkillSprite( string name )
+	{
+		switch(name)
+		{
+			case"BarrelDrop":
+				return skillIcon[0]; 
+			case"Snipe":
+				return skillIcon[1]; 
+			case"Lighting":
+				return skillIcon[2]; 
+		}
+
+		return null;
+	}
+
+	//clear skill image
+	public void OffSkillImage( )
+	{
+		if (skillImage != null)
+		{
+			for (int i = 0; i < skillImage.Length; i++)
+			{
+				Destroy( skillImage[i] );
+			}
+		}
+	}
+
+	//control money infor tab
+	public void ControlMoneyInfor( bool state )
+	{
+		transform.Find( "MoneyBack" ).GetComponent<Image>().enabled = state;
+		transform.Find( "Money1stSpace" ).GetComponent<Image>().enabled = state;
+		transform.Find( "Money1stIcon" ).GetComponent<Image>().enabled = state;
+		transform.Find( "Money1stText" ).GetComponent<Text>().enabled = state;
+		transform.Find( "Money2ndSpace" ).GetComponent<Image>().enabled = state;
+		transform.Find( "Money2ndIcon" ).GetComponent<Image>().enabled = state;
+		transform.Find( "Money2ndText" ).GetComponent<Text>().enabled = state;
+		transform.Find( "Money3rdSpace" ).GetComponent<Image>().enabled = state;
+		transform.Find( "Money3rdIcon" ).GetComponent<Image>().enabled = state;
+		transform.Find( "Money3rdText" ).GetComponent<Text>().enabled = state;
+	}
+
+	public void ControlMoneyInforItem( int index, bool state )
+	{
+		switch(index)
+		{
+			case 1:
+				transform.Find( "Money1stSpace" ).GetComponent<Image>().enabled = state;
+				transform.Find( "Money1stIcon" ).GetComponent<Image>().enabled = state;
+				transform.Find( "Money1stText" ).GetComponent<Text>().enabled = state;
+				break;
+			case 2:
+				transform.Find( "Money2ndSpace" ).GetComponent<Image>().enabled = state;
+				transform.Find( "Money2ndIcon" ).GetComponent<Image>().enabled = state;
+				transform.Find( "Money2ndText" ).GetComponent<Text>().enabled = state;
+				break;
+			case 3:
+				transform.Find( "Money3rdSpace" ).GetComponent<Image>().enabled = state;
+				transform.Find( "Money3rdIcon" ).GetComponent<Image>().enabled = state;
+				transform.Find( "Money3rdText" ).GetComponent<Text>().enabled = state;
+				break;
+		}
+	}
+
+
+	//update money infor
+	public void UpdateMoneyInfor( string infor, int money )
+	{
+		//add money infor
+		moneyInfor.Add( infor );
+		moneyChange.Add( money );
+
+		//only use 3 data
+		if (moneyChange.Count > 3 && moneyInfor.Count > 3)
+		{
+			moneyInfor.RemoveAt( 0 );
+			moneyChange.RemoveAt( 0 );
+		}
+
+		//ui update
+		if (moneyInfor.Count > 0)
+		{
+			ControlMoneyInforItem( 1, true );
+			transform.Find( "Money1stText" ).GetComponent<Text>().text = moneyInfor[0] + " " + moneyChange[0].ToString();
+			if (moneyChange[0] > 0)
+				transform.Find( "Money1stIcon" ).GetComponent<Image>().sprite = moneyChangeIcon[0];
+			else
+				transform.Find( "Money1stIcon" ).GetComponent<Image>().sprite = moneyChangeIcon[1];
+		}
+
+		if (moneyInfor.Count > 1)
+		{
+			ControlMoneyInforItem( 2, true );
+			transform.Find( "Money1stText" ).GetComponent<Text>().text = moneyInfor[1] + " " + moneyChange[1].ToString();
+			if (moneyChange[1] > 0)
+				transform.Find( "Money1stIcon" ).GetComponent<Image>().sprite = moneyChangeIcon[0];
+			else
+				transform.Find( "Money1stIcon" ).GetComponent<Image>().sprite = moneyChangeIcon[1];
+		}
+
+		if (moneyInfor.Count > 2)
+		{
+			ControlMoneyInforItem( 3, true );
+			transform.Find( "Money1stText" ).GetComponent<Text>().text = moneyInfor[2] + " " + moneyChange[2].ToString();
+			if (moneyChange[2] > 0)
+				transform.Find( "Money1stIcon" ).GetComponent<Image>().sprite = moneyChangeIcon[0];
+			else
+				transform.Find( "Money1stIcon" ).GetComponent<Image>().sprite = moneyChangeIcon[1];
+		}
+
+	}
 }
+

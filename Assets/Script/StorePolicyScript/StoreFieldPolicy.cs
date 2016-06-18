@@ -77,7 +77,9 @@ public class StoreFieldPolicy : MonoBehaviour
 	{
 		onStore = false;
 		manager.AddMoney( price );
-
+		storeUI.UpdateMoneyInfor( "Sold out", presentCrop.Price );
+		presentCrop = null;
+		Destroy( presentTexture );
 		//send renewal data by store UI
 	}
 
@@ -85,8 +87,8 @@ public class StoreFieldPolicy : MonoBehaviour
 	public void SoldOutCropItem( )
 	{
 		//Destroy( presentItem );
-		Debug.Log( "Enter Sold Out Crop Item method" );
 		manager.AddMoney( presentCrop.Price );
+		storeUI.UpdateMoneyInfor( "Sold out", presentCrop.Price );
 		onStore = false;
 		presentCrop = null;
 		Destroy( presentTexture );
@@ -103,7 +105,6 @@ public class StoreFieldPolicy : MonoBehaviour
 
 		stealPrice = presentCrop.Price;
 		//send renewal data by store UI
-
 	}
 
 

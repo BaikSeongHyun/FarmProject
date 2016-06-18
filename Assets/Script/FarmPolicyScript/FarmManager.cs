@@ -6,14 +6,15 @@ public class FarmManager : MonoBehaviour
 {
 	//simple data field
 	public bool onGame;
-	public int stageMoney;
 	const float RayCastMaxDistance = 100.0f;
 	public Crop.Resource presentResource;
 
 	//complex data field
 	public Crop presentSeed;
 	public CropItem outputCropItem;
+
 	//this array will be set automaic
+	public GameManager gameManager;
 	public FarmFieldPolicy[] farmFieldGroup;
 	public Crop[] cropGroup;
 	public List<CropItem> saveCropItem;
@@ -22,8 +23,9 @@ public class FarmManager : MonoBehaviour
 	// initialize this script
 	void Start( )
 	{
-		stageMoney = 200;
+
 		presentResource = Crop.Resource.Default;
+		gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 		LinkFarmFieldPolicy();
 		LinkCropData();
 		outputCropItem = new CropItem();
@@ -31,11 +33,6 @@ public class FarmManager : MonoBehaviour
 	}
 
 	//property
-	public int StageMoney
-	{
-		get { return stageMoney; }
-		set { stageMoney = value; }
-	}
 
 	public Crop PresentSeed
 	{
@@ -133,21 +130,21 @@ public class FarmManager : MonoBehaviour
 	}
 
 	//stageMoney - return false => no add item
-	public bool SetStageMoney( int index, bool add )
+	public bool SetMoney( int index, bool add )
 	{
 		if (add)
 		{
-			if ((stageMoney - cropGroup[index].SeedPrice) < 0)
+			if ((gameManager.Money - cropGroup[index].SeedPrice) < 0)
 				return false;
 			else
 			{
-				stageMoney -= cropGroup[index].SeedPrice;
+				gameManager.Money -= cropGroup[index].SeedPrice;
 				return true;
 			}			
 		}
 		else
 		{
-			stageMoney += cropGroup[index].SeedPrice;
+			gameManager.Money += cropGroup[index].SeedPrice;
 			return true;
 		}
 	}

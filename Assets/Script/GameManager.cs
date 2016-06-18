@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 	//simple data fiele
 	public float gameTime;
 	public Vector2 mousePosition;
+	public int money;
 
 	//complex data field
 	CropItem[] cropData;
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
 	// initialize this script
 	void Start( )
 	{
+		money = 2000;
 		gameTime = 0.0f;
 		LinkGameResource();
 
@@ -58,12 +60,22 @@ public class GameManager : MonoBehaviour
 			storeUI.SetGameTime( gameTime );
 			storeStage.ProcessStageEvent( mousePosition );
 		}
+
+		mainUI.SetMoneyInfor();
+
 	}
 
 	//property
+	//game time
 	public float GameTime
 	{
 		get { return gameTime; }
+	}
+	// game money
+	public int Money
+	{
+		get { return money; }
+		set { money = value; }
 	}
 
 	//another method
@@ -114,6 +126,9 @@ public class GameManager : MonoBehaviour
 		storeUI.enabled = true;
 		storeUI.DataLink();
 		storeUI.WakeUpCanvas();
+		storeUI.ControlMoneyInforItem( 1, false );
+		storeUI.ControlMoneyInforItem( 2, false );
+		storeUI.ControlMoneyInforItem( 3, false );
 		storeUI.LinkCropItem( farmStage.GetCropItem().ToArray() );
 		storeUI.ControlStoreGameButton( true );
 	}
@@ -133,7 +148,7 @@ public class GameManager : MonoBehaviour
 		mainUI.MainMenuControl( true );
 	}
 
-	//if game over -> all game data reset 
+	//if game over -> all game data reset
 	public void InitializeGameData( )
 	{
 

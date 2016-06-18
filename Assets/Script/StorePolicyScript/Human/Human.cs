@@ -74,6 +74,7 @@ public class Human : MonoBehaviour
 		onShopping = false;
 		onMove = true;
 		onBargain = false;
+		target = null;
 		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
 		popUpImage = transform.Find( "PopUpHuman" ).GetComponent<Image>();
 		popUpImage.enabled = false;
@@ -84,12 +85,30 @@ public class Human : MonoBehaviour
 	{
 		if (onMove && !onShopping)
 		{
-			interpolate = (target.position.sqrMagnitude / transform.position.sqrMagnitude) * 0.01f;
-			transform.position = (Vector3.Lerp( transform.position, target.position, moveSpeed * interpolate ));
+			SetTarget();
+			if (target != null)
+			{
+				interpolate = (target.position.sqrMagnitude / transform.position.sqrMagnitude) * 0.01f;
+				transform.position = (Vector3.Lerp( transform.position, target.position, moveSpeed * interpolate ));
+			}
+			if (!manager.CheckAllField())
+			{
+				onShopping = true;
+			}
 		}
 		else if (onMove && onShopping)
 		{
 			transform.position = (Vector3.Lerp( transform.position, target.position, moveSpeed * 0.0005f ));
+		}
+
+		if (onBargain)
+		{
+			if (SetTarget())
+			{
+				SetTarget();
+				onBargain = false;
+				onMove = true;
+			}
 		}
 
 		if (onShopping)
@@ -99,15 +118,20 @@ public class Human : MonoBehaviour
 	//another method
 
 	//Human move by target
-	public void MoveTarget( )
+	public bool SetTarget( )
 	{
+		if (target == null)
+		{
+			target = manager.GetSellingStoreField();
+			return true;
+		}
 
-	}
-
-	//Human move by outside
-	public void MoveOutside( )
-	{
-
+		if (presentStore != null && !presentStore.OnStore)
+		{
+			target = manager.GetSellingStoreField();
+			return true;
+		}
+		return false;
 	}
 
 	//collision at store field
@@ -132,7 +156,6 @@ public class Human : MonoBehaviour
 
 		if (col.gameObject.layer.Equals( LayerMask.NameToLayer( "Skill" ) ))
 		{
-			Debug.Log( "Active this layer" );
 			if (state == State.Customer)
 			{
 				manager.CustomerDeath();
@@ -140,7 +163,7 @@ public class Human : MonoBehaviour
 			}
 			else if (state == State.Thief)
 			{
-				manager.ThiefDeath( onShopping, stealPrice  );
+				manager.ThiefDeath( onShopping, stealPrice );
 				Destroy( this.gameObject );
 			}
 		}
@@ -149,9 +172,10 @@ public class Human : MonoBehaviour
 	//thief policy method
 	public void StealCrop( StoreFieldPolicy field )
 	{
-		field.StealCrop(out stealPrice);
+		field.StealCrop( out stealPrice );
 		popUpImage.enabled = true;
 		popUpImage.sprite = image[1];
+		moveSpeed = 10f;
 		//drawing canvas for steal
 		onShopping = true;
 	}
@@ -214,7 +238,7 @@ public class Human : MonoBehaviour
 
 	//get / set method
 
-	public void SetTarget(Transform trans)
+	public void SetTarget( Transform trans )
 	{
 		target = trans;
 	}
