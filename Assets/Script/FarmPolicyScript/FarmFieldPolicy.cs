@@ -17,7 +17,6 @@ public class FarmFieldPolicy : MonoBehaviour
 	public Sprite temp;
 	public FarmState presentState;
 	public Vector3 presentPosition;
-	public Quaternion presentRotation;
 	private Crop.Rank tempRank;
 
 	//complex data field
@@ -37,18 +36,18 @@ public class FarmFieldPolicy : MonoBehaviour
 	;
 
 	//initialize this script
-	void Start( )
+	void Start ()
 	{
 		InitialzeCreate();
 		InitialzeResource();
 		presentTexture = null;
 		resourceImage = transform.Find( "FarmCanvas" ).GetComponent<Image>();
 		resourceImage.enabled = false;
-		presentRotation = new Quaternion( 0f, 0f, 0f, 0f );
+		
 	}
 	
 	// Update is called once per frame
-	void Update( )
+	void Update ()
 	{
 		presentPosition = transform.position;
 
@@ -63,7 +62,7 @@ public class FarmFieldPolicy : MonoBehaviour
 
 	//another method
 	//texture create parameter initialze
-	void InitialzeCreate( )
+	void InitialzeCreate ()
 	{
 		create1st = false;
 		create2nd = false;
@@ -72,19 +71,19 @@ public class FarmFieldPolicy : MonoBehaviour
 	}
 
 	//check resource initialze
-	void InitialzeResource( )
+	void InitialzeResource ()
 	{
 		firstResource = false;
 		secondResource = false;
 	}
 
 	//click event process
-	public void ProcessEvent( Crop data, CropItem itemData, Crop.Resource resource )
+	public void ProcessEvent (Crop data, CropItem itemData, Crop.Resource resource)
 	{			
 		itemData.Name = null;
 		tempRank = Crop.Rank.Default;
 
-		switch(presentState)
+		switch (presentState)
 		{
 			case FarmState.Empty:
 				PlantCrop( data );
@@ -99,7 +98,7 @@ public class FarmFieldPolicy : MonoBehaviour
 				break;
 			case FarmState.Complete:
 				itemData.Name = presentCrop.Name;
-				HarvestCrop( ref tempRank, resource);
+				HarvestCrop( ref tempRank, resource );
 				itemData.Rank = tempRank;
 				break;
 		}
@@ -107,7 +106,7 @@ public class FarmFieldPolicy : MonoBehaviour
 	}
 
 	//plant crop
-	void PlantCrop( Crop data )
+	void PlantCrop (Crop data)
 	{		
 		if (data.SeedCount <= 0)
 			return;
@@ -121,12 +120,12 @@ public class FarmFieldPolicy : MonoBehaviour
 	}
 
 	//grow crop
-	void GrowCrop( )
+	void GrowCrop ()
 	{
 		if (onCrop && presentState == FarmState.FirstStep && !create1st)
 		{
 			//crop texture update
-			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 0 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 0 ), presentPosition, new Quaternion(0f, 0f, 0f, 0f) );
 			create1st = true;
 		}
 		else if (onCrop && presentState == FarmState.SecondStep && !create2nd)
@@ -137,7 +136,7 @@ public class FarmFieldPolicy : MonoBehaviour
 
 			//crop texture update
 			Destroy( presentTexture );
-			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 1 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 1 ), presentPosition, new Quaternion(0f, 0f, 0f, 0f) );
 			create2nd = true;
 		}
 		else if (onCrop && presentState == FarmState.ThirdStep && !create3rd)
@@ -148,7 +147,7 @@ public class FarmFieldPolicy : MonoBehaviour
 
 			//crop texture update
 			Destroy( presentTexture );
-			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 2 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 2 ), presentPosition, new Quaternion(0f, 0f, 0f, 0f) );
 			create3rd = true;
 		}
 		else if (onCrop && presentState == FarmState.Complete && !createComplete)
@@ -158,13 +157,13 @@ public class FarmFieldPolicy : MonoBehaviour
 
 			//crop texture update
 			Destroy( presentTexture );
-			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 3 ), presentPosition, presentRotation );
+			presentTexture = (GameObject)Instantiate( presentCrop.GetGrowTexture( 3 ), presentPosition, new Quaternion(0f, 0f, 0f, 0f) );
 			createComplete = true;
 		}
 	}
 
 	//harvestCrop
-	void HarvestCrop( ref Crop.Rank data, Crop.Resource resource )
+	void HarvestCrop (ref Crop.Rank data, Crop.Resource resource)
 	{
 		if (resource != Crop.Resource.Default)
 			return;
@@ -179,7 +178,7 @@ public class FarmFieldPolicy : MonoBehaviour
 	}
 
 	//work farm - supply resource
-	void FarmWork( Crop.Resource resource )
+	void FarmWork (Crop.Resource resource)
 	{
 		//first item supply
 		if (presentState == FarmState.SecondStep)
@@ -202,22 +201,8 @@ public class FarmFieldPolicy : MonoBehaviour
 
 	}
 
-	//see item
-	void SupplyItem( Crop.Resource resource )
-	{
-		if (presentState == FarmState.SecondStep)
-		{
-	
-			Debug.Log( "First resource active" );
-		}
-		else if (presentState == FarmState.ThirdStep)
-		{
-			Debug.Log( "Second resource active" );
-		}
-	}
-
 	//set crop Rank
-	Crop.Rank SetCropRank( )
+	Crop.Rank SetCropRank ()
 	{
 		if (firstResource && secondResource)
 			return Crop.Rank.S;
@@ -228,7 +213,7 @@ public class FarmFieldPolicy : MonoBehaviour
 	}
 
 	//set farm state
-	void SetFarmState( )
+	void SetFarmState ()
 	{
 		if (grewTime == 0.0f)
 			presentState = FarmState.Empty;
@@ -240,5 +225,13 @@ public class FarmFieldPolicy : MonoBehaviour
 			presentState = FarmState.ThirdStep;
 		else if (presentCrop.GrowTime < grewTime)
 			presentState = FarmState.Complete;
+	}
+	
+	//clear game data
+	public void InitializeGameData()
+	{
+		if(presentTexture != null)
+			Destroy(presentTexture);
+		presentCrop = null;
 	}
 }

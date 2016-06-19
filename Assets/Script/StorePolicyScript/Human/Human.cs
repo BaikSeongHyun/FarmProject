@@ -17,7 +17,7 @@ public class Human : MonoBehaviour
 	public int stealPrice;
 
 	//complex data field
-	StoreManager manager;
+	protected StoreManager manager;
 	public Image popUpImage;
 	public Sprite[] image;
 	public StoreFieldPolicy presentStore;
@@ -32,7 +32,7 @@ public class Human : MonoBehaviour
 	;
 
 	//constructor - no parameter
-	public Human()
+	public Human ()
 	{
 		moveSpeed = 0f;
 		disposition = 1.0f;
@@ -43,7 +43,7 @@ public class Human : MonoBehaviour
 		bargainPrice = 0;
 	}
 	//constructor - self parameter
-	public Human( Human data )
+	public Human (Human data)
 	{
 		moveSpeed = data.moveSpeed;
 		disposition = data.disposition;
@@ -51,9 +51,19 @@ public class Human : MonoBehaviour
 	}
 
 	//property
+	public bool OnShopping
+	{
+		get { return onShopping; }
+	}
+
 	public bool OnBargain
 	{
 		get { return onBargain; }
+	}
+
+	public int StealPrice
+	{
+		get { return StealPrice; }
 	}
 
 	public int BargainPrice
@@ -69,7 +79,7 @@ public class Human : MonoBehaviour
 
 	//standard method
 	//initialize this script
-	void Start( )
+	void Start ()
 	{
 		onShopping = false;
 		onMove = true;
@@ -81,7 +91,7 @@ public class Human : MonoBehaviour
 		moveSpeed = 5f;
 	}
 
-	void Update( )
+	void Update ()
 	{
 		if (onMove && !onShopping)
 		{
@@ -91,8 +101,9 @@ public class Human : MonoBehaviour
 				interpolate = (target.position.sqrMagnitude / transform.position.sqrMagnitude) * 0.01f;
 				transform.position = (Vector3.Lerp( transform.position, target.position, moveSpeed * interpolate ));
 			}
-			if (!manager.CheckAllField())
+			if (manager.CheckAllFieldIsEmpty())
 			{
+				Debug.Log("field empty go to house");
 				onShopping = true;
 			}
 		}
@@ -116,9 +127,19 @@ public class Human : MonoBehaviour
 	}
 
 	//another method
-
+	public virtual void DataSetUp()
+	{
+		onShopping = false;
+		onMove = true;
+		onBargain = false;
+		target = null;
+		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
+		popUpImage = transform.Find( "PopUpHuman" ).GetComponent<Image>();
+		popUpImage.enabled = false;
+		moveSpeed = 5f;
+	}
 	//Human move by target
-	public bool SetTarget( )
+	public bool SetTarget ()
 	{
 		if (target == null)
 		{
@@ -135,7 +156,7 @@ public class Human : MonoBehaviour
 	}
 
 	//collision at store field
-	void OnCollisionEnter( Collision col )
+	void OnCollisionEnter (Collision col)
 	{
 		if (col.gameObject.CompareTag( "StoreField" ))
 			presentStore = col.gameObject.GetComponent<StoreFieldPolicy>();
@@ -170,18 +191,22 @@ public class Human : MonoBehaviour
 	}
 
 	//thief policy method
-	public void StealCrop( StoreFieldPolicy field )
+	public void StealCrop (StoreFieldPolicy field)
 	{
-		field.StealCrop( out stealPrice );
-		popUpImage.enabled = true;
-		popUpImage.sprite = image[1];
-		moveSpeed = 10f;
+		if(field.OnStore)
+		{
+			field.StealCrop( out stealPrice );
+			popUpImage.enabled = true;
+			popUpImage.sprite = image[1];
+			moveSpeed = 10f;
+		}
+		
 		//drawing canvas for steal
 		onShopping = true;
 	}
 
 	//customer policy method
-	public void BuyCrop( StoreFieldPolicy field )
+	public void BuyCrop (StoreFieldPolicy field)
 	{
 		Crop[] cropData = manager.GetCropGroup();
 		float averagePrice = 0.0f;
@@ -220,7 +245,7 @@ public class Human : MonoBehaviour
 		}
 	}
 
-	public void SuccessBargain( )
+	public void SuccessBargain ()
 	{		
 		popUpImage.enabled = false;
 		presentStore.BargainSoldOutCrop( (int)bargainPrice );
@@ -228,7 +253,7 @@ public class Human : MonoBehaviour
 		onMove = true;
 	}
 
-	public void FailureBargain( )
+	public void FailureBargain ()
 	{
 		Debug.Log( "Bargain failure" );
 		popUpImage.enabled = false;
@@ -238,9 +263,14 @@ public class Human : MonoBehaviour
 
 	//get / set method
 
-	public void SetTarget( Transform trans )
+	public void SetTarget (Transform trans)
 	{
 		target = trans;
+	}
+
+	public void SetDisposition ()
+	{
+		disposition = Random.Range( 0.9f, 1.1f );
 	}
 
 }

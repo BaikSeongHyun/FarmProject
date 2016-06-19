@@ -69,7 +69,7 @@
      <Compile Include="Assets\Script\StorePolicyScript\Skill\BarrelDrop.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\Skill\Lighting.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\Skill\Skill.cs" />
-     <Compile Include="Assets\Script\StorePolicyScript\Skill\Snipe.cs" />
+     <Compile Include="Assets\Script\StorePolicyScript\Skill\SpinTrap.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\StoreFieldPolicy.cs" />
      <Compile Include="Assets\Script\StorePolicyScript\StoreManager.cs" />
      <Compile Include="Assets\Script\UIScript\FarmUI.cs" />

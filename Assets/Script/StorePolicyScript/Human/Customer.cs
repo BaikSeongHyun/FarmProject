@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Customer : Human
@@ -7,9 +8,21 @@ public class Customer : Human
 	public Customer()
 	{
 		moveSpeed = 5f;
-		disposition = Random.Range( 0.9f, 1.1f );
 		state = State.Customer;
 	}
+	
+	//another method
+	public override void DataSetUp()
+	{
+		onShopping = false;
+		onMove = true;
+		onBargain = false;
+		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
+		popUpImage = transform.Find( "PopUpHuman" ).GetComponent<Image>();
+		popUpImage.enabled = false;
+		moveSpeed = 5f;
+		
+		SetTarget();
+		SetDisposition();
+	}
 }
-
-

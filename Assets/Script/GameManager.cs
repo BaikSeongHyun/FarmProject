@@ -6,7 +6,9 @@ public class GameManager : MonoBehaviour
 {
 	//simple data fiele
 	public float gameTime;
+	public float stageTime;
 	public Vector2 mousePosition;
+	int originMoney;
 	public int money;
 
 	//complex data field
@@ -18,11 +20,12 @@ public class GameManager : MonoBehaviour
 	public MainUI mainUI;
 
 	// initialize this script
-	void Start( )
+	void Start ()
 	{
 		money = 2000;
 		gameTime = 0.0f;
-		LinkGameResource();
+		stageTime = 90f;
+		LinkGameResource();		
 
 		//sleep farm
 		farmUI.SleepCanvas();
@@ -31,10 +34,13 @@ public class GameManager : MonoBehaviour
 		//sleep store
 		storeUI.SleepCanvas();
 		storeUI.enabled = false;
+		
+		//result sleep
+		mainUI.ControlResultPopUp(false);
 	}
 	
 	// Update is called once per frame
-	void Update( )
+	void Update ()
 	{
 		mousePosition = Input.mousePosition;
 
@@ -42,9 +48,16 @@ public class GameManager : MonoBehaviour
 		if (farmStage.CheckOnGame())
 		{
 			gameTime += Time.deltaTime;
-			farmUI.SetGameTime( gameTime );
+			farmUI.SetGameTime( );
 			farmStage.ProcessStageEvent( mousePosition );
 			farmUI.LinkCropItem( farmStage.GetCropItem() );
+			if (gameTime >= stageTime)
+			{
+				gameTime = 0.0f;
+				//go next stage	
+				EndFarmGame();
+				StartPreProcessStoreGame();
+			}
 		}
 
 		//store stage placement item step
@@ -57,11 +70,18 @@ public class GameManager : MonoBehaviour
 		if (storeStage.CheckOnGame())
 		{
 			gameTime += Time.deltaTime;
-			storeUI.SetGameTime( gameTime );
+			storeUI.SetGameTime( );
 			storeStage.ProcessStageEvent( mousePosition );
+			
+			if (gameTime >= stageTime)
+			{
+				gameTime = 0.0f;
+				//go next stage	
+				EndStoreGame();
+			}
 		}
-
-		mainUI.SetMoneyInfor();
+		CameraChanger();
+		mainUI.SetMoneyInfor();		
 
 	}
 
@@ -71,6 +91,11 @@ public class GameManager : MonoBehaviour
 	{
 		get { return gameTime; }
 	}
+	//stage time
+	public float StageTime
+	{
+		get { return stageTime; }
+	}
 	// game money
 	public int Money
 	{
@@ -79,7 +104,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	//another method
-	void LinkGameResource( )
+	void LinkGameResource ()
 	{
 		//link stage data
 		farmStage = GetComponent<FarmManager>();
@@ -94,31 +119,32 @@ public class GameManager : MonoBehaviour
 	//game start / end policy
 
 	//farm
-	public void StartPreProcessFarmGame( )
+	public void StartPreProcessFarmGame ()
 	{
 		//start ui alogorithm -> no active canvas ( for pop up only)
+		originMoney = money;
 		farmUI.enabled = true;
 		farmUI.DataLink();
 		farmUI.OpenPreprocessPopUp();
 		mainUI.MainMenuControl( false );
 	}
 
-	public void StartFarmGame( )
+	public void StartFarmGame ()
 	{	
 		farmStage.StartFarmGame();
 	}
 
-	public void EndFarmGame( )
+	public void EndFarmGame ()
 	{
-		farmStage.EndFarmGame();
 		farmUI.SleepCanvas();
 		farmUI.enabled = false;
+		farmStage.EndFarmGame();
 		gameTime = 0.0f;
 	}
 
 
 	//store
-	public void StartPreProcessStoreGame( )
+	public void StartPreProcessStoreGame ()
 	{
 		storeStage.StartPreProcess();
 
@@ -133,12 +159,12 @@ public class GameManager : MonoBehaviour
 		storeUI.ControlStoreGameButton( true );
 	}
 
-	public void StartStoreGame( )
+	public void StartStoreGame ()
 	{
 		storeStage.StartStoreGame();
 	}
 
-	public void EndStoreGame( )
+	public void EndStoreGame ()
 	{
 		storeStage.EndStoreGame();
 		storeUI.SleepCanvas();
@@ -146,11 +172,48 @@ public class GameManager : MonoBehaviour
 		storeUI.enabled = false;
 		gameTime = 0.0f;
 		mainUI.MainMenuControl( true );
+		ProcessStageClear();
+		InitializeGameData();
 	}
-
-	//if game over -> all game data reset
-	public void InitializeGameData( )
+	
+	void ProcessStageClear()
 	{
+		if(money >= originMoney + 400)
+		
+			mainUI.PopUpResult("Success");
+		
+		else
+			mainUI.PopUpResult("Failure");
+	}
+			
 
+	//if game end -> all game data reset
+	public void InitializeGameData ()
+	{
+		farmStage.InitializeGameData();
+		storeStage.InitializeGameData();
+	}
+	
+	//camera rotation set
+	void CameraChanger ()
+	{	
+		//farm stage view
+		if (farmStage.CheckOnGame())
+		{
+			Camera.main.transform.position = Vector3.Lerp( Camera.main.transform.position, new Vector3(-28.0f, 32.0f, -20.0f), Time.deltaTime );
+			Camera.main.transform.rotation = Quaternion.Lerp( Camera.main.transform.rotation, new Quaternion(0.6f, 0.0f, 0.0f, 0.8f), Time.deltaTime );
+		}
+		else if (!storeStage.PlaceComplete || storeStage.CheckOnGame())
+		{
+			Camera.main.transform.position = Vector3.Lerp( Camera.main.transform.position, new Vector3(-2.0f, 30.0f, -22.0f), Time.deltaTime );
+			Camera.main.transform.rotation = Quaternion.Lerp( Camera.main.transform.rotation, new Quaternion(0.6f, 0.0f, 0.0f, 0.8f), Time.deltaTime );
+		}
+		//main view
+		else if (!farmStage.CheckOnGame() && !storeStage.CheckOnGame())
+		{
+			//rotate round
+			Camera.main.transform.position = Vector3.Lerp( Camera.main.transform.position, new Vector3(18.9f, 24.4f, -29.2f), Time.deltaTime );
+			Camera.main.transform.rotation = Quaternion.Lerp( Camera.main.transform.rotation, new Quaternion(0.2f, -0.3f, 0.1f, 0.9f), Time.deltaTime );
+		}
 	}
 }

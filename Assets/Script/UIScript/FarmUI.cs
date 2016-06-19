@@ -7,15 +7,13 @@ public class FarmUI : MonoBehaviour
 {
 	//simple datafield
 	int moveX;
-	float gameTime;
 
 	//complex data field
 	public Texture[] cropTexture;
 	public Sprite[] resourceSprite;
 	int[] buySeedCount;
-	Button[] cropItem;
 	CropItem[] itemList;
-	Scrollbar timeBar;
+	Image timeBar;
 	Canvas preProcessPopUp;
 	public MainUI mainUI;
 	public FarmManager manager;
@@ -35,17 +33,10 @@ public class FarmUI : MonoBehaviour
 		for (int i = 0; i < itemList.Length; i++)
 		{
 			moveX += 80;
-			GUI.DrawTexture( new Rect( moveX, 40, 50, 50 ), SetTexture( itemList[i].Name ) );
+			GUI.DrawTexture( new Rect( moveX, 60, 50, 50 ), SetTexture( itemList[i].Name ) );
 		}
-
-		timeBar.value = (1 - gameTime / 60f);
+		
 		UpdateSeedCount();
-	}
-
-	//property
-	public float GameTime
-	{
-		set { gameTime = value; }
 	}
 
 	//another method
@@ -53,7 +44,7 @@ public class FarmUI : MonoBehaviour
 	//initialize data for start UI - priority check
 	public void DataLink()
 	{
-		timeBar = transform.Find( "TimeBar" ).GetComponent<Scrollbar>();
+		timeBar = transform.Find( "TimeBar" ).GetComponent<Image>();
 		preProcessPopUp = transform.Find( "PreProcessFarmGame" ).GetComponent<Canvas>();
 		itemList = new CropItem[0];
 		mainUI = GameObject.FindGameObjectWithTag( "MainCanvas" ).GetComponent<MainUI>(); 
@@ -104,17 +95,14 @@ public class FarmUI : MonoBehaviour
 	}
 
 	//set game time and renewal scroll bar value
-	public void SetGameTime( float time )
+	public void SetGameTime( )
 	{
-		gameTime = time;
-		timeBar.value = (1 - gameTime / 60f);
+		timeBar.fillAmount = 1 - (gameManager.GameTime / gameManager.StageTime);
 	}
 
 	//control farm select section
 	public void ControlFarmMenu( bool state )
 	{
-
-
 
 	}
 
@@ -174,13 +162,13 @@ public class FarmUI : MonoBehaviour
 		switch(index)
 		{
 			case 0:
-				manager.PresentSeed = manager.GetCropGroup()[0];
+				manager.PresentSeed = manager.GetCropSearchByName("Corn");
 				break;
 			case 1:
-				manager.PresentSeed = manager.GetCropGroup()[1];
+				manager.PresentSeed = manager.GetCropSearchByName("Carrot");
 				break;
 			case 2:
-				manager.PresentSeed = manager.GetCropGroup()[2];
+				manager.PresentSeed = manager.GetCropSearchByName("Barley");
 				break;
 		}
 
@@ -227,4 +215,10 @@ public class FarmUI : MonoBehaviour
 		transform.Find( "Seed2ndText" ).GetComponent<Text>().text = manager.GetCropInformation( "Carrot" ).SeedCount + " pcs";
 		transform.Find( "Seed3rdText" ).GetComponent<Text>().text = manager.GetCropInformation( "Barley" ).SeedCount + " pcs";
 	}
+	
+	//clear game data
+	public void InitializeGameData()
+	{
+		
+	}		
 }

@@ -30,11 +30,12 @@ public class StoreManager : MonoBehaviour
 
 
 	//initialize this script
-	void Start( )
+	void Start ()
 	{
 		onGame = false;
 		placeComplete = true;
 		onSkill = false;
+		presentCrop = null;
 		generateCoolTime = 0.0f;
 		generateCycle = 10f;
 		humanGroup = new Human[10];
@@ -55,7 +56,7 @@ public class StoreManager : MonoBehaviour
 	//another method
 	//initialize game data
 	//crop data
-	void LinkCropData( )
+	void LinkCropData ()
 	{
 		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Crop" );
 		cropGroup = new Crop[tempData.Length];
@@ -67,7 +68,7 @@ public class StoreManager : MonoBehaviour
 		}
 	}
 	//skill data
-	void LinkSkillData( )
+	void LinkSkillData ()
 	{
 		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "Skill" );
 		skillGroup = new Skill[tempData.Length];
@@ -79,7 +80,7 @@ public class StoreManager : MonoBehaviour
 		}
 	}
 	//store field policy script
-	void LinkStoreFieldPolicy( )
+	void LinkStoreFieldPolicy ()
 	{
 		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "StoreField" );
 		storeFieldGroup = new StoreFieldPolicy[tempData.Length];
@@ -93,7 +94,7 @@ public class StoreManager : MonoBehaviour
 		}
 	}
 	//link human generate position
-	void LinkStartPos( )
+	void LinkStartPos ()
 	{
 		GameObject[] tempData = GameObject.FindGameObjectsWithTag( "StartPos" );
 		startPos = new Vector3[tempData.Length];
@@ -108,20 +109,20 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//store field enable set false
-	void SleepStoreField( StoreFieldPolicy store )
+	void SleepStoreField (StoreFieldPolicy store)
 	{
-		store.enabled = false;
+		
 	}
 
 	//process placement step
-	public void ProcessPlacementEvent( Vector2 mousePosition )
+	public void ProcessPlacementEvent (Vector2 mousePosition)
 	{
 		if (Input.GetButtonDown( "Click" ))
 		{
 			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
 			RaycastHit hitinfo;
 
-			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "StoreField" ) ))
+			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "StoreField" ) ) && presentCrop != null )
 			{
 				GameObject tempSearch = hitinfo.collider.gameObject;
 				StoreFieldPolicy tempPolicy = tempSearch.GetComponent<StoreFieldPolicy>();
@@ -134,7 +135,7 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//process game event - moveclick event
-	public void ProcessStageEvent( Vector2 mousePosition )
+	public void ProcessStageEvent (Vector2 mousePosition)
 	{
 		//skill event
 		if (Input.GetButtonDown( "Click" ) && onSkill)
@@ -144,13 +145,13 @@ public class StoreManager : MonoBehaviour
 			if (presentSkill.CheckSkillIsEmpty())
 			{
 				ResetSkill();
-				storeUI.OffSkillImage();
+				storeUI.ClearSkillImage();
 			}
 		}
 		else if (Input.GetButtonDown( "SkillOff" ) && onSkill)
 		{
 			ResetSkill();
-			storeUI.OffSkillImage();
+			storeUI.ClearSkillImage();
 		}
 
 		//human event
@@ -168,54 +169,69 @@ public class StoreManager : MonoBehaviour
 				}
 			}
 		}
+		
+		if (Input.GetButtonDown( "Click" ))
+		{
+			Ray ray = Camera.main.ScreenPointToRay( mousePosition );
+			RaycastHit hitinfo;
+
+			if (Physics.Raycast( ray, out hitinfo, RayCastMaxDistance, 1 << LayerMask.NameToLayer( "StoreField" ) ) && presentCrop != null )
+			{
+				GameObject tempSearch = hitinfo.collider.gameObject;
+				StoreFieldPolicy tempPolicy = tempSearch.GetComponent<StoreFieldPolicy>();
+				tempPolicy.enabled = true;
+				tempPolicy.ProcessEvent( presentCrop, presentCropIndex );
+				presentCrop = null;
+			}
+
+		}
 
 		GenerateHuman();
 	}
 	//find texture for store field crop item texture
-	public GameObject FindCropItemTexture( string name )
+	public GameObject FindCropItemTexture (string name)
 	{
-		Debug.Log( "Enter find texture" );
 		GameObject temp = null;
 		for (int i = 0; i < cropGroup.Length; i++)
 			if (cropGroup[i].Name == name)
 				temp = cropGroup[i].GetItemTexture();
 
-		Debug.Log( temp );
 		return temp;
 	}
 
 	//store cropitem
-	public void storeCrop( int cropIndex )
+	public void storeCrop (int cropIndex)
 	{
 		//add money & remove crop item in list
 	
 	}
 
 	//start pre process store game
-	public void StartPreProcess( )
+	public void StartPreProcess ()
 	{
 		placeComplete = false;
 	}
 
 	//store game start or restart
-	public void StartStoreGame( )
+	public void StartStoreGame ()
 	{
 		onGame = true;
+		placeComplete = true;
 	}
 
 	//store game close
-	public void EndStoreGame( )
+	public void EndStoreGame ()
 	{
 		onGame = false;
 	}
 
 	//crop button click
-	public bool LinkPresentCropItem( CropItem item, int index )
+	public bool LinkPresentCropItem (CropItem item, int index)
 	{
 		if (CheckAllField())
 		{
 			presentCropIndex = index;
-			presentCrop = new CropItem( item );
+			presentCrop = new CropItem(item);
 			return true;
 		}
 		else
@@ -223,25 +239,38 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//check empty store field
-	public bool CheckAllField( )
+	public bool CheckAllField ()
 	{
 		for (int i = 0; i < storeFieldGroup.Length; i++)
 		{
+			//no sell -> is empty
 			if (!storeFieldGroup[i].OnStore)
 				return true;
 		}
 	
 		return false;
 	}
+	
+	//check Field all empty
+	public bool CheckAllFieldIsEmpty()
+	{
+		for (int i = 0; i < storeFieldGroup.Length; i++)
+		{
+			//no sell -> is empty
+			if (storeFieldGroup[i].OnStore)
+				return false;
+		}
 
+		return true;
+	}
 	//sold or kill thief
-	public void AddMoney( int value )
+	public void AddMoney (int value)
 	{
 		gameManager.Money += value;
 	}
 
 	//set present skill
-	public void SetPresentSkill( string name )
+	public void SetPresentSkill (string name)
 	{
 		for (int i = 0; i < skillGroup.Length; i++)
 		{
@@ -254,6 +283,7 @@ public class StoreManager : MonoBehaviour
 					onSkill = true;
 					presentSkill = skillGroup[i];
 					storeUI.DrawSkillImage( name, presentSkill.SkillCounter );
+					storeUI.ControlSelectSkillButton(false);
 					return;
 				}
 			}
@@ -261,15 +291,21 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//reset skill
-	public void ResetSkill( )
-	{
-		gameManager.Money += presentSkill.ResetSkill();
+	public void ResetSkill ()
+	{ 	
+		int changeAmount = presentSkill.ResetSkill();
+		gameManager.Money += changeAmount;
+
+		if(changeAmount > 0)
+			storeUI.UpdateMoneyInfor( "Return skill", changeAmount );
+
+		storeUI.ControlSelectSkillButton(true);
 		presentSkill = null;
 		onSkill = false;
 	}
 
 	//generate human process
-	public void GenerateHuman( )
+	public void GenerateHuman ()
 	{
 		generateCoolTime += Time.deltaTime;
 		if (generateCoolTime >= generateCycle)
@@ -278,9 +314,9 @@ public class StoreManager : MonoBehaviour
 			{
 				if (humanGroup[i] == null)
 				{
-					GameObject tempData = (GameObject)Instantiate( humanObject[Random.Range( 0, 2 )], startPos[Random.Range( 0, 3 )] + new Vector3( 0f, 0f, 3f ), new Quaternion( 0f, 0f, 0f, 0f ) );
+					GameObject tempData = (GameObject)Instantiate( humanObject[Random.Range( 0, 2 )], startPos[Random.Range( 0, 3 )] + new Vector3(0f, 0f, 3f), new Quaternion(0f, 0f, 0f, 0f) );
 					humanGroup[i] = tempData.GetComponent<Human>();
-					humanGroup[i].SetTarget( transform );
+					humanGroup[i].DataSetUp();
 					generateCoolTime = 0.0f;
 					break;
 				}
@@ -289,7 +325,7 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//set human destination field
-	public Transform GetSellingStoreField( )
+	public Transform GetSellingStoreField ()
 	{
 		for (int i = 0; i < storeFieldGroup.Length; i++)
 		{
@@ -301,13 +337,13 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//human death process
-	public void CustomerDeath( )
+	public void CustomerDeath ()
 	{
 		gameManager.Money -= 100;
 		storeUI.UpdateMoneyInfor( "Kill Customer", -100 );
 	}
 
-	public void ThiefDeath( bool onShopping, int stealPrice )
+	public void ThiefDeath (bool onShopping, int stealPrice)
 	{
 		if (onShopping)
 		{
@@ -321,18 +357,35 @@ public class StoreManager : MonoBehaviour
 		}			
 	}
 
+	//clear game data
+	public void InitializeGameData()
+	{
+		storeUI.InitializeGameData();
+		for(int i = 0; i < storeFieldGroup.Length; i++)
+			storeFieldGroup[i].InitializeGameData();
+
+		for(int i = 0; i < humanGroup.Length; i++)
+		{
+			if(humanGroup[i] != null)
+				Destroy(humanGroup[i].gameObject);
+		}
+		presentSkill = null;
+		presentCrop = null;
+		presentCropIndex = 0;
+	}
+
 	//get / set method
 
 	//on game
-	public bool CheckOnGame( )
+	public bool CheckOnGame ()
 	{
 		return onGame;
 	}
 
 	//return crop infor (key = name)
-	public Sprite SetAverageCropTable( string name )
+	public Sprite SetAverageCropTable (string name)
 	{
-		switch(name)
+		switch (name)
 		{
 			case "Corn":
 				return cropAverageTable[0];
@@ -346,10 +399,8 @@ public class StoreManager : MonoBehaviour
 	}
 
 	//return crop group
-	public Crop[] GetCropGroup( )
+	public Crop[] GetCropGroup ()
 	{
 		return cropGroup;
 	}
-
-
 }

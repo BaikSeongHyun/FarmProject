@@ -16,6 +16,7 @@ public class FarmManager : MonoBehaviour
 	//this array will be set automaic
 	public GameManager gameManager;
 	public FarmFieldPolicy[] farmFieldGroup;
+	public FarmUI farmUI;
 	public Crop[] cropGroup;
 	public List<CropItem> saveCropItem;
 
@@ -27,6 +28,7 @@ public class FarmManager : MonoBehaviour
 		presentResource = Crop.Resource.Default;
 		gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 		LinkFarmFieldPolicy();
+		farmUI = GameObject.FindGameObjectWithTag("FarmCanvas").GetComponent<FarmUI>();
 		LinkCropData();
 		outputCropItem = new CropItem();
 		saveCropItem = new List<CropItem>();
@@ -121,6 +123,18 @@ public class FarmManager : MonoBehaviour
 	{
 		onGame = false;
 	}
+	
+	//clear game data
+	public void InitializeGameData()
+	{
+		saveCropItem.Clear();
+		for(int i = 0; i < farmFieldGroup.Length; i++)
+		{
+			farmFieldGroup[i].InitializeGameData();
+			farmFieldGroup[i].enabled = false;
+		}
+		farmUI.InitializeGameData();
+	}
 
 	//get / set method
 	//on game
@@ -171,6 +185,19 @@ public class FarmManager : MonoBehaviour
 	{
 		return cropGroup;
 	}
+	
+	
+	//search crop group
+	public Crop GetCropSearchByName(string name)
+	{
+		for(int i = 0; i < cropGroup.Length; i++)
+		{
+			if(cropGroup[i].Name == name)
+				return cropGroup[i];
+		}
+		return null;
+	}
+	
 
 
 }

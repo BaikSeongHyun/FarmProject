@@ -15,8 +15,9 @@ public class StoreFieldPolicy : MonoBehaviour
 
 	//standard method
 	// initialize this script
-	void Start( )
+	void Start ()
 	{
+		onStore = false;
 		LinkData();
 	}
 
@@ -40,13 +41,14 @@ public class StoreFieldPolicy : MonoBehaviour
 	//another method
 
 	//link UI & manager
-	public void LinkData()
+	public void LinkData ()
 	{
 		manager = GameObject.FindGameObjectWithTag( "GameManager" ).GetComponent<StoreManager>();
 		storeUI = GameObject.FindGameObjectWithTag( "StoreCanvas" ).GetComponent<StoreUI>();
 	}
+	
 	//click event process - mouse click event
-	public void ProcessEvent( CropItem data, int index )
+	public void ProcessEvent (CropItem data, int index)
 	{
 		if (!onStore)
 		{
@@ -56,24 +58,22 @@ public class StoreFieldPolicy : MonoBehaviour
 	}
 
 	//input store object
-	void SetCropItem( CropItem data, int index )
+	void SetCropItem (CropItem data, int index)
 	{
 		LinkData();
-
-		presentCropIndex = index;
-		presentCrop = new CropItem( data );
-		onStore = true;
-		Debug.Log(presentCrop);
-		Debug.Log(presentTexture);
-		Debug.Log(transform.position);
-		presentTexture = (GameObject)Instantiate( manager.FindCropItemTexture( presentCrop.Name ), transform.position, new Quaternion( 0f, 0f, 0f, 0f ) );
-
+		if (data != null)
+		{
+			presentCropIndex = index;
+			presentCrop = new CropItem(data);
+			onStore = true;
+			presentTexture = (GameObject)Instantiate( manager.FindCropItemTexture( presentCrop.Name ), transform.position, new Quaternion(0f, 0f, 0f, 0f) );
+		}
 		//draw texture image 
 
 	}
 
 	//customer to player bargaining
-	public void BargainSoldOutCrop( int price )
+	public void BargainSoldOutCrop (int price)
 	{
 		onStore = false;
 		manager.AddMoney( price );
@@ -84,7 +84,7 @@ public class StoreFieldPolicy : MonoBehaviour
 	}
 
 	//store crop item
-	public void SoldOutCropItem( )
+	public void SoldOutCropItem ()
 	{
 		//Destroy( presentItem );
 		manager.AddMoney( presentCrop.Price );
@@ -97,7 +97,7 @@ public class StoreFieldPolicy : MonoBehaviour
 	}
 
 	//thief has been stolen crop item
-	public void StealCrop( out int stealPrice )
+	public void StealCrop (out int stealPrice)
 	{
 		//Destroy( presentItem );
 		onStore = false;
@@ -107,5 +107,13 @@ public class StoreFieldPolicy : MonoBehaviour
 		//send renewal data by store UI
 	}
 
-
+	//clear game data
+	public void InitializeGameData ()
+	{
+		if (presentTexture != null)
+			Destroy( presentTexture );
+		presentCropIndex = 0;	
+		presentCrop = null;
+		onStore = false;
+	}
 }
