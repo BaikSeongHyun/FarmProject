@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 	{
 		money = 2000;
 		gameTime = 0.0f;
-		stageTime = 90f;
+		stageTime = 120f;
 		LinkGameResource();		
 
 		//sleep farm
